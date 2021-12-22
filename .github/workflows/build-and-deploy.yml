@@ -1,0 +1,106 @@
+name: Build and deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployEnv:
+        description: 'Env'
+        required: true
+        default: 'stage'
+
+env:
+  AWS_REGION: eu-north-1
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  ECR_REPOSITORY: psinder
+  DEPLOY_ENV: ${{ github.event.inputs.deployEnv }}
+
+jobs:
+  build_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create keystore directory
+        run: mkdir ./keystore
+
+      - name: Decode keystore
+        run: echo ${{ secrets.KEYSTORE_BASE64 }} | base64 --decode > ./keystore/keystore-aws.jks
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+      - name: Build with Gradle
+        run: ./gradlew build installDist
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          DOCKERFILE_PATH: ./.docker/Dockerfile
+        run: |
+          docker build -f $DOCKERFILE_PATH -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: cdk deploy network
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'deploy'
+          cdk_stack: ${{ env.DEPLOY_ENV }}-psinder-network
+          cdk_args: '--require-approval never'
+          actions_comment: false
+          working_dir: '.aws-cdk'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+          DEPLOY_ENV: ${{ env.DEPLOY_ENV }}
+
+      - name: cdk deploy cluster
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'deploy'
+          cdk_stack: ${{ env.DEPLOY_ENV }}-psinder-cluster
+          cdk_args: '--require-approval never'
+          actions_comment: false
+          working_dir: '.aws-cdk'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+          DEPLOY_ENV: ${{ env.DEPLOY_ENV }}
+
+      - name: cdk deploy psinder
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'deploy'
+          cdk_stack: ${{ env.DEPLOY_ENV }}-psinder
+          cdk_args: '--require-approval never'
+          actions_comment: false
+          working_dir: '.aws-cdk'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
+          IMAGE_TAG: ${{ github.sha }}
+          GITHUB_SHA: ${{ github.sha }}
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
+          DD_APPLICATION_KEY: ${{ secrets.DD_APPLICATION_KEY }}

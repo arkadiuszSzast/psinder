@@ -1,0 +1,47 @@
+{
+  "availability-zones:account=993160204208:region=eu-north-1": [
+    "eu-north-1a",
+    "eu-north-1b",
+    "eu-north-1c"
+  ],
+  "vpc-provider:account=993160204208:filter.tag:aws:cloudformation:stack-name=stage-text-rpg-network:region=eu-north-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0fc6f846dffe9ffe6",
+    "vpcCidrBlock": "10.0.0.0/25",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Private",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0d0f7f5e69afceeaf",
+            "cidr": "10.0.0.64/26",
+            "availabilityZone": "eu-north-1a",
+            "routeTableId": "rtb-0c88ff652275d6d09"
+          }
+        ]
+      },
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-03483ff0444a747cb",
+            "cidr": "10.0.0.0/26",
+            "availabilityZone": "eu-north-1a",
+            "routeTableId": "rtb-061edb4606197fc9b"
+          }
+        ]
+      }
+    ]
+  },
+  "availability-zones:account=000000000000:region=eu-north-1": [
+    "eu-north-1a",
+    "eu-north-1b",
+    "eu-north-1c"
+  ],
+  "hosted-zone:account=993160204208:domainName=psinder.link:region=eu-north-1": {
+    "Id": "/hostedzone/Z09690222YMDUWYQ79WOY",
+    "Name": "psinder.link."
+  }
+}

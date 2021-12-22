@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<property name="DEPLOY_ENV" value="${DEPLOY_ENV:-local}" />
+
+<if condition='property("DEPLOY_ENV").contains("dev") || property("DEPLOY_ENV").contains("local")'>
+    <then>
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="trace">
+            <appender-ref ref="STDOUT"/>
+        </root>
+        <logger name="com.psinder" level="trace"/>
+        <logger name="org.eclipse.jetty" level="info"/>
+        <logger name="io.netty" level="info"/>
+    </then>
+    <else>
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <version>${VCS_VERSION}</version>
+            </encoder>
+        </appender>
+
+        <logger name="com.psinder" level="trace"/>
+        <logger name="org.eclipse.jetty" level="info"/>
+        <logger name="io.netty" level="info"/>
+
+        <root level="trace">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </else>
+</if>
+</configuration>
