@@ -14,6 +14,7 @@ val logstash_logback_encoder_version: String by project
 val ktor_opentracing_version: String by project
 val dd_tracer_version: String by project
 val sentry_version: String by project
+val mockk_version: String by project
 
 val tcnative_classifier: String = with(System.getProperty("os.name").toLowerCase()) {
     when {
@@ -71,6 +72,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:$kotest_version")
     testImplementation("io.strikt:strikt-core:$strikt_version")
     testImplementation("io.strikt:strikt-arrow:$strikt_version")
+    testImplementation("io.mockk:mockk:$mockk_version")
 
     implementation(platform("io.arrow-kt:arrow-stack:$arrow_version"))
 }

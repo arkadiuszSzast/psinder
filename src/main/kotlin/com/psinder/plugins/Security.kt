@@ -7,20 +7,20 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 
-fun Application.configureSecurity() {
+fun Application.configureSecurity(jwtConfig: JwtConfig) {
 
     authentication {
         jwt {
-            realm = JwtConfig.realm
+            realm = jwtConfig.realm
             verifier(
                 JWT
-                    .require(Algorithm.HMAC256(JwtConfig.secret))
-                    .withAudience(JwtConfig.audience)
-                    .withIssuer(JwtConfig.domain)
+                    .require(Algorithm.HMAC256(jwtConfig.secret))
+                    .withAudience(jwtConfig.audience)
+                    .withIssuer(jwtConfig.domain)
                     .build()
             )
             validate { credential ->
-                if (credential.payload.audience.contains(JwtConfig.audience)) JWTPrincipal(credential.payload) else null
+                if (credential.payload.audience.contains(jwtConfig.audience)) JWTPrincipal(credential.payload) else null
             }
         }
     }

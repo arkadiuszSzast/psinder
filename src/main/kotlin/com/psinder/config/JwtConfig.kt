@@ -1,11 +1,11 @@
 package com.psinder.config
 
 object JwtConfig {
-    val domain = getProperty(Keys.jwt_domain)
-    val audience = getProperty(Keys.audience)
-    val realm = getProperty(Keys.realm)
-    val secret = getProperty(Keys.secret)
-    val issuer = getProperty(Keys.issuer)
+    val domain by lazy { getProperty(Keys.jwt_domain) }
+    val audience by lazy { getProperty(Keys.audience) }
+    val realm by lazy { getProperty(Keys.realm) }
+    val secret by lazy { getProperty(Keys.secret) }
+    val issuer by lazy { getProperty(Keys.issuer) }
 
     private object Keys {
         val jwt_domain = ConfigKey("jwt.domain")

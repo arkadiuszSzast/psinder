@@ -6,10 +6,14 @@ import com.psinder.shared.validation.ValidationRule
 import com.psinder.shared.validation.checkAll
 import org.mindrot.jbcrypt.BCrypt
 
-internal data class Password private constructor(val hashedPassword: String) {
+@JvmInline
+internal value class Password private constructor(val hashedPassword: String) {
 
     companion object {
-        internal fun create(password: String, rules: List<ValidationRule<String>> = defaultPasswordValidationRules): ValidatedNel<ValidationError, Password> {
+        internal fun create(
+            password: String,
+            rules: List<ValidationRule<String>> = defaultPasswordValidationRules
+        ): ValidatedNel<ValidationError, Password> {
             val errors = rules.checkAll(password)
 
             return if (errors.isNotEmpty()) {

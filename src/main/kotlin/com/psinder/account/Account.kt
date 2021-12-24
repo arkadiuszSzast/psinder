@@ -5,4 +5,9 @@ import com.psinder.shared.password.Password
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
 
-internal data class Account(@BsonId val id: Id<Account>, val emailAddress: EmailAddress, val username: String, val password: Password)
+internal data class Account(
+    @BsonId val id: Id<Account>,
+    val emailAddress: EmailAddress,
+    val username: Username,
+    val password: Password
+)

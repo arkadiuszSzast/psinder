@@ -1,5 +1,6 @@
 package com.psinder.account
 
+import arrow.core.orNull
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.config.JwtConfig
@@ -28,17 +29,16 @@ fun Application.configureAccountRouting() {
             throw Error("oups")
             call.respondText("Hello from me")
         }
-        post( "/register" ) {
+        post("/register") {
             val request = call.receive<RegisterRequest>()
-            database.getCollection<Account>().insertOne(
-                Account(
-                    newId(),
-                    EmailAddress.create("test@test.com").toOption().orNull()!!,
-                    "zxc",
-                    Password.create("qwe123#@!123").toOption().orNull()!!
-                )
+            val account = Account(
+                newId(),
+                EmailAddress.create("test@test.com").orNull()!!,
+                Username.create("zxc").orNull()!!,
+                Password.create("qwe123#@!123").orNull()!!
             )
-            call.respondText { "OK" }
+            database.getCollection<Account>().insertOne(account)
+            call.respond(account)
         }
         post("/login") {
             val request = call.receive<LoginRequest>()

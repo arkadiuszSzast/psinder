@@ -1,6 +1,9 @@
 package com.psinder
 
 import com.psinder.account.configureAccountRouting
+import com.psinder.config.JwtConfig
+import com.psinder.config.SentryConfig
+import com.psinder.config.TracingConfig
 import com.psinder.plugins.*
 import io.ktor.application.*
 import io.ktor.network.tls.certificates.*
@@ -20,13 +23,13 @@ fun main(args: Array<String>): Unit {
 
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
-    initializeSentry()
-    configureMicrometer()
-    configureOpentracing()
+    initializeSentry(SentryConfig)
+    configureMicrometer(TracingConfig)
+    configureOpentracing(TracingConfig)
     configureRouting()
     configureAccountRouting()
     configureExceptionsHandling()
-    configureSecurity()
+    configureSecurity(JwtConfig)
     configureHTTP()
     configureMonitoring()
     configureSerialization()

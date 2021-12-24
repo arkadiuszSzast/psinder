@@ -1,12 +1,12 @@
 package com.psinder.account
 
 import arrow.core.*
-import com.psinder.shared.SimpleValueObject
 import com.psinder.shared.validation.ValidationError
 import com.psinder.shared.validation.checkAll
 import com.psinder.shared.validation.rules.StringValidationRules
 
-internal data class Username(override val value: String) : SimpleValueObject<String> {
+@JvmInline
+internal value class Username private constructor(val value: String) {
 
     companion object {
         internal fun create(username: String): ValidatedNel<ValidationError, Username> {

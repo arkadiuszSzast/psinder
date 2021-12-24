@@ -6,7 +6,8 @@ import com.psinder.shared.validation.ValidationError
 import com.psinder.shared.validation.ValidationRule
 import com.psinder.shared.validation.checkAll
 
-internal data class EmailAddress private constructor(override val value: String) : SimpleValueObject<String> {
+@JvmInline
+internal value class EmailAddress private constructor(val value: String) {
 
     companion object {
         internal fun create(address: String): ValidatedNel<ValidationError, EmailAddress> {

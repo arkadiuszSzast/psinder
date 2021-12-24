@@ -1,8 +1,8 @@
 package com.psinder.config
 
 object DatabaseConfig {
-    val name = getProperty(Keys.name)
-    val connectionString = getProperty(Keys.connectionString)
+    val name by lazy { getProperty(Keys.name) }
+    val connectionString by lazy { getProperty(Keys.connectionString) }
 
     private object Keys {
         val name = ConfigKey("database.name")
