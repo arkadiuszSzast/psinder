@@ -1,5 +1,6 @@
 package com.psinder.account
 
+import com.psinder.account.requests.CreateAccountRequest
 import com.psinder.shared.validation.mergeAll
 import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
@@ -17,7 +18,7 @@ class RegisterRequestTest : DescribeSpec({
         describe("should throw exception when") {
 
             it("username is empty") {
-                expectThat(RegisterRequest.create(" ", validEmail, validPassword))
+                expectThat(CreateAccountRequest.create(" ", validEmail, validPassword))
                     .isInvalid()
                     .get { value.mergeAll().validationErrorCodes }
                     .containsExactly("validation.blank_username")
@@ -25,21 +26,21 @@ class RegisterRequestTest : DescribeSpec({
             }
 
             it("invalid email format") {
-                expectThat(RegisterRequest.create(validUsername, "invalid_email", validPassword))
+                expectThat(CreateAccountRequest.create(validUsername, "invalid_email", validPassword))
                     .isInvalid()
                     .get { value.mergeAll().validationErrorCodes }
                     .containsExactly("validation.invalid_email_format")
             }
 
             it("too short password") {
-                expectThat(RegisterRequest.create(validUsername, validEmail, "123#"))
+                expectThat(CreateAccountRequest.create(validUsername, validEmail, "123#"))
                     .isInvalid()
                     .get { value.mergeAll().validationErrorCodes }
                     .containsExactly("validation.password_too_short")
             }
 
             it("all fields are invalid") {
-                expectThat(RegisterRequest.create(" ", "invalid_email", "\t"))
+                expectThat(CreateAccountRequest.create(" ", "invalid_email", "\t"))
                     .isInvalid()
                     .get { value.mergeAll().validationErrorCodes }
                     .containsExactlyInAnyOrder(
@@ -57,7 +58,7 @@ class RegisterRequestTest : DescribeSpec({
         describe("trimming values") {
 
             it("should trim username and email") {
-                val result = RegisterRequest.create(" Joe ", " joe@doe.com ", validPassword)
+                val result = CreateAccountRequest.create(" Joe ", " joe@doe.com ", validPassword)
 
                 expectThat(result)
                     .isValid()

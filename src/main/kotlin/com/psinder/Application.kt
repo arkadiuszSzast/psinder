@@ -1,12 +1,15 @@
 package com.psinder
 
 import com.psinder.account.configureAccountRouting
+import com.psinder.config.DatabaseConfig.connectionString
+import com.psinder.config.EventStoreConfig
 import com.psinder.config.JwtConfig
 import com.psinder.config.SentryConfig
 import com.psinder.config.TracingConfig
 import com.psinder.plugins.*
 import io.ktor.application.*
 import io.ktor.network.tls.certificates.*
+import io.traxter.eventstoredb.EventStoreDB
 import java.io.File
 
 internal fun main(args: Array<String>) {
@@ -22,6 +25,7 @@ internal fun main(args: Array<String>) {
 
 @Suppress("unused")
 internal fun Application.main() {
+    configureEventStore(EventStoreConfig)
     configureKoin()
     initializeSentry(SentryConfig)
     configureMicrometer(TracingConfig)

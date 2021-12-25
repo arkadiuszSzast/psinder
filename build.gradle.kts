@@ -5,6 +5,7 @@ val pipelinr_version: String by project
 val logback_version: String by project
 val jbcrypt_version: String by project
 val kmongo_version: String by project
+val event_store_db_version: String by project
 val tcnative_version: String by project
 val kotest_version: String by project
 val strikt_version: String by project
@@ -37,12 +38,10 @@ group = "com"
 version = "0.0.1"
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
-//    applicationDefaultJvmArgs = listOf("-javaagent:/dd-java-agent.jar")
 }
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://jitpack.io") }
     maven { url = uri("https://jitpack.io") }
 }
 
@@ -56,11 +55,12 @@ dependencies {
     implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
-    implementation("io.arrow-kt:arrow-core:$arrow_version")
+    implementation("io.arrow-kt:arrow-core")
     implementation("io.arrow-kt:arrow-integrations-jackson-module:$arrow_jackson_version")
     implementation("com.github.arkadiuszSzast:pipelinr-fork:$pipelinr_version")
     implementation("org.litote.kmongo:kmongo:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
+    implementation("com.github.traxterz:ktor-plugin-event-store-db:$event_store_db_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.github.microutils:kotlin-logging-jvm:$kotlin_logging_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_logback_encoder_version")

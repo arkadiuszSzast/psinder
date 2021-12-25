@@ -13,4 +13,5 @@ internal fun getPropertyAsBoolean(key: ConfigKey) = Config.config.property(key.k
 
 internal fun getPropertyOrNull(key: ConfigKey) = Config.config.propertyOrNull(key.key)?.getString()
 
-internal data class ConfigKey(val key: String)
+@JvmInline
+internal value class ConfigKey(val key: String)
