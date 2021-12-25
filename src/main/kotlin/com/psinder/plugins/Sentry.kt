@@ -5,7 +5,7 @@ import com.psinder.config.SentryConfig
 import com.psinder.features.SentryFeature
 import io.ktor.application.*
 
-fun Application.initializeSentry(sentryConfig: SentryConfig) {
+internal fun Application.initializeSentry(sentryConfig: SentryConfig) {
     if (!sentryConfig.enabled) {
         return
     }

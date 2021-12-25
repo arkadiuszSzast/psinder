@@ -9,10 +9,9 @@ import io.ktor.application.*
 import io.ktor.network.tls.certificates.*
 import java.io.File
 
-fun main(args: Array<String>): Unit {
-    val keyStoreFile = File("keystore/psinder.link.jks")
-    val keystore = generateCertificate(
-        file = keyStoreFile,
+internal fun main(args: Array<String>) {
+    generateCertificate(
+        file = File("keystore/psinder.link.jks"),
         keyAlias = "psinder.link",
         keyPassword = "foobar",
         jksPassword = "foobar"
@@ -21,8 +20,9 @@ fun main(args: Array<String>): Unit {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
-@Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
-fun Application.module() {
+@Suppress("unused")
+internal fun Application.main() {
+    configureKoin()
     initializeSentry(SentryConfig)
     configureMicrometer(TracingConfig)
     configureOpentracing(TracingConfig)

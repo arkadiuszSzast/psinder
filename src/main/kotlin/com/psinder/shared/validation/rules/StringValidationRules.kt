@@ -7,7 +7,7 @@ import com.psinder.shared.password.allowedSpecialCharacters
 import com.psinder.shared.validation.ValidationException
 import com.psinder.shared.validation.ValidationRule
 
-object StringValidationRules {
+internal object StringValidationRules {
 
     fun nonEmptyRule(errorMessage: String = "validation.string_empty") = ValidationRule<String> {
         if(it.isNotEmpty()) None

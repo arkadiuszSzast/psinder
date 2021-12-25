@@ -4,7 +4,7 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
 
-fun Application.configureHTTP() {
+internal fun Application.configureHTTP() {
     install(CORS) {
         method(HttpMethod.Options)
         method(HttpMethod.Put)

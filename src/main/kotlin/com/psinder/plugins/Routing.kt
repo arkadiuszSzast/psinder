@@ -6,7 +6,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Application.configureRouting() {
+internal fun Application.configureRouting() {
 
     routing {
         get("/") {

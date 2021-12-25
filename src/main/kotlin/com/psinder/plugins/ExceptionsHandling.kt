@@ -9,7 +9,7 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.response.*
 
-fun Application.configureExceptionsHandling() {
+internal fun Application.configureExceptionsHandling() {
     install(StatusPages) {
         exception<ValueInstantiationException> { exception ->
             when (exception.rootCause) {
@@ -26,7 +26,7 @@ internal fun Throwable.createHttpCustomErrorMessage(): HttpError =
         else -> GenericErrorMessage(this.message ?: "UNKNOWN_ERROR", this::class.java.simpleName)
     }
 
-sealed interface HttpError {
+internal sealed interface HttpError {
     val type: String
 
     interface HttpErrorSingleMessage : HttpError {

@@ -6,19 +6,17 @@ import arrow.typeclasses.Semigroup
 import com.psinder.shared.reduce
 import io.ktor.features.*
 
-data class ValidationException(val validationErrorCodes: NonEmptyList<String>) :
+internal data class ValidationException(val validationErrorCodes: NonEmptyList<String>) :
     BadRequestException(validationErrorCodes.joinToString(",")) {
 
     constructor(errorCode: String): this(errorCode.nel())
 
     companion object {
-        val semigroup = object : ValidationExceptionMonoid {}
-    }
-}
-
-interface ValidationExceptionMonoid : Semigroup<ValidationException> {
-    override fun ValidationException.combine(b: ValidationException): ValidationException {
-        return ValidationException(this.validationErrorCodes + b.validationErrorCodes)
+        val semigroup = object : Semigroup<ValidationException> {
+            override fun ValidationException.combine(b: ValidationException): ValidationException {
+                return ValidationException(this.validationErrorCodes + b.validationErrorCodes)
+            }
+        }
     }
 }
 

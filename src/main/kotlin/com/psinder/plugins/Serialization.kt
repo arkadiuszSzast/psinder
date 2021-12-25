@@ -1,19 +1,16 @@
 package com.psinder.plugins
 
-import arrow.integrations.jackson.module.registerArrowModule
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.jackson.*
+import org.koin.ktor.ext.inject
 
-fun Application.configureSerialization() {
+internal fun Application.configureSerialization() {
+    val objectMapper: ObjectMapper by inject()
+
     install(ContentNegotiation) {
-        jackson {
-            registerArrowModule()
-            enable(SerializationFeature.INDENT_OUTPUT)
-            disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        }
+        register(ContentType.Application.Json, JacksonConverter(objectMapper))
     }
 }

@@ -10,7 +10,7 @@ import io.micrometer.datadog.DatadogConfig
 import io.micrometer.datadog.DatadogMeterRegistry
 import io.micrometer.core.instrument.Clock
 
-fun Application.configureMicrometer(tracingConfig: TracingConfig) {
+internal fun Application.configureMicrometer(tracingConfig: TracingConfig) {
     if (!tracingConfig.enabled) {
         return
     }

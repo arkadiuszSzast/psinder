@@ -1,5 +1,6 @@
 val ktor_version: String by project
 val kotlin_version: String by project
+val koin_version: String by project
 val logback_version: String by project
 val jbcrypt_version: String by project
 val kmongo_version: String by project
@@ -50,25 +51,26 @@ dependencies {
     implementation("io.ktor:ktor-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-jackson:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
+    implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.arrow-kt:arrow-core:$arrow_version")
     implementation("io.arrow-kt:arrow-integrations-jackson-module:$arrow_jackson_version")
     implementation("org.litote.kmongo:kmongo:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.github.microutils:kotlin-logging-jvm:$kotlin_logging_version")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logstash_logback_encoder_version")
     implementation("io.netty:netty-tcnative:$tcnative_version")
     implementation("io.netty:netty-tcnative-boringssl-static:$tcnative_version")
     implementation("io.netty:netty-tcnative-boringssl-static:$tcnative_version:$tcnative_classifier")
     implementation("org.mindrot:jbcrypt:$jbcrypt_version")
-    implementation("io.github.microutils:kotlin-logging-jvm:$kotlin_logging_version")
-    implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
-    implementation("io.micrometer:micrometer-registry-datadog:$micrometer_dd_version")
-    implementation("org.codehaus.janino:janino:$janino_version")
-    implementation("net.logstash.logback:logstash-logback-encoder:$logstash_logback_encoder_version")
     implementation("com.zopa:ktor-opentracing:$ktor_opentracing_version")
+    implementation("io.micrometer:micrometer-registry-datadog:$micrometer_dd_version")
     implementation("com.datadoghq:dd-trace-api:$dd_tracer_version")
     implementation("com.datadoghq:dd-trace-ot:$dd_tracer_version")
     implementation("io.sentry:sentry:$sentry_version")
+    implementation("org.codehaus.janino:janino:$janino_version")
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("io.kotest:kotest-runner-junit5:$kotest_version")

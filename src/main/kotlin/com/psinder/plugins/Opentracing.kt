@@ -11,7 +11,7 @@ import io.opentracing.util.GlobalTracer
 import org.slf4j.MDC
 import datadog.trace.api.GlobalTracer as DatadogTracer
 
-fun Application.configureOpentracing(tracingConfig: TracingConfig) {
+internal fun Application.configureOpentracing(tracingConfig: TracingConfig) {
     if (!tracingConfig.enabled) {
         return
     }
