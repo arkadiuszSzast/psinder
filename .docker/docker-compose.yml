@@ -1,6 +1,15 @@
 version: "3.4"
 
 services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret_password
+      MONGO_INITDB_DATABASE: psinder
+
   eventstore.db:
     image: eventstore/eventstore:20.10.2-buster-slim
     environment:
