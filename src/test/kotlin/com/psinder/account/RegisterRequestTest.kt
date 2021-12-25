@@ -1,5 +1,6 @@
 package com.psinder.account
 
+import com.psinder.shared.validation.mergeAll
 import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
 import strikt.arrow.isInvalid
@@ -18,33 +19,29 @@ class RegisterRequestTest : DescribeSpec({
             it("username is empty") {
                 expectThat(RegisterRequest.create(" ", validEmail, validPassword))
                     .isInvalid()
-                    .get { value.map { it.validationErrorCode } }
+                    .get { value.mergeAll().validationErrorCodes }
                     .containsExactly("validation.blank_username")
 
-                expectThat(RegisterRequest.create("", validEmail, validPassword))
-                    .isInvalid()
-                    .get { value.map { it.validationErrorCode } }
-                    .containsExactly("validation.blank_username")
             }
 
             it("invalid email format") {
                 expectThat(RegisterRequest.create(validUsername, "invalid_email", validPassword))
                     .isInvalid()
-                    .get { value.map { it.validationErrorCode } }
+                    .get { value.mergeAll().validationErrorCodes }
                     .containsExactly("validation.invalid_email_format")
             }
 
             it("too short password") {
                 expectThat(RegisterRequest.create(validUsername, validEmail, "123#"))
                     .isInvalid()
-                    .get { value.map { it.validationErrorCode } }
+                    .get { value.mergeAll().validationErrorCodes }
                     .containsExactly("validation.password_too_short")
             }
 
             it("all fields are invalid") {
                 expectThat(RegisterRequest.create(" ", "invalid_email", "\t"))
                     .isInvalid()
-                    .get { value.map { it.validationErrorCode } }
+                    .get { value.mergeAll().validationErrorCodes }
                     .containsExactlyInAnyOrder(
                         "validation.blank_username",
                         "validation.invalid_email_format",

@@ -1,5 +1,6 @@
 package com.psinder.shared.password
 
+import com.psinder.shared.validation.mergeAll
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import org.mindrot.jbcrypt.BCrypt
@@ -31,7 +32,7 @@ class PasswordTest : DescribeSpec({
 
         expectThat(password)
             .isInvalid()
-            .get { value.map { it.validationErrorCode } }
+            .get { value.mergeAll().validationErrorCodes }
             .containsExactlyInAnyOrder(
                 ("validation.password_cannot_be_blank"),
                 ("validation.password_too_short"),

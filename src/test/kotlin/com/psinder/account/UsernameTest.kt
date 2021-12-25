@@ -1,5 +1,6 @@
 package com.psinder.account
 
+import com.psinder.shared.validation.mergeAll
 import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
 import strikt.arrow.isInvalid
@@ -30,12 +31,12 @@ class UsernameTest : DescribeSpec({
 
             expectThat(Username.create(""))
                 .isInvalid()
-                .get { value.map { it.validationErrorCode } }
+                .get { value.mergeAll().validationErrorCodes }
                 .containsExactly("validation.blank_username")
 
             expectThat(Username.create(" "))
                 .isInvalid()
-                .get { value.map { it.validationErrorCode } }
+                .get { value.mergeAll().validationErrorCodes }
                 .containsExactly("validation.blank_username")
         }
     }

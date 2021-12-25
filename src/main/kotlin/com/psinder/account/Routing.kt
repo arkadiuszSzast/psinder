@@ -29,7 +29,7 @@ fun Application.configureAccountRouting() {
             throw Error("oups")
             call.respondText("Hello from me")
         }
-        post("/register") {
+        post("/account") {
             val request = call.receive<RegisterRequest>()
             val account = Account(
                 newId(),

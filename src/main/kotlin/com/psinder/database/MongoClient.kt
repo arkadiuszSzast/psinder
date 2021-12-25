@@ -5,6 +5,6 @@ import com.mongodb.ConnectionString
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 
-private val client = KMongo.createClient(ConnectionString(DatabaseConfig.connectionString)).coroutine
+private val client by lazy { KMongo.createClient(ConnectionString(DatabaseConfig.connectionString)).coroutine }
 
-internal val database = client.getDatabase(DatabaseConfig.name)
+internal val database by lazy { client.getDatabase(DatabaseConfig.name) }

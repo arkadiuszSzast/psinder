@@ -1,10 +1,15 @@
 package com.psinder.shared.validation
 
 import arrow.core.NonEmptyList
+import arrow.core.nel
 import arrow.typeclasses.Semigroup
+import com.psinder.shared.reduce
+import io.ktor.features.*
 
 data class ValidationException(val validationErrorCodes: NonEmptyList<String>) :
-    RuntimeException(validationErrorCodes.joinToString(",")) {
+    BadRequestException(validationErrorCodes.joinToString(",")) {
+
+    constructor(errorCode: String): this(errorCode.nel())
 
     companion object {
         val semigroup = object : ValidationExceptionMonoid {}
@@ -16,3 +21,6 @@ interface ValidationExceptionMonoid : Semigroup<ValidationException> {
         return ValidationException(this.validationErrorCodes + b.validationErrorCodes)
     }
 }
+
+internal fun NonEmptyList<ValidationException>.mergeAll() =
+    this.reduce(ValidationException.semigroup)

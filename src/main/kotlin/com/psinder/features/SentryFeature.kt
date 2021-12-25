@@ -25,7 +25,7 @@ class SentryFeature private constructor() {
         internal fun initClient() {
             Sentry.init { options ->
                 options.dsn = dsn
-                options.environment= appEnv
+                options.environment = appEnv
                 options.serverName = serverName
                 options.setDebug(true)
             }

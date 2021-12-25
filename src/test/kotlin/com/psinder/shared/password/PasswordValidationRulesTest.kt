@@ -12,75 +12,75 @@ class PasswordValidationRulesTest : DescribeSpec({
 
         it("password cannot be blank") {
             expectThat(rules.checkAll(""))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_cannot_be_blank")
 
             expectThat(rules.checkAll(" "))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_cannot_be_blank")
 
             expectThat(rules.checkAll("test"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_cannot_be_blank")
         }
 
         it("password has at least 12 characters") {
             expectThat(rules.checkAll("12345678901"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_too_short")
 
             expectThat(rules.checkAll("123456789012"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_too_short")
 
             expectThat(rules.checkAll("1234567890123"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_too_short")
         }
 
         it("password contains number") {
             expectThat(rules.checkAll("ABC"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_must_contains_number")
 
             expectThat(rules.checkAll("ABC1"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_must_contains_number")
 
             expectThat(rules.checkAll("1"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_must_contains_number")
         }
 
         it("password contains special character") {
             expectThat(rules.checkAll("ABC"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_must_contains_special_character")
 
             expectThat(rules.checkAll("ABC#"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_must_contains_special_character")
 
             expectThat(rules.checkAll("#"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_must_contains_special_character")
         }
 
         it("password cannot contains whitespace") {
             expectThat(rules.checkAll(" A"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_cannot_have_whitespaces")
 
             expectThat(rules.checkAll("AB \tC"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_cannot_have_whitespaces")
 
             expectThat(rules.checkAll("ABC "))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes } }
                 .contains("validation.password_cannot_have_whitespaces")
 
             expectThat(rules.checkAll("ABC"))
-                .get { map { it.validationErrorCode } }
+                .get { flatMap { it.validationErrorCodes }}
                 .not().contains("validation.password_cannot_have_whitespaces")
         }
     }

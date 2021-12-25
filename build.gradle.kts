@@ -7,6 +7,7 @@ val tcnative_version: String by project
 val kotest_version: String by project
 val strikt_version: String by project
 val arrow_version: String by project
+val arrow_jackson_version: String by project
 val kotlin_logging_version: String by project
 val micrometer_dd_version: String by project
 val janino_version: String by project
@@ -51,6 +52,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
     implementation("io.arrow-kt:arrow-core:$arrow_version")
+    implementation("io.arrow-kt:arrow-integrations-jackson-module:$arrow_jackson_version")
     implementation("org.litote.kmongo:kmongo:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")

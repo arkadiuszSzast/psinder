@@ -1,18 +1,18 @@
 package com.psinder.plugins
 
 import com.psinder.config.TracingConfig
+import com.zopa.ktor.opentracing.OpenTracingServer
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.*
-import io.ktor.metrics.micrometer.*
 import io.ktor.server.testing.*
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.verify
 
-internal class MicrometerKtTest : DescribeSpec({
+class OpentracingKtTest : DescribeSpec({
 
-    describe("micrometer feature install") {
+    describe("opentracing feature install") {
 
         it("should not install when tracing is disabled") {
             withTestApplication {
@@ -20,9 +20,9 @@ internal class MicrometerKtTest : DescribeSpec({
                 mockkObject(TracingConfig)
                 every { TracingConfig.enabled } returns false
 
-                application.configureMicrometer(TracingConfig)
+                application.configureOpentracing(TracingConfig)
 
-                verify(exactly = 0) { application.install(eq(MicrometerMetrics), any()) }
+                verify(exactly = 0) { application.install(eq(OpenTracingServer), any()) }
             }
         }
 
@@ -32,10 +32,11 @@ internal class MicrometerKtTest : DescribeSpec({
                 mockkObject(TracingConfig)
                 every { TracingConfig.enabled } returns true
 
-                application.configureMicrometer(TracingConfig)
+                application.configureOpentracing(TracingConfig)
 
-                verify(exactly = 1) { application.install(eq(MicrometerMetrics), any()) }
+                verify(exactly = 1) { application.install(eq(OpenTracingServer), any()) }
             }
         }
     }
+
 })

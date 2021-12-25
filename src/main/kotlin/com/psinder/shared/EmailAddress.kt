@@ -2,7 +2,7 @@ package com.psinder.shared
 
 import arrow.core.*
 import com.psinder.shared.EmailAddressValidationRules.emailPatternRule
-import com.psinder.shared.validation.ValidationError
+import com.psinder.shared.validation.ValidationException
 import com.psinder.shared.validation.ValidationRule
 import com.psinder.shared.validation.checkAll
 
@@ -10,7 +10,7 @@ import com.psinder.shared.validation.checkAll
 internal value class EmailAddress private constructor(val value: String) {
 
     companion object {
-        internal fun create(address: String): ValidatedNel<ValidationError, EmailAddress> {
+        internal fun create(address: String): ValidatedNel<ValidationException, EmailAddress> {
             val errors = validationRules.checkAll(address)
 
             return if (errors.isNotEmpty()) {
@@ -27,6 +27,6 @@ internal value class EmailAddress private constructor(val value: String) {
 private object EmailAddressValidationRules {
     val emailPatternRule = ValidationRule<String> {
         if (it.matches(emailPattern.toRegex())) None
-        else Some(ValidationError("validation.invalid_email_format"))
+        else Some(ValidationException("validation.invalid_email_format"))
     }
 }

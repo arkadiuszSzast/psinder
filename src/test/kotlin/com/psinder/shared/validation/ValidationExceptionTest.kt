@@ -4,21 +4,22 @@ import arrow.core.NonEmptyList
 import arrow.core.nel
 import arrow.core.nonEmptyListOf
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
 import strikt.assertions.isEqualTo
 import strikt.assertions.size
 
-class ValidateKtTest : DescribeSpec({
+class ValidationExceptionTest : DescribeSpec({
 
-    describe("merging validation errors to exception") {
+    describe("merging validation exceptions") {
 
         it("when only single error") {
             //arrange
-            val errors = ValidationError("error_1").nel()
+            val errors = ValidationException("error_1".nel()).nel()
 
             //act
-            val result = errors.mergeToException()
+            val result = errors.mergeAll()
 
             //assert
             expectThat(result)
@@ -28,10 +29,10 @@ class ValidateKtTest : DescribeSpec({
 
         it("when two errors") {
             //arrange
-            val errors = nonEmptyListOf(ValidationError("error_1"), ValidationError("error_2"))
+            val errors = nonEmptyListOf(ValidationException("error_1"), ValidationException("error_2"))
 
             //act
-            val result = errors.mergeToException()
+            val result = errors.mergeAll()
 
             //assert
             expectThat(result)
@@ -41,10 +42,10 @@ class ValidateKtTest : DescribeSpec({
 
         it("when ten errors") {
             //arrange
-            val errors = IntRange(1, 10).map { ValidationError("error_$it") }.let { NonEmptyList.fromListUnsafe(it) }
+            val errors = IntRange(1, 10).map { ValidationException("error_$it") }.let { NonEmptyList.fromListUnsafe(it) }
 
             //act
-            val result = errors.mergeToException()
+            val result = errors.mergeAll()
 
             //assert
             expectThat(result)
