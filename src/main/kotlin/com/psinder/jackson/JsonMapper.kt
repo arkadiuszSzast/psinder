@@ -18,6 +18,6 @@ private object JsonMapper {
     }
 }
 
-internal val jacksonKoinModule = module {
+internal val jacksonModule = module {
     single { JsonMapper.defaultMapper }
 }
