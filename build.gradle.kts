@@ -31,6 +31,8 @@ val tcnative_classifier: String = with(System.getProperty("os.name").toLowerCase
 
 plugins {
     application
+    jacoco
+    id("org.sonarqube") version "3.3"
     kotlin("jvm") version "1.6.0"
 }
 
@@ -38,6 +40,15 @@ group = "com"
 version = "0.0.1"
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "arkadiuszSzast_psinder")
+        property("sonar.organization", "arkadiuszszast")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.login", System.getenv("SONAR_LOGIN_TOKEN"))
+    }
 }
 
 repositories {
@@ -84,16 +95,15 @@ dependencies {
     implementation(platform("io.arrow-kt:arrow-stack:$arrow_version"))
 }
 
-val downloadDDJavaAgent = tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDDJavaAgent") {
-    src("https://dtdg.co/latest-java-tracer")
-    dest(file("build/libs/dd-java-agent.jar"))
-    overwrite(false)
-}
-
-tasks.named("build") {
-    dependsOn(downloadDDJavaAgent)
-}
-
 tasks.withType<Test> {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        csv.required.set(true)
+        html.required.set(true)
+    }
 }
