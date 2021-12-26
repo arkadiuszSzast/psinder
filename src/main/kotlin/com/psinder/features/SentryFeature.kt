@@ -5,15 +5,25 @@ import io.ktor.request.*
 import io.ktor.util.*
 import io.ktor.util.pipeline.*
 import io.sentry.Sentry
+import io.sentry.TransactionContext
+import io.sentry.kotlin.SentryContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-private inline fun <T> sentryWrap(path: String, fn: () -> T) =
-    try {
-        fn()
-    } catch (ex: Throwable) {
-        Sentry.captureException(ex)
-        throw ex
-    } finally {
+private inline fun <T> sentryWrap(requestPath: String, crossinline fn: () -> T) = runBlocking {
+    launch(SentryContext()) {
+        val transaction = Sentry.startTransaction(TransactionContext(requestPath, "http"))
+        try {
+            fn()
+        } catch (t: Throwable) {
+            Sentry.captureException(t)
+            transaction.throwable = t
+            throw t
+        } finally {
+            transaction.finish()
+        }
     }
+}
 
 class SentryFeature private constructor() {
 
@@ -27,13 +37,12 @@ class SentryFeature private constructor() {
                 options.dsn = dsn
                 options.environment = appEnv
                 options.serverName = serverName
-                options.setDebug(true)
             }
         }
     }
 
     suspend fun intercept(context: PipelineContext<Unit, ApplicationCall>) {
-        sentryWrap(context.context.request.path()) { context.proceed() }
+        sentryWrap(context.context.request.path()) { runBlocking { context.proceed() } }
     }
 
     companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, SentryFeature> {

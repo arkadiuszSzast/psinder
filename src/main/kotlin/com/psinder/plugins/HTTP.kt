@@ -11,13 +11,10 @@ internal fun Application.configureHTTP() {
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
-        header("MyCustomHeader")
         allowCredentials = false
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+        anyHost()
     }
     install(PartialContent) {
-        // Maximum number of ranges that will be accepted from a HTTP request.
-        // If the HTTP request specifies more ranges, they will all be merged into a single range.
         maxRangeCount = 10
     }
 

@@ -84,6 +84,7 @@ dependencies {
     implementation("com.datadoghq:dd-trace-api:$dd_tracer_version")
     implementation("com.datadoghq:dd-trace-ot:$dd_tracer_version")
     implementation("io.sentry:sentry:$sentry_version")
+    implementation("io.sentry:sentry-kotlin-extensions:$sentry_version")
     implementation("org.codehaus.janino:janino:$janino_version")
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
