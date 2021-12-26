@@ -1,9 +1,11 @@
 package com.psinder.features
 
-import io.ktor.application.*
-import io.ktor.request.*
-import io.ktor.util.*
-import io.ktor.util.pipeline.*
+import io.ktor.application.ApplicationCall
+import io.ktor.application.ApplicationCallPipeline
+import io.ktor.application.ApplicationFeature
+import io.ktor.request.path
+import io.ktor.util.AttributeKey
+import io.ktor.util.pipeline.PipelineContext
 import io.sentry.Sentry
 import io.sentry.TransactionContext
 import io.sentry.kotlin.SentryContext

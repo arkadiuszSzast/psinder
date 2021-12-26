@@ -1,6 +1,9 @@
 package com.psinder.account.requests
 
-import arrow.core.*
+import arrow.core.Invalid
+import arrow.core.Valid
+import arrow.core.ValidatedNel
+import arrow.core.zip
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.psinder.account.Username
 import com.psinder.shared.EmailAddress

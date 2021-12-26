@@ -4,10 +4,12 @@ import arrow.core.NonEmptyList
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 import com.psinder.shared.rootCause
 import com.psinder.shared.validation.ValidationException
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.http.*
-import io.ktor.response.*
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.features.StatusPages
+import io.ktor.http.HttpStatusCode
+import io.ktor.response.respond
 
 internal fun Application.configureExceptionsHandling() {
     install(StatusPages) {

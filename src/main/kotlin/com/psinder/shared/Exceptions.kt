@@ -8,4 +8,3 @@ internal val Throwable.rootCause: Throwable
         }
         return rootCause ?: this
     }
-

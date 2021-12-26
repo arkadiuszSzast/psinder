@@ -9,4 +9,3 @@ object DatabaseConfig {
         val connectionString = ConfigKey("database.connectionString")
     }
 }
-

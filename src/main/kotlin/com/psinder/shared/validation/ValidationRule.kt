@@ -7,4 +7,4 @@ internal fun interface ValidationRule<T> {
     fun check(target: T): Option<ValidationException>
 }
 
-internal fun <T> Collection<ValidationRule<T>>.checkAll(target: T)  = this.map { it.check(target) }.allNotEmpty()
+internal fun <T> Collection<ValidationRule<T>>.checkAll(target: T) = this.map { it.check(target) }.allNotEmpty()

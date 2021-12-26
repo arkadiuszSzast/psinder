@@ -1,11 +1,11 @@
 package com.psinder.plugins
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.http.*
-import io.ktor.jackson.*
-import org.koin.ktor.ext.inject
+import io.ktor.application.Application
+import io.ktor.application.install
+import io.ktor.features.ContentNegotiation
+import io.ktor.http.ContentType
+import io.ktor.jackson.JacksonConverter
 
 internal fun Application.configureSerialization(objectMapper: ObjectMapper) {
 

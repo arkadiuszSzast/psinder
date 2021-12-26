@@ -3,9 +3,11 @@ package com.psinder.plugins
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.config.JwtConfig
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.auth.jwt.*
+import io.ktor.application.Application
+import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.jwt.JWTPrincipal
+import io.ktor.auth.jwt.jwt
 
 internal fun Application.configureSecurity(jwtConfig: JwtConfig) {
 
@@ -24,5 +26,4 @@ internal fun Application.configureSecurity(jwtConfig: JwtConfig) {
             }
         }
     }
-
 }

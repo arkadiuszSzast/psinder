@@ -1,7 +1,7 @@
 package com.psinder.config
 
 import com.typesafe.config.ConfigFactory
-import io.ktor.config.*
+import io.ktor.config.HoconApplicationConfig
 
 internal object Config {
     internal val config = HoconApplicationConfig(ConfigFactory.load())

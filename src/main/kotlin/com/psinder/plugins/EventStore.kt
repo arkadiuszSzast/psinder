@@ -1,7 +1,8 @@
 package com.psinder.plugins
 
 import com.psinder.config.EventStoreConfig
-import io.ktor.application.*
+import io.ktor.application.Application
+import io.ktor.application.install
 import io.traxter.eventstoredb.EventStoreDB
 import org.koin.dsl.module
 import org.koin.ktor.ext.modules

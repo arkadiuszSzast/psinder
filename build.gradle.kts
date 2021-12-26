@@ -1,3 +1,5 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val koin_version: String by project
@@ -33,6 +35,7 @@ plugins {
     application
     jacoco
     id("org.sonarqube") version "3.3"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     kotlin("jvm") version "1.6.0"
 }
 
@@ -48,6 +51,25 @@ sonarqube {
         property("sonar.organization", "arkadiuszszast")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.login", System.getenv("SONAR_LOGIN_TOKEN"))
+        property(
+            "sonar.kotlin.ktlint.reportPaths",
+            arrayOf(
+                "${project.buildDir}/reports/ktlint/ktlintKotlinScriptCheck/ktlintKotlinScriptCheck.json",
+                "${project.buildDir}/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.json",
+                "${project.buildDir}/reports/ktlint/ktlintTestSourceSetCheck/ktlintTestSourceSetCheck.json"
+            ).joinToString(",")
+        )
+    }
+}
+
+ktlint {
+    verbose.set(true)
+    outputToConsole.set(true)
+    coloredOutput.set(true)
+    reporters {
+        reporter(ReporterType.CHECKSTYLE)
+        reporter(ReporterType.JSON)
+        reporter(ReporterType.HTML)
     }
 }
 

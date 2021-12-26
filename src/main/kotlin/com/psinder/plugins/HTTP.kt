@@ -1,8 +1,11 @@
 package com.psinder.plugins
 
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.http.*
+import io.ktor.application.Application
+import io.ktor.application.install
+import io.ktor.features.CORS
+import io.ktor.features.PartialContent
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 
 internal fun Application.configureHTTP() {
     install(CORS) {
@@ -18,5 +21,4 @@ internal fun Application.configureHTTP() {
     install(PartialContent) {
         maxRangeCount = 10
     }
-
 }

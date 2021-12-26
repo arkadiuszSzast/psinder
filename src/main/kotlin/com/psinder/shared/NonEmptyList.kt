@@ -13,5 +13,4 @@ internal fun <A, B> NonEmptyList<A>.reduceMap(semigroup: Semigroup<B>, f: (A) ->
     this@reduceMap.map { f(it) }.reduce { acc, next ->
         acc.combine(next)
     }
-
 }

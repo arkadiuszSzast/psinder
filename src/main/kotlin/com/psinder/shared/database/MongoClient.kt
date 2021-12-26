@@ -1,7 +1,7 @@
 package com.psinder.shared.database
 
-import com.psinder.config.DatabaseConfig
 import com.mongodb.ConnectionString
+import com.psinder.config.DatabaseConfig
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.coroutine

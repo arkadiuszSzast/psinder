@@ -1,0 +1,61 @@
+name: Build test
+
+on:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+env:
+  AWS_REGION: eu-north-1
+  ECR_REPOSITORY: psinder
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+      - name: Build with Gradle
+        env:
+          SONAR_LOGIN_TOKEN: ${{ secrets.SONAR_LOGIN_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: ./gradlew build ktlintCheck sonarqube --continue
+
+  ktlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+
+      - name: KtLint Scripts
+        run: ./gradlew ktlintKotlinScriptCheck
+
+      - name: KtLint Sources
+        run: ./gradlew ktlintMainSourceSetCheck
+
+      - name: KtLint Tests
+        run: ./gradlew ktlintTestSourceSetCheck
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+      - name: Build with Gradle
+        run: ./gradlew test

@@ -6,12 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.account.commands.CreateAccountCommand
 import com.psinder.account.requests.CreateAccountRequest
 import com.psinder.config.JwtConfig
-import io.ktor.application.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.request.receive
+import io.ktor.response.respond
+import io.ktor.routing.post
+import io.ktor.routing.routing
 import org.koin.ktor.ext.inject
-import java.util.*
+import java.util.Date
 
 fun Application.configureAccountRouting() {
 

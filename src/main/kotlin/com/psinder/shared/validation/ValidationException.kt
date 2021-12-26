@@ -4,12 +4,12 @@ import arrow.core.NonEmptyList
 import arrow.core.nel
 import arrow.typeclasses.Semigroup
 import com.psinder.shared.reduce
-import io.ktor.features.*
+import io.ktor.features.BadRequestException
 
 internal data class ValidationException(val validationErrorCodes: NonEmptyList<String>) :
     BadRequestException(validationErrorCodes.joinToString(",")) {
 
-    constructor(errorCode: String): this(errorCode.nel())
+    constructor(errorCode: String) : this(errorCode.nel())
 
     companion object {
         val semigroup = object : Semigroup<ValidationException> {

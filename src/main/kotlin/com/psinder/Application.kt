@@ -4,9 +4,19 @@ import com.psinder.config.EventStoreConfig
 import com.psinder.config.JwtConfig
 import com.psinder.config.SentryConfig
 import com.psinder.config.TracingConfig
-import com.psinder.plugins.*
-import io.ktor.application.*
-import io.ktor.network.tls.certificates.*
+import com.psinder.plugins.configureEventStore
+import com.psinder.plugins.configureExceptionsHandling
+import com.psinder.plugins.configureHTTP
+import com.psinder.plugins.configureKoin
+import com.psinder.plugins.configureMicrometer
+import com.psinder.plugins.configureMonitoring
+import com.psinder.plugins.configureOpentracing
+import com.psinder.plugins.configureRouting
+import com.psinder.plugins.configureSecurity
+import com.psinder.plugins.configureSerialization
+import com.psinder.plugins.initializeSentry
+import io.ktor.application.Application
+import io.ktor.network.tls.certificates.generateCertificate
 import org.koin.ktor.ext.get
 import java.io.File
 
