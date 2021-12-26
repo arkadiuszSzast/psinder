@@ -6,7 +6,10 @@ import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
 import strikt.arrow.isInvalid
 import strikt.arrow.isValid
-import strikt.assertions.*
+import strikt.assertions.containsExactly
+import strikt.assertions.containsExactlyInAnyOrder
+import strikt.assertions.endsWith
+import strikt.assertions.startsWith
 
 class RegisterRequestTest : DescribeSpec({
 
@@ -22,7 +25,6 @@ class RegisterRequestTest : DescribeSpec({
                     .isInvalid()
                     .get { value.mergeAll().validationErrorCodes }
                     .containsExactly("validation.blank_username")
-
             }
 
             it("invalid email format") {
@@ -68,5 +70,4 @@ class RegisterRequestTest : DescribeSpec({
             }
         }
     }
-
 })

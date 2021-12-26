@@ -41,5 +41,4 @@ class PasswordTest : DescribeSpec({
                 ("validation.password_cannot_have_whitespaces")
             )
     }
-
 })

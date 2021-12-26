@@ -40,5 +40,4 @@ class UsernameTest : DescribeSpec({
                 .containsExactly("validation.blank_username")
         }
     }
-
 })

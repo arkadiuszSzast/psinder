@@ -1,7 +1,7 @@
 package com.psinder.config
 
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.config.*
+import io.ktor.config.ApplicationConfigurationException
 import strikt.api.expectThat
 import strikt.api.expectThrows
 import strikt.assertions.isNotBlank

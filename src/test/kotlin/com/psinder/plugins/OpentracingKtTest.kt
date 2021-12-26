@@ -4,11 +4,10 @@ import com.psinder.config.TracingConfig
 import com.psinder.utils.mockKtorInstallFunction
 import com.zopa.ktor.opentracing.OpenTracingServer
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.*
-import io.ktor.server.testing.*
+import io.ktor.application.install
+import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.verify
 
 class OpentracingKtTest : DescribeSpec({
@@ -39,5 +38,4 @@ class OpentracingKtTest : DescribeSpec({
             }
         }
     }
-
 })

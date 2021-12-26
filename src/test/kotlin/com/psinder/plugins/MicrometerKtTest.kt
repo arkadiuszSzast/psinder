@@ -3,12 +3,11 @@ package com.psinder.plugins
 import com.psinder.config.TracingConfig
 import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.*
-import io.ktor.metrics.micrometer.*
-import io.ktor.server.testing.*
+import io.ktor.application.install
+import io.ktor.metrics.micrometer.MicrometerMetrics
+import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.verify
 
 internal class MicrometerKtTest : DescribeSpec({

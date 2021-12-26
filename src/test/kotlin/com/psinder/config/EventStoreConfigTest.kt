@@ -14,5 +14,4 @@ class EventStoreConfigTest : DescribeSpec({
             }
         }
     }
-
 })

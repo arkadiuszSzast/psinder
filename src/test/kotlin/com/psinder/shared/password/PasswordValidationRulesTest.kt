@@ -80,7 +80,7 @@ class PasswordValidationRulesTest : DescribeSpec({
                 .contains("validation.password_cannot_have_whitespaces")
 
             expectThat(rules.checkAll("ABC"))
-                .get { flatMap { it.validationErrorCodes }}
+                .get { flatMap { it.validationErrorCodes } }
                 .not().contains("validation.password_cannot_have_whitespaces")
         }
     }

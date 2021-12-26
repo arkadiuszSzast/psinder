@@ -46,7 +46,5 @@ class EmailTest : DescribeSpec({
                     .containsExactly("validation.invalid_email_format")
             }
         }
-
     }
-
 })

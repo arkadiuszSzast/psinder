@@ -4,11 +4,10 @@ import com.psinder.config.SentryConfig
 import com.psinder.features.SentryFeature
 import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.*
-import io.ktor.server.testing.*
+import io.ktor.application.install
+import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.verify
 
 class SentryKtTest : DescribeSpec({
@@ -20,7 +19,7 @@ class SentryKtTest : DescribeSpec({
                 mockKtorInstallFunction()
                 mockkObject(SentryConfig)
                 every { SentryConfig.enabled } returns false
-                every { SentryConfig.dsn} returns "https://public@sentry.example.com/1"
+                every { SentryConfig.dsn } returns "https://public@sentry.example.com/1"
 
                 application.initializeSentry(SentryConfig)
 
@@ -41,5 +40,4 @@ class SentryKtTest : DescribeSpec({
             }
         }
     }
-
 })

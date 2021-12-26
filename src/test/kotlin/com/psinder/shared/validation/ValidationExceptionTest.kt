@@ -4,7 +4,6 @@ import arrow.core.NonEmptyList
 import arrow.core.nel
 import arrow.core.nonEmptyListOf
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
 import strikt.assertions.isEqualTo
@@ -15,43 +14,43 @@ class ValidationExceptionTest : DescribeSpec({
     describe("merging validation exceptions") {
 
         it("when only single error") {
-            //arrange
+            // arrange
             val errors = ValidationException("error_1".nel()).nel()
 
-            //act
+            // act
             val result = errors.mergeAll()
 
-            //assert
+            // assert
             expectThat(result)
                 .get { validationErrorCodes }
                 .containsExactly("error_1")
         }
 
         it("when two errors") {
-            //arrange
+            // arrange
             val errors = nonEmptyListOf(ValidationException("error_1"), ValidationException("error_2"))
 
-            //act
+            // act
             val result = errors.mergeAll()
 
-            //assert
+            // assert
             expectThat(result)
                 .get { validationErrorCodes }
                 .containsExactly("error_1", "error_2")
         }
 
         it("when ten errors") {
-            //arrange
+            // arrange
             val errors = IntRange(1, 10).map { ValidationException("error_$it") }.let { NonEmptyList.fromListUnsafe(it) }
 
-            //act
+            // act
             val result = errors.mergeAll()
 
-            //assert
+            // assert
             expectThat(result)
                 .get { validationErrorCodes }
                 .and { size.isEqualTo(10) }
-                .and { containsExactly(IntRange(1,10).map { "error_$it" }) }
+                .and { containsExactly(IntRange(1, 10).map { "error_$it" }) }
         }
     }
 })

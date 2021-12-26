@@ -3,8 +3,8 @@ package com.psinder.plugins
 import com.psinder.config.EventStoreConfig
 import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.*
-import io.ktor.server.testing.*
+import io.ktor.application.install
+import io.ktor.server.testing.withTestApplication
 import io.mockk.verify
 import io.traxter.eventstoredb.EventStoreDB
 

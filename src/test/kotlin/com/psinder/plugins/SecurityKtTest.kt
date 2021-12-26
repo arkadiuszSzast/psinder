@@ -3,9 +3,9 @@ package com.psinder.plugins
 import com.psinder.config.JwtConfig
 import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.server.testing.*
+import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.server.testing.withTestApplication
 import io.mockk.verify
 
 class SecurityKtTest : DescribeSpec({
@@ -22,5 +22,4 @@ class SecurityKtTest : DescribeSpec({
             }
         }
     }
-
 })

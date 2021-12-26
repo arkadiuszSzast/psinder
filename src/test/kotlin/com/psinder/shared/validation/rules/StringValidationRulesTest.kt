@@ -235,7 +235,6 @@ class StringValidationRulesTest : DescribeSpec({
                     .isSome()
             }
 
-
             it("fail when contains space") {
                 val rule = StringValidationRules.cannotHaveWhitespacesRule()
 
@@ -285,5 +284,4 @@ class StringValidationRulesTest : DescribeSpec({
             }
         }
     }
-
 })

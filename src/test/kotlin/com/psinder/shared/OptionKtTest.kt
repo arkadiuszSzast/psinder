@@ -18,7 +18,7 @@ class OptionKtTest : DescribeSpec({
             val result = options.allNotEmpty()
 
             expectThat(result)
-                .containsExactly(1,2,3)
+                .containsExactly(1, 2, 3)
         }
 
         it("should remove empty options") {
@@ -27,7 +27,7 @@ class OptionKtTest : DescribeSpec({
             val result = options.allNotEmpty()
 
             expectThat(result)
-                .containsExactly(1,2)
+                .containsExactly(1, 2)
         }
 
         it("return empty list when all items are empty") {
@@ -43,5 +43,4 @@ class OptionKtTest : DescribeSpec({
                 .isEmpty()
         }
     }
-
 })

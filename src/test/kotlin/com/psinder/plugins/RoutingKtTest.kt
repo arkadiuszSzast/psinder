@@ -3,7 +3,7 @@ package com.psinder.plugins
 import com.psinder.account.configureAccountRouting
 import com.psinder.utils.mockConfigureAccountRouting
 import io.kotest.core.spec.style.DescribeSpec
-import io.ktor.server.testing.*
+import io.ktor.server.testing.withTestApplication
 import io.mockk.verify
 
 class RoutingKtTest : DescribeSpec({

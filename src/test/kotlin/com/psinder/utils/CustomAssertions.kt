@@ -1,9 +1,8 @@
 package com.psinder.utils
 
-import arrow.integrations.jackson.module.registerArrowModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.psinder.jackson.JsonMapper
 import com.psinder.shared.toObject
-import io.ktor.server.testing.*
+import io.ktor.server.testing.TestApplicationResponse
 import strikt.api.Assertion
 
 private inline fun <reified T> Assertion.Builder<TestApplicationResponse>.contentIsTypeOf() {
@@ -12,7 +11,7 @@ private inline fun <reified T> Assertion.Builder<TestApplicationResponse>.conten
             when (this) {
                 null -> fail("Cannot construct [${T::class.qualifiedName}] from null.")
                 else -> {
-                    val result = jacksonObjectMapper().registerArrowModule().toObject<T>(this) //TODO: provide ObjectMapper
+                    val result = JsonMapper.defaultMapper.toObject<T>(this)
                     result.fold(
                         { fail("Cannot construct [${T::class.qualifiedName}] from given string: $this. Error: ${it.message}") },
                         { pass() }
