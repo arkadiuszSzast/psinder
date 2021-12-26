@@ -7,7 +7,7 @@ import org.koin.dsl.module
 import org.koin.ktor.ext.modules
 
 internal fun Application.configureEventStore(eventStoreConfig: EventStoreConfig) {
-    val client = EventStoreDB {
+    val client = install(EventStoreDB) {
         connectionString = eventStoreConfig.connectionString
     }
 

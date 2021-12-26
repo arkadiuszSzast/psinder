@@ -10,21 +10,14 @@ import io.ktor.application.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import mu.KotlinLogging
 import org.koin.ktor.ext.inject
 import java.util.*
 
 fun Application.configureAccountRouting() {
 
-    val logger = KotlinLogging.logger {}
-
     val pipeline: Pipeline by inject()
 
     routing {
-        get("/me") {
-            logger.info { "Entered me method" }
-            call.respondText("Hello from me")
-        }
         post("/account") {
             val request = call.receive<CreateAccountRequest>()
             call.respond(pipeline.send(CreateAccountCommand(request)))

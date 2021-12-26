@@ -14,6 +14,7 @@ internal fun Application.configureHTTP() {
         allowCredentials = false
         anyHost()
     }
+
     install(PartialContent) {
         maxRangeCount = 10
     }

@@ -92,6 +92,7 @@ dependencies {
     testImplementation("io.strikt:strikt-core:$strikt_version")
     testImplementation("io.strikt:strikt-arrow:$strikt_version")
     testImplementation("io.mockk:mockk:$mockk_version")
+    testImplementation("io.insert-koin:koin-test:$koin_version")
 
     implementation(platform("io.arrow-kt:arrow-stack:$arrow_version"))
 }

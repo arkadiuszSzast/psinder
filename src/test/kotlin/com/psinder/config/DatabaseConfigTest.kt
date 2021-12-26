@@ -11,7 +11,7 @@ class DatabaseConfigTest : DescribeSpec({
         it("get properties") {
             expectThat(DatabaseConfig) {
                 get { name }.isEqualTo("test-database-name")
-                get { connectionString }.isEqualTo("test-database-password")
+                get { connectionString }.isEqualTo("mongodb://test-database-connection-string")
             }
         }
     }

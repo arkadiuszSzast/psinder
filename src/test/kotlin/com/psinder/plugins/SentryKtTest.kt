@@ -2,6 +2,7 @@ package com.psinder.plugins
 
 import com.psinder.config.SentryConfig
 import com.psinder.features.SentryFeature
+import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.*
 import io.ktor.server.testing.*
@@ -16,7 +17,7 @@ class SentryKtTest : DescribeSpec({
 
         it("should not install when disabled") {
             withTestApplication {
-                mockkStatic("io.ktor.application.ApplicationFeatureKt")
+                mockKtorInstallFunction()
                 mockkObject(SentryConfig)
                 every { SentryConfig.enabled } returns false
                 every { SentryConfig.dsn} returns "https://public@sentry.example.com/1"
@@ -29,7 +30,7 @@ class SentryKtTest : DescribeSpec({
 
         it("should install when enabled") {
             withTestApplication {
-                mockkStatic("io.ktor.application.ApplicationFeatureKt")
+                mockKtorInstallFunction()
                 mockkObject(SentryConfig)
                 every { SentryConfig.enabled } returns true
                 every { SentryConfig.dsn } returns "https://public@sentry.example.com/1"

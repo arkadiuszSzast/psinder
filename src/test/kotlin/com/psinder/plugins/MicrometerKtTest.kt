@@ -1,6 +1,7 @@
 package com.psinder.plugins
 
 import com.psinder.config.TracingConfig
+import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.*
 import io.ktor.metrics.micrometer.*
@@ -16,7 +17,7 @@ internal class MicrometerKtTest : DescribeSpec({
 
         it("should not install when tracing is disabled") {
             withTestApplication {
-                mockkStatic("io.ktor.application.ApplicationFeatureKt")
+                mockKtorInstallFunction()
                 mockkObject(TracingConfig)
                 every { TracingConfig.enabled } returns false
 
@@ -28,7 +29,7 @@ internal class MicrometerKtTest : DescribeSpec({
 
         it("should install when tracing is enabled") {
             withTestApplication {
-                mockkStatic("io.ktor.application.ApplicationFeatureKt")
+                mockKtorInstallFunction()
                 mockkObject(TracingConfig)
                 every { TracingConfig.enabled } returns true
 

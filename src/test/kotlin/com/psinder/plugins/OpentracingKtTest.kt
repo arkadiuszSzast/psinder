@@ -1,6 +1,7 @@
 package com.psinder.plugins
 
 import com.psinder.config.TracingConfig
+import com.psinder.utils.mockKtorInstallFunction
 import com.zopa.ktor.opentracing.OpenTracingServer
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.*
@@ -16,7 +17,7 @@ class OpentracingKtTest : DescribeSpec({
 
         it("should not install when tracing is disabled") {
             withTestApplication {
-                mockkStatic("io.ktor.application.ApplicationFeatureKt")
+                mockKtorInstallFunction()
                 mockkObject(TracingConfig)
                 every { TracingConfig.enabled } returns false
 
@@ -28,7 +29,7 @@ class OpentracingKtTest : DescribeSpec({
 
         it("should install when tracing is enabled") {
             withTestApplication {
-                mockkStatic("io.ktor.application.ApplicationFeatureKt")
+                mockKtorInstallFunction()
                 mockkObject(TracingConfig)
                 every { TracingConfig.enabled } returns true
 
