@@ -1,3 +1,4 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 val ktor_version: String by project
@@ -36,6 +37,7 @@ plugins {
     jacoco
     id("org.sonarqube") version "3.3"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
+    id("io.gitlab.arturbosch.detekt").version("1.19.0")
     kotlin("jvm") version "1.6.0"
 }
 
@@ -51,6 +53,7 @@ sonarqube {
         property("sonar.organization", "arkadiuszszast")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.login", System.getenv("SONAR_LOGIN_TOKEN"))
+        property("sonar.kotlin.detekt.reportPaths", "${project.buildDir}/reports/detekt/detekt.xml")
         property(
             "sonar.kotlin.ktlint.reportPaths",
             arrayOf(
@@ -71,6 +74,11 @@ ktlint {
         reporter(ReporterType.JSON)
         reporter(ReporterType.HTML)
     }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
 }
 
 repositories {
@@ -117,6 +125,15 @@ dependencies {
     testImplementation("io.insert-koin:koin-test:$koin_version")
 
     implementation(platform("io.arrow-kt:arrow-stack:$arrow_version"))
+}
+
+tasks.withType<Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(true)
+        sarif.required.set(true)
+    }
 }
 
 tasks.withType<Test> {

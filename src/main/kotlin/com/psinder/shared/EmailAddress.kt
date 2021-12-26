@@ -1,6 +1,11 @@
 package com.psinder.shared
 
-import arrow.core.*
+import arrow.core.Nel
+import arrow.core.None
+import arrow.core.Some
+import arrow.core.Valid
+import arrow.core.ValidatedNel
+import arrow.core.invalid
 import com.psinder.shared.EmailAddressValidationRules.emailPatternRule
 import com.psinder.shared.validation.ValidationException
 import com.psinder.shared.validation.ValidationRule

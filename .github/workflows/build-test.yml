@@ -25,7 +25,7 @@ jobs:
         env:
           SONAR_LOGIN_TOKEN: ${{ secrets.SONAR_LOGIN_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: ./gradlew build ktlintCheck sonarqube --continue
+        run: ./gradlew build detekt ktlintCheck sonarqube --continue
 
   ktlint:
     runs-on: ubuntu-latest
@@ -46,6 +46,20 @@ jobs:
 
       - name: KtLint Tests
         run: ./gradlew ktlintTestSourceSetCheck
+
+  detekt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+
+      - name: Detekt checks
+        run: ./gradlew detekt
 
   test:
     runs-on: ubuntu-latest
