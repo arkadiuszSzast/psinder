@@ -6,30 +6,36 @@ import com.zopa.ktor.opentracing.getGlobalTracer
 import mu.KotlinLogging
 
 internal class NotificationLoggableMiddleware : Notification.Middleware {
-    private val logger = KotlinLogging.logger {}
-
     override fun <N : Notification> invoke(notification: N, next: Notification.Middleware.Next) {
         var errorThrown = false
         val tracer = getGlobalTracer()
-        val baseHandlerClass = next.baseHandlerType
+        val notificationClassName = notification::class.simpleName
+        val baseHandlerClassName = next.baseHandlerType.simpleName
 
-        return tracer.buildSpan("notification-handler-${notification::class.simpleName}")
+        return tracer.buildSpan("notification-handler-$notificationClassName")
             .withTag("notification", notification::class.simpleName)
-            .withTag("notification-handler", baseHandlerClass.simpleName)
+            .withTag("notification-handler", baseHandlerClassName)
             .start()
             .activate(tracer) {
-                logger.debug { "Handling notification: ${notification::class.simpleName} with handler ${baseHandlerClass.simpleName}" }
+                logger.debug { "Handling notification: $notificationClassName with handler $baseHandlerClassName" }
                 try {
                     next.invoke()
                 } catch (t: Throwable) {
                     errorThrown = true
-                    logger.error { "Notification: ${notification::class.simpleName} handled by: ${baseHandlerClass.simpleName} with error. Error message: ${t.message}" }
+                    logger.error {
+                        "Notification [$notificationClassName]: $notification " +
+                            "handled by: $baseHandlerClassName with error. Error message: ${t.message}"
+                    }
                     throw t
                 } finally {
                     if (!errorThrown) {
-                        logger.debug { "Notification: ${notification::class.simpleName} handled by: ${baseHandlerClass.simpleName} successfully" }
+                        logger.debug { "Notification [$notificationClassName] handled by: $baseHandlerClassName successfully" }
                     }
                 }
             }
+    }
+
+    companion object {
+        private val logger = KotlinLogging.logger {}
     }
 }

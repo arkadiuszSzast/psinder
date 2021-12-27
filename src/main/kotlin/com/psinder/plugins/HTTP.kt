@@ -19,6 +19,5 @@ internal fun Application.configureHTTP() {
     }
 
     install(PartialContent) {
-        maxRangeCount = 10
     }
 }

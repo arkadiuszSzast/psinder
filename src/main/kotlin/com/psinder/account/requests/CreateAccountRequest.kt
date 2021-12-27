@@ -17,11 +17,13 @@ internal data class CreateAccountRequest private constructor(
     val password: Password,
 ) {
     companion object {
-        internal fun create(username: String, email: String, password: String): ValidatedNel<ValidationException, CreateAccountRequest> {
-            return Username.create(username).zip(
-                EmailAddress.create(email),
-                Password.create(password)
-            ) { username, email, password -> CreateAccountRequest(username, email, password) }
+        internal fun create(
+            username: String,
+            email: String,
+            password: String
+        ): ValidatedNel<ValidationException, CreateAccountRequest> {
+            return Username.create(username)
+                .zip(EmailAddress.create(email), Password.create(password), ::CreateAccountRequest)
         }
 
         @JvmStatic

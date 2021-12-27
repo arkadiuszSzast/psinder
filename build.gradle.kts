@@ -77,8 +77,7 @@ ktlint {
 }
 
 detekt {
-    buildUponDefaultConfig = true
-    allRules = false
+    config = files("$projectDir/config/detekt/detekt.yml")
 }
 
 repositories {

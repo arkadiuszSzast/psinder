@@ -2,7 +2,7 @@ package com.psinder.shared.validation.rules
 
 import arrow.core.None
 import arrow.core.Some
-import com.psinder.shared.emailPattern
+import com.psinder.shared.EMAIL_PATTERN
 import com.psinder.shared.password.allowedSpecialCharacters
 import com.psinder.shared.validation.ValidationException
 import com.psinder.shared.validation.ValidationRule
@@ -53,7 +53,7 @@ internal object StringValidationRules {
     }
 
     fun isValidEmailRule(errorMessage: String = "validation.invalid_email_format") = ValidationRule<String> {
-        if (it.matches(emailPattern.toRegex())) None
+        if (it.matches(EMAIL_PATTERN.toRegex())) None
         else Some(ValidationException(errorMessage))
     }
 }

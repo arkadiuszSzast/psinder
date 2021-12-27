@@ -31,7 +31,7 @@ internal value class EmailAddress private constructor(val value: String) {
 
 private object EmailAddressValidationRules {
     val emailPatternRule = ValidationRule<String> {
-        if (it.matches(emailPattern.toRegex())) None
+        if (it.matches(EMAIL_PATTERN.toRegex())) None
         else Some(ValidationException("validation.invalid_email_format"))
     }
 }

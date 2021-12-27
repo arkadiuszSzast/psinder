@@ -11,15 +11,13 @@ import io.ktor.application.Application
 import org.koin.ktor.ext.modules
 
 internal fun Application.configureKoin() {
-    modules(*koinModules.toTypedArray())
+    modules(
+        jacksonModule,
+        kmongoModule,
+        repositoriesModule,
+        pipelinrMiddlewaresModule,
+        pipelinrCommandHandlersModule,
+        pipelinrNotificationHandlersModule,
+        pipelinrModule
+    )
 }
-
-internal val koinModules = listOf(
-    jacksonModule,
-    kmongoModule,
-    repositoriesModule,
-    pipelinrMiddlewaresModule,
-    pipelinrCommandHandlersModule,
-    pipelinrNotificationHandlersModule,
-    pipelinrModule
-)

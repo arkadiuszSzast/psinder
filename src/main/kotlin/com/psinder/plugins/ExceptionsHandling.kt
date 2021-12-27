@@ -8,15 +8,16 @@ import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.StatusPages
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.HttpStatusCode.Companion.BadRequest
+import io.ktor.http.HttpStatusCode.Companion.InternalServerError
 import io.ktor.response.respond
 
 internal fun Application.configureExceptionsHandling() {
     install(StatusPages) {
         exception<ValueInstantiationException> { exception ->
             when (exception.rootCause) {
-                is ValidationException -> call.respond(HttpStatusCode.BadRequest, exception.rootCause.createHttpCustomErrorMessage())
-                else -> call.respond(HttpStatusCode.InternalServerError, exception.rootCause.createHttpCustomErrorMessage())
+                is ValidationException -> call.respond(BadRequest, exception.rootCause.createHttpCustomErrorMessage())
+                else -> call.respond(InternalServerError, exception.rootCause.createHttpCustomErrorMessage())
             }
         }
     }
@@ -40,5 +41,8 @@ internal sealed interface HttpError {
     }
 }
 
-internal data class ValidationErrorMessage(override val message: NonEmptyList<String>, override val type: String) : HttpError.HttpErrorArrayMessage
-internal data class GenericErrorMessage(override val message: String, override val type: String) : HttpError.HttpErrorSingleMessage
+internal data class ValidationErrorMessage(override val message: NonEmptyList<String>, override val type: String) :
+    HttpError.HttpErrorArrayMessage
+
+internal data class GenericErrorMessage(override val message: String, override val type: String) :
+    HttpError.HttpErrorSingleMessage
