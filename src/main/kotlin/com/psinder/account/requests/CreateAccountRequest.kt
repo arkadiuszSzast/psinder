@@ -5,31 +5,42 @@ import arrow.core.Valid
 import arrow.core.ValidatedNel
 import arrow.core.zip
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.psinder.account.Username
+import com.psinder.account.PersonalData
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.password.Password
 import com.psinder.shared.validation.ValidationException
 import com.psinder.shared.validation.mergeAll
+import java.time.ZoneId
 
 internal data class CreateAccountRequest private constructor(
-    val username: Username,
-    val emailAddress: EmailAddress,
+    val personalData: PersonalData,
+    val email: EmailAddress,
     val password: Password,
+    val timeZoneId: ZoneId
 ) {
     companion object {
         internal fun create(
-            username: String,
+            personalData: PersonalData,
             email: String,
-            password: String
+            password: String,
+            timeZoneId: ZoneId
         ): ValidatedNel<ValidationException, CreateAccountRequest> {
-            return Username.create(username)
-                .zip(EmailAddress.create(email), Password.create(password), ::CreateAccountRequest)
+            ZoneId.getAvailableZoneIds()
+            return EmailAddress.create(email)
+                .zip(Password.create(password)) { email, password ->
+                    CreateAccountRequest(personalData, email, password, timeZoneId)
+                }
         }
 
         @JvmStatic
         @JsonCreator
-        internal fun createOrThrow(username: String, email: String, password: String): CreateAccountRequest =
-            when (val vRegisterRequest = create(username, email, password)) {
+        internal fun createOrThrow(
+            personalData: PersonalData,
+            email: String,
+            password: String,
+            timeZoneId: ZoneId
+        ): CreateAccountRequest =
+            when (val vRegisterRequest = create(personalData, email, password, timeZoneId)) {
                 is Invalid -> throw vRegisterRequest.value.mergeAll()
                 is Valid -> vRegisterRequest.value
             }

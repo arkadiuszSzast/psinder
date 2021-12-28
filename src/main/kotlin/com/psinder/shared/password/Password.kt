@@ -10,7 +10,7 @@ import com.psinder.shared.validation.checkAll
 import org.mindrot.jbcrypt.BCrypt
 
 @JvmInline
-internal value class Password private constructor(val hashedPassword: String) {
+internal value class Password private constructor(val value: String) {
 
     companion object {
         internal fun create(

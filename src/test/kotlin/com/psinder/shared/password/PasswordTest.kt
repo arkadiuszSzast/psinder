@@ -21,7 +21,7 @@ class PasswordTest : DescribeSpec({
             expectThat(password)
                 .isValid()
                 .get { value }
-                .get { hashedPassword }
+                .get { value }
                 .not().isEqualTo(notHashedPassword)
                 .and { BCrypt.checkpw(notHashedPassword, this.subject).shouldBeTrue() }
         }
