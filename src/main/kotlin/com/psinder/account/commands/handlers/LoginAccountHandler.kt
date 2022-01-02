@@ -10,8 +10,7 @@ import com.psinder.shared.jwt.JwtToken
 import mu.KotlinLogging
 import java.util.Date
 
-internal class LoginAccountHandler :
-    Command.Handler<LoginAccountCommand, LoginAccountCommandResult> {
+internal class LoginAccountHandler : Command.Handler<LoginAccountCommand, LoginAccountCommandResult> {
 
     override fun handle(command: LoginAccountCommand): LoginAccountCommandResult {
         val (username, password) = command.loginAccountRequest

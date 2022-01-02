@@ -22,7 +22,6 @@ val ktor_opentracing_version: String by project
 val dd_tracer_version: String by project
 val sentry_version: String by project
 val mockk_version: String by project
-val codified_version: String by project
 
 val tcnative_classifier: String = with(System.getProperty("os.name").toLowerCase()) {
     when {
@@ -96,7 +95,6 @@ dependencies {
     implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-    implementation("com.github.bright.codified:enums:$codified_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.arrow-kt:arrow-core")
     implementation("io.arrow-kt:arrow-integrations-jackson-module:$arrow_jackson_version")

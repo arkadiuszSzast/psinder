@@ -7,20 +7,21 @@ import com.psinder.shared.password.Password
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
-import pl.brightinventions.codified.enums.CodifiedEnum
-import pl.brightinventions.codified.enums.codifiedEnum
+import java.time.ZoneId
 
 internal data class Account private constructor(
     @BsonId override val id: Id<Account>,
     val email: EmailAddress,
     val personalData: PersonalData,
     val password: Password,
-    val status: CodifiedEnum<AccountStatus, String>,
-    val lastLoggedInDate: LastLoggedInDate? = null
+    val status: AccountStatus,
+    val timeZoneId: ZoneId,
+    val lastLoggedInUTCDate: LastLoggedInDate? = null
 ) : HasId<Account> {
     constructor(
         email: EmailAddress,
         personalData: PersonalData,
         password: Password,
-    ) : this(newId(), email, personalData, password, AccountStatus.WAITING_FOR_ACTIVATION.codifiedEnum())
+        timeZoneId: ZoneId,
+    ) : this(newId(), email, personalData, password, AccountStatus.Staged, timeZoneId)
 }

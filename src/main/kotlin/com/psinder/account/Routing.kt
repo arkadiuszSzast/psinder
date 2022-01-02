@@ -1,6 +1,7 @@
 package com.psinder.account
 
 import an.awesome.pipelinr.Pipeline
+import com.psinder.account.commands.CreateAccountCommand
 import com.psinder.account.commands.LoginAccountCommand
 import com.psinder.account.requests.CreateAccountRequest
 import com.psinder.account.requests.LoginAccountRequest
@@ -12,7 +13,6 @@ import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.routing
 import org.koin.ktor.ext.inject
-import pl.brightinventions.codified.enums.CodifiedEnum
 
 fun Application.configureAccountRouting() {
 
@@ -21,13 +21,7 @@ fun Application.configureAccountRouting() {
     routing {
         post("/account") {
             val request = call.receive<CreateAccountRequest>()
-            // call.respond(pipeline.send(CreateAccountCommand(request)))
-            call.respond(request)
-        }
-        post("/qwe") {
-            val request = call.receive<CodifiedEnum<AccountStatus, String>>()
-            // call.respond(pipeline.send(CreateAccountCommand(request)))
-            call.respond(request)
+            call.respond(pipeline.send(CreateAccountCommand(request)))
         }
         post("/login") {
             val request = call.receive<LoginAccountRequest>()
