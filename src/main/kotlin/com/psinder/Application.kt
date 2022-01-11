@@ -5,6 +5,7 @@ import com.psinder.config.JwtConfig
 import com.psinder.config.SentryConfig
 import com.psinder.config.TracingConfig
 import com.psinder.plugins.configureEventStore
+import com.psinder.plugins.configureEventStoreSubscribers
 import com.psinder.plugins.configureExceptionsHandling
 import com.psinder.plugins.configureHTTP
 import com.psinder.plugins.configureKoin
@@ -44,4 +45,5 @@ internal fun Application.main() {
     configureHTTP()
     configureMonitoring()
     configureSerialization(get())
+    configureEventStoreSubscribers()
 }

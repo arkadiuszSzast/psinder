@@ -14,8 +14,13 @@ internal data class AccountCreatedEvent(
     val timeZoneId: ZoneId
 ) : DomainEvent {
 
-    override val eventType: EventType = EventType.Created
-    override val eventFamily: EventFamily = EventFamily.Account
-
     constructor(account: Account) : this(account.id, account.personalData, account.password, account.timeZoneId)
+
+    override val eventType: EventType = AccountCreatedEvent.eventType
+    override val eventFamily: EventFamily = AccountCreatedEvent.eventFamily
+
+    companion object {
+        val eventType: EventType = EventType.Created
+        val eventFamily: EventFamily = EventFamily.Account
+    }
 }
