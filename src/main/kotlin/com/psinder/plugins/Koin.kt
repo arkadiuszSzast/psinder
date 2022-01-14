@@ -1,12 +1,12 @@
 package com.psinder.plugins
 
-import com.psinder.jackson.jacksonModule
 import com.psinder.pipelinr.pipelinrCommandHandlersModule
 import com.psinder.pipelinr.pipelinrMiddlewaresModule
 import com.psinder.pipelinr.pipelinrModule
 import com.psinder.pipelinr.pipelinrNotificationHandlersModule
 import com.psinder.shared.database.kmongoModule
 import com.psinder.shared.database.repositoriesModule
+import com.psinder.shared.json.jacksonModule
 import io.ktor.application.Application
 import org.koin.ktor.ext.modules
 

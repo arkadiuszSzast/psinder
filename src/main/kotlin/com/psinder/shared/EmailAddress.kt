@@ -10,8 +10,10 @@ import com.psinder.shared.EmailAddressValidationRules.emailPatternRule
 import com.psinder.shared.validation.ValidationException
 import com.psinder.shared.validation.ValidationRule
 import com.psinder.shared.validation.checkAll
+import kotlinx.serialization.Serializable
 
 @JvmInline
+@Serializable
 internal value class EmailAddress private constructor(val value: String) {
 
     companion object {

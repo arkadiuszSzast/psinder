@@ -1,11 +1,10 @@
 package com.psinder.account
 
-import com.fasterxml.jackson.annotation.JsonCreator
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal data class AddressData(val city: City, val streetName: StreetName? = null) {
     companion object {
-        @JvmStatic
-        @JsonCreator
         internal fun create(city: String, streetName: String?): AddressData {
             return AddressData(City.create(city), streetName?.let { StreetName.create(it) })
         }
@@ -13,6 +12,7 @@ internal data class AddressData(val city: City, val streetName: StreetName? = nu
 }
 
 @JvmInline
+@Serializable
 internal value class City private constructor(val value: String) {
     companion object {
         internal fun create(city: String): City {
@@ -22,6 +22,7 @@ internal value class City private constructor(val value: String) {
 }
 
 @JvmInline
+@Serializable
 internal value class StreetName private constructor(val value: String) {
     companion object {
         internal fun create(streetName: String): StreetName {

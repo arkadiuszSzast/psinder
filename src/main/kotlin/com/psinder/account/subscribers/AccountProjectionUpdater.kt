@@ -8,6 +8,6 @@ import kotlinx.coroutines.launch
 
 internal fun Application.accountProjectionUpdater(db: EventStoreDB) = launch {
     db.subscribeToStream(AccountCreatedEvent.eventFamily.code) {
-        event.getAs<AccountCreatedEvent>()
+        println(event.getAs<AccountCreatedEvent>())
     }
 }

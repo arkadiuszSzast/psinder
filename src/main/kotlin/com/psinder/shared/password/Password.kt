@@ -7,9 +7,11 @@ import arrow.core.invalid
 import com.psinder.shared.validation.ValidationException
 import com.psinder.shared.validation.ValidationRule
 import com.psinder.shared.validation.checkAll
+import kotlinx.serialization.Serializable
 import org.mindrot.jbcrypt.BCrypt
 
 @JvmInline
+@Serializable
 internal value class Password private constructor(val value: String) {
 
     companion object {

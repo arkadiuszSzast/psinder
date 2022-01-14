@@ -13,7 +13,7 @@ val tcnative_version: String by project
 val kotest_version: String by project
 val strikt_version: String by project
 val arrow_version: String by project
-val arrow_jackson_version: String by project
+val kotlin_datetime_version: String by project
 val kotlin_logging_version: String by project
 val micrometer_dd_version: String by project
 val janino_version: String by project
@@ -38,6 +38,7 @@ plugins {
     id("org.sonarqube") version "3.3"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("io.gitlab.arturbosch.detekt").version("1.19.0")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
     kotlin("jvm") version "1.6.0"
 }
 
@@ -90,17 +91,17 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common:$ktor_version")
     implementation("io.ktor:ktor-auth:$ktor_version")
     implementation("io.ktor:ktor-auth-jwt:$ktor_version")
-    implementation("io.ktor:ktor-jackson:$ktor_version")
+    implementation("io.ktor:ktor-serialization:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.arrow-kt:arrow-core")
-    implementation("io.arrow-kt:arrow-integrations-jackson-module:$arrow_jackson_version")
     implementation("com.github.arkadiuszSzast:pipelinr-fork:$pipelinr_version")
     implementation("org.litote.kmongo:kmongo:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
+    implementation("org.litote.kmongo:kmongo-id-serialization:$kmongo_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlin_datetime_version")
     implementation("com.github.traxterz:ktor-plugin-event-store-db:$event_store_db_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.github.microutils:kotlin-logging-jvm:$kotlin_logging_version")

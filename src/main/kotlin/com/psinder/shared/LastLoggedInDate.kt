@@ -1,6 +1,8 @@
 package com.psinder.shared
 
-import java.time.ZonedDateTime
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
 @JvmInline
-internal value class LastLoggedInDate(val value: ZonedDateTime)
+@Serializable
+internal value class LastLoggedInDate(val value: LocalDateTime)

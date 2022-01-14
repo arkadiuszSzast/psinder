@@ -30,8 +30,10 @@ internal class CreateAccountHandler(
         val accountCreatedEvent = AccountCreatedEvent(account)
 
         logger.debug { "Account created. Sending event: $accountCreatedEvent" }
-        eventStore.appendToStream(accountCreatedEvent.eventFamily.code, accountCreatedEvent.toEventData())
-        pipeline.send(accountCreatedEvent)
+        eventStore.appendToStream(
+            accountCreatedEvent.eventFamily.code,
+            accountCreatedEvent.toEventData<AccountCreatedEvent>()
+        )
 
         CreateAccountCommandResult(account.id)
     }
