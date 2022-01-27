@@ -1,6 +1,6 @@
 package com.psinder.plugins
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.psinder.shared.json.JsonMapper
 import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.install
@@ -15,7 +15,7 @@ class SerializationKtTest : DescribeSpec({
         it("should install") {
             withTestApplication {
                 mockKtorInstallFunction()
-                application.configureSerialization(jacksonObjectMapper())
+                application.configureSerialization(JsonMapper.defaultMapper)
 
                 verify(exactly = 1) { application.install(eq(ContentNegotiation), any()) }
             }

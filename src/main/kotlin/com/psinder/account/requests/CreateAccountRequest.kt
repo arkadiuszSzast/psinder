@@ -1,32 +1,32 @@
 package com.psinder.account.requests
 
-import arrow.core.Invalid
-import arrow.core.Valid
-import arrow.core.zip
 import com.psinder.account.PersonalData
 import com.psinder.shared.EmailAddress
-import com.psinder.shared.password.Password
-import com.psinder.shared.validation.mergeAll
+import com.psinder.shared.password.RawPassword
+import com.psinder.shared.validation.Validatable
+import io.konform.validation.Validation
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class CreateAccountRequest private constructor(
+internal data class CreateAccountRequest constructor(
     val personalData: PersonalData,
     val email: EmailAddress,
-    val password: Password,
+    val password: RawPassword,
     val timeZoneId: TimeZone
-) {
-    companion object {
-        internal fun create(personalData: PersonalData, email: String, password: String, timeZoneId: TimeZone) =
-            EmailAddress.create(email).zip(Password.create(password)) { email, password ->
-                CreateAccountRequest(personalData, email, password, timeZoneId)
-            }
+) : Validatable<CreateAccountRequest> {
 
-        internal fun createOrThrow(personalData: PersonalData, email: String, password: String, timeZoneId: TimeZone) =
-            when (val vRegisterRequest = create(personalData, email, password, timeZoneId)) {
-                is Invalid -> throw vRegisterRequest.value.mergeAll()
-                is Valid -> vRegisterRequest.value
+    companion object {
+        val validator = Validation<CreateAccountRequest> {
+            CreateAccountRequest::password {
+                run(RawPassword.validator)
             }
+            CreateAccountRequest::email {
+                run(EmailAddress.validator)
+            }
+        }
     }
+
+    override val validator: Validation<CreateAccountRequest>
+        get() = CreateAccountRequest.validator
 }

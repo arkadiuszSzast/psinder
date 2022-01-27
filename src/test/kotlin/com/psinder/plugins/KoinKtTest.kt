@@ -1,7 +1,9 @@
 package com.psinder.plugins
 
+import com.psinder.main
 import com.psinder.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
+import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.server.testing.withTestApplication
 import io.mockk.verify
@@ -27,8 +29,7 @@ class KoinKtTest : DescribeSpec({
     describe("check installed modules") {
 
         it("verify all modules") {
-            withTestApplication {
-                application.configureKoin()
+            withTestApplication(Application::main) {
                 application.getKoin().checkModules()
             }
         }

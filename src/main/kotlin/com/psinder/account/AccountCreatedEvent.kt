@@ -3,7 +3,7 @@ package com.psinder.account
 import com.psinder.shared.events.DomainEvent
 import com.psinder.shared.events.EventFamily
 import com.psinder.shared.events.EventType
-import com.psinder.shared.password.Password
+import com.psinder.shared.password.HashedPassword
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -13,7 +13,7 @@ import org.litote.kmongo.Id
 internal data class AccountCreatedEvent(
     @Contextual val accountId: Id<Account>,
     val personalData: PersonalData,
-    val password: Password,
+    val password: HashedPassword,
     val timeZoneId: TimeZone
 ) : DomainEvent {
 

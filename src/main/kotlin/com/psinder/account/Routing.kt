@@ -6,6 +6,7 @@ import com.psinder.account.commands.LoginAccountCommand
 import com.psinder.account.requests.CreateAccountRequest
 import com.psinder.account.requests.LoginAccountRequest
 import com.psinder.account.responses.LoginAccountResponse
+import com.psinder.shared.validation.validateEagerly
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.request.receive
@@ -20,7 +21,7 @@ fun Application.configureAccountRouting() {
 
     routing {
         post("/account") {
-            val request = call.receive<CreateAccountRequest>()
+            val request = call.receive<CreateAccountRequest>().validateEagerly()
             call.respond(pipeline.send(CreateAccountCommand(request)))
         }
         post("/login") {

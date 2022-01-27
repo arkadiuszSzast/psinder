@@ -1,39 +1,24 @@
 package com.psinder.shared
 
-import arrow.core.Nel
-import arrow.core.None
-import arrow.core.Some
-import arrow.core.Valid
-import arrow.core.ValidatedNel
-import arrow.core.invalid
-import com.psinder.shared.EmailAddressValidationRules.emailPatternRule
-import com.psinder.shared.validation.ValidationException
-import com.psinder.shared.validation.ValidationRule
-import com.psinder.shared.validation.checkAll
+import com.psinder.shared.validation.Validatable
+import io.konform.validation.Validation
+import io.konform.validation.jsonschema.pattern
 import kotlinx.serialization.Serializable
 
 @JvmInline
 @Serializable
-internal value class EmailAddress private constructor(val value: String) {
+internal value class EmailAddress private constructor(val value: String) : Validatable<EmailAddress> {
 
     companion object {
-        internal fun create(address: String): ValidatedNel<ValidationException, EmailAddress> {
-            val errors = validationRules.checkAll(address)
+        internal fun create(address: String) = EmailAddress(address.trim())
 
-            return if (errors.isNotEmpty()) {
-                Nel.fromListUnsafe(errors).invalid()
-            } else {
-                Valid(EmailAddress(address.trim()))
+        val validator = Validation<EmailAddress> {
+            EmailAddress::value {
+                pattern(EMAIL_PATTERN) hint "validation.invalid_email_format"
             }
         }
-
-        private val validationRules = listOf(emailPatternRule)
     }
-}
 
-private object EmailAddressValidationRules {
-    val emailPatternRule = ValidationRule<String> {
-        if (it.matches(EMAIL_PATTERN.toRegex())) None
-        else Some(ValidationException("validation.invalid_email_format"))
-    }
+    override val validator: Validation<EmailAddress>
+        get() = EmailAddress.validator
 }

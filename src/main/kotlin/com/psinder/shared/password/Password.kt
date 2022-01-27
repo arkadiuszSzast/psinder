@@ -1,31 +1,30 @@
 package com.psinder.shared.password
 
-import arrow.core.Nel
-import arrow.core.Valid
-import arrow.core.ValidatedNel
-import arrow.core.invalid
-import com.psinder.shared.validation.ValidationException
-import com.psinder.shared.validation.ValidationRule
-import com.psinder.shared.validation.checkAll
+import com.psinder.shared.validation.Validatable
+import io.konform.validation.Validation
 import kotlinx.serialization.Serializable
 import org.mindrot.jbcrypt.BCrypt
 
 @JvmInline
 @Serializable
-internal value class Password private constructor(val value: String) {
+internal value class RawPassword(val value: String) : Validatable<RawPassword> {
+
+    fun hashpw() = HashedPassword(BCrypt.hashpw(value, BCrypt.gensalt()))
 
     companion object {
-        internal fun create(
-            password: String,
-            rules: List<ValidationRule<String>> = defaultPasswordValidationRules
-        ): ValidatedNel<ValidationException, Password> {
-            val errors = rules.checkAll(password)
-
-            return if (errors.isNotEmpty()) {
-                Nel.fromListUnsafe(errors).invalid()
-            } else {
-                Valid(Password(BCrypt.hashpw(password, BCrypt.gensalt())))
+        val validator = Validation<RawPassword> {
+            RawPassword::value {
+                run(defaultPasswordValidator)
             }
         }
     }
+
+    override val validator: Validation<RawPassword>
+        get() = RawPassword.validator
+}
+
+@JvmInline
+@Serializable
+internal value class HashedPassword(val value: String) {
+    fun matches(value: String) = BCrypt.checkpw(value, this.value)
 }

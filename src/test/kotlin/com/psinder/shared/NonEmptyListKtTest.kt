@@ -4,49 +4,62 @@ import arrow.core.nel
 import arrow.core.nonEmptyListOf
 import arrow.typeclasses.Semigroup
 import com.psinder.shared.validation.ValidationException
+import io.konform.validation.ValidationError
 import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
 import strikt.assertions.isEqualTo
+
+private data class SimpleValidationError(
+    override val dataPath: String,
+    override val message: String
+) : ValidationError
 
 class NonEmptyListKtTest : DescribeSpec({
 
     describe("reduce non empty list") {
 
         it("can reduce list with single element") {
-            val errors = ValidationException(nonEmptyListOf("error_1")).nel()
+            val errors = ValidationException(nonEmptyListOf(SimpleValidationError(".", "error_1"))).nel()
 
             val result = errors.reduce(ValidationException.semigroup)
 
-            expectThat(result)
-                .get { validationErrorCodes }
-                .containsExactly("error_1")
+            expectThat(result).get { validationErrors }.containsExactly(SimpleValidationError(".", "error_1"))
         }
 
         it("can reduce list with two elements") {
             val errors = nonEmptyListOf(
-                ValidationException(nonEmptyListOf("error_1")),
-                ValidationException(nonEmptyListOf("error_2"))
+                ValidationException(nonEmptyListOf(SimpleValidationError(".", "error_1"))),
+                ValidationException(nonEmptyListOf(SimpleValidationError(".", "error_2")))
             )
 
             val result = errors.reduce(ValidationException.semigroup)
 
-            expectThat(result)
-                .get { validationErrorCodes }
-                .containsExactly("error_1", "error_2")
+            expectThat(result).get { validationErrors }
+                .containsExactly(
+                    SimpleValidationError(".", "error_1"),
+                    SimpleValidationError(".", "error_2")
+                )
         }
 
         it("can reduce list with two elements and with different size") {
             val errors = nonEmptyListOf(
-                ValidationException(nonEmptyListOf("error_1")),
-                ValidationException(nonEmptyListOf("error_2", "error_3"))
+                ValidationException(nonEmptyListOf(SimpleValidationError(".", "error_1"))),
+                ValidationException(
+                    nonEmptyListOf(
+                        SimpleValidationError(".", "error_2"),
+                        SimpleValidationError(".", "error_3")
+                    )
+                )
             )
 
             val result = errors.reduce(ValidationException.semigroup)
 
-            expectThat(result)
-                .get { validationErrorCodes }
-                .containsExactly("error_1", "error_2", "error_3")
+            expectThat(result).get { validationErrors }.containsExactly(
+                SimpleValidationError(".", "error_1"),
+                SimpleValidationError(".", "error_2"),
+                SimpleValidationError(".", "error_3")
+            )
         }
     }
 
@@ -56,8 +69,7 @@ class NonEmptyListKtTest : DescribeSpec({
 
             val result = errors.reduceMap(Semigroup.Companion.string()) { it.toString() }
 
-            expectThat(result)
-                .isEqualTo("1")
+            expectThat(result).isEqualTo("1")
         }
 
         it("two elements") {
@@ -65,8 +77,7 @@ class NonEmptyListKtTest : DescribeSpec({
 
             val result = errors.reduceMap(Semigroup.Companion.string()) { it.toString() }
 
-            expectThat(result)
-                .isEqualTo("12")
+            expectThat(result).isEqualTo("12")
         }
     }
 })

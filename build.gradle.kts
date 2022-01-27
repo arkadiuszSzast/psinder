@@ -22,6 +22,7 @@ val ktor_opentracing_version: String by project
 val dd_tracer_version: String by project
 val sentry_version: String by project
 val mockk_version: String by project
+val konform_version: String by project
 
 val tcnative_classifier: String = with(System.getProperty("os.name").toLowerCase()) {
     when {
@@ -103,6 +104,7 @@ dependencies {
     implementation("org.litote.kmongo:kmongo-id-serialization:$kmongo_version")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlin_datetime_version")
     implementation("com.github.traxterz:ktor-plugin-event-store-db:$event_store_db_version")
+    implementation("io.konform:konform-jvm:$konform_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.github.microutils:kotlin-logging-jvm:$kotlin_logging_version")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstash_logback_encoder_version")

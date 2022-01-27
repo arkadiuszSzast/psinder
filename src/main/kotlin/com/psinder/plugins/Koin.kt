@@ -18,6 +18,7 @@ internal fun Application.configureKoin() {
         pipelinrMiddlewaresModule,
         pipelinrCommandHandlersModule,
         pipelinrNotificationHandlersModule,
-        pipelinrModule
+        pipelinrModule,
+        eventStoreDbKoinModule
     )
 }

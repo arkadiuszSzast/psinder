@@ -19,14 +19,14 @@ internal class CreateAccountHandler(
 
     override fun handle(command: CreateAccountCommand): CreateAccountCommandResult = runBlocking {
         logger.debug { "Starting creating account" }
-        val (personalData, email, password, timeZoneId) = command.createAccountRequest
+        val (personalData, email, rawPassword, timeZoneId) = command.createAccountRequest
 
         val isEmailAlreadyTaken = pipeline.send(FindAccountByEmailQuery(email)).accountDto.isDefined()
         if (isEmailAlreadyTaken) {
             throw IllegalStateException("Cannot create account with already existing email")
         }
 
-        val account = Account(email, personalData, password, timeZoneId)
+        val account = Account(email, personalData, rawPassword.hashpw(), timeZoneId)
         val accountCreatedEvent = AccountCreatedEvent(account)
 
         logger.debug { "Account created. Sending event: $accountCreatedEvent" }

@@ -1,16 +1,18 @@
 package com.psinder.shared.password
 
-import arrow.core.nonEmptyListOf
-import com.psinder.shared.validation.rules.StringValidationRules
+import com.psinder.shared.validation.rules.cannotHaveWhitespaces
+import com.psinder.shared.validation.rules.containsNumber
+import com.psinder.shared.validation.rules.containsSpecialCharacter
+import io.konform.validation.Validation
+import io.konform.validation.jsonschema.minLength
 
 internal val allowedSpecialCharacters = """!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~""".toList()
 
-private const val DEFAULT_MIN_PASSWORD_LENGTH = 12L
+private const val DEFAULT_MIN_PASSWORD_LENGTH = 12
 
-internal val defaultPasswordValidationRules = nonEmptyListOf(
-    StringValidationRules.nonBlankRule("validation.password_cannot_be_blank"),
-    StringValidationRules.minLengthRule(DEFAULT_MIN_PASSWORD_LENGTH, "validation.password_too_short"),
-    StringValidationRules.containsNumberRule("validation.password_must_contains_number"),
-    StringValidationRules.containsSpecialCharacterRule("validation.password_must_contains_special_character"),
-    StringValidationRules.cannotHaveWhitespacesRule("validation.password_cannot_have_whitespaces"),
-)
+internal val defaultPasswordValidator = Validation<String> {
+    minLength(DEFAULT_MIN_PASSWORD_LENGTH) hint "validation.password_too_short"
+    containsNumber() hint ("validation.password_must_contains_number")
+    containsSpecialCharacter() hint ("validation.password_must_contains_special_character")
+    cannotHaveWhitespaces() hint ("validation.password_cannot_have_whitespaces")
+}

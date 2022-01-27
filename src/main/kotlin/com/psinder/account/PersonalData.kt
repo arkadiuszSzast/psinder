@@ -3,13 +3,7 @@ package com.psinder.account
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class PersonalData(val name: Name, val surname: Surname? = null, val addressData: AddressData? = null) {
-    companion object {
-        internal fun create(name: String, surname: String?, addressData: AddressData?): PersonalData {
-            return PersonalData(Name.create(name), surname?.let { Surname.create(it) }, addressData)
-        }
-    }
-}
+internal data class PersonalData(val name: Name, val surname: Surname? = null, val addressData: AddressData? = null)
 
 @JvmInline
 @Serializable
