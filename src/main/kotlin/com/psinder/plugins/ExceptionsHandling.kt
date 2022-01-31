@@ -2,7 +2,6 @@ package com.psinder.plugins
 
 import arrow.core.NonEmptyList
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.psinder.shared.rootCause
 import com.psinder.shared.validation.ValidationException
 import io.konform.validation.ValidationError
@@ -22,9 +21,6 @@ internal fun Application.configureExceptionsHandling() {
                 BadRequest,
                 ValidationErrorMessage(it.validationErrors.toInternalValidationCodes(), it::class.java.simpleName)
             )
-        }
-        exception<MissingKotlinParameterException>() {
-            call.respond(BadRequest, it.rootCause.createHttpErrorMessage())
         }
         exception<InvalidDefinitionException> {
             call.respond(InternalServerError, it.rootCause.createHttpErrorMessage())

@@ -36,6 +36,7 @@ internal fun main(args: Array<String>) {
 internal fun Application.main() {
     configureEventStore(EventStoreConfig)
     configureKoin()
+    configureSerialization(get())
     initializeSentry(SentryConfig)
     configureMicrometer(TracingConfig)
     configureOpentracing(TracingConfig)
@@ -44,6 +45,5 @@ internal fun Application.main() {
     configureSecurity(JwtConfig)
     configureHTTP()
     configureMonitoring()
-    configureSerialization(get())
     configureEventStoreSubscribers()
 }

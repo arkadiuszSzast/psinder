@@ -5,18 +5,22 @@ import com.psinder.shared.LastLoggedInDate
 import com.psinder.shared.database.HasId
 import com.psinder.shared.password.HashedPassword
 import kotlinx.datetime.TimeZone
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
+import pl.brightinventions.codified.enums.CodifiedEnum
+import pl.brightinventions.codified.enums.codifiedEnum
 
 @Serializable
 internal data class Account private constructor(
-    @SerialName("_id") override val id: Id<Account>,
+    @SerialName("_id") @Contextual override val id: Id<Account>,
     val email: EmailAddress,
     val personalData: PersonalData,
     val password: HashedPassword,
-    val status: AccountStatus,
+    @Serializable(with = AccountStatus.CodifiedSerializer::class)
+    val status: CodifiedEnum<AccountStatus, String>,
     val timeZoneId: TimeZone,
     val lastLoggedInUTCDate: LastLoggedInDate? = null
 ) : HasId<Account> {
@@ -25,5 +29,5 @@ internal data class Account private constructor(
         personalData: PersonalData,
         password: HashedPassword,
         timeZoneId: TimeZone,
-    ) : this(newId(), email, personalData, password, AccountStatus.Staged, timeZoneId)
+    ) : this(newId(), email, personalData, password, AccountStatus.Staged.codifiedEnum(), timeZoneId)
 }

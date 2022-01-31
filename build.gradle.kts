@@ -23,6 +23,7 @@ val dd_tracer_version: String by project
 val sentry_version: String by project
 val mockk_version: String by project
 val konform_version: String by project
+val codified_version: String by project
 
 val tcnative_classifier: String = with(System.getProperty("os.name").toLowerCase()) {
     when {
@@ -99,8 +100,9 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.arrow-kt:arrow-core")
     implementation("com.github.arkadiuszSzast:pipelinr-fork:$pipelinr_version")
-    implementation("org.litote.kmongo:kmongo:$kmongo_version")
-    implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
+    implementation("com.github.bright.codified:enums:$codified_version")
+    implementation("com.github.bright.codified:enums-serializer:$codified_version")
+    implementation("org.litote.kmongo:kmongo-coroutine-serialization:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-id-serialization:$kmongo_version")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlin_datetime_version")
     implementation("com.github.traxterz:ktor-plugin-event-store-db:$event_store_db_version")

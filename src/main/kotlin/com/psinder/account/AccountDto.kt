@@ -4,12 +4,13 @@ import com.psinder.shared.EmailAddress
 import com.psinder.shared.LastLoggedInDate
 import kotlinx.datetime.TimeZone
 import org.litote.kmongo.Id
+import pl.brightinventions.codified.enums.CodifiedEnum
 
 internal data class AccountDto(
     val id: Id<Account>,
     val email: EmailAddress,
     val personalData: PersonalData,
-    val status: AccountStatus,
+    val status: CodifiedEnum<AccountStatus, String>,
     val timeZoneId: TimeZone,
     val lastLoggedInUTCDate: LastLoggedInDate? = null
 ) {
