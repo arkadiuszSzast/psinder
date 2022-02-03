@@ -1,7 +1,6 @@
 package com.psinder.plugins
 
 import arrow.core.NonEmptyList
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
 import com.psinder.shared.rootCause
 import com.psinder.shared.validation.ValidationException
 import io.konform.validation.ValidationError
@@ -13,6 +12,7 @@ import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.InternalServerError
 import io.ktor.response.respond
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 
 internal fun Application.configureExceptionsHandling() {
     install(StatusPages) {
@@ -22,7 +22,7 @@ internal fun Application.configureExceptionsHandling() {
                 ValidationErrorMessage(it.validationErrors.toInternalValidationCodes(), it::class.java.simpleName)
             )
         }
-        exception<InvalidDefinitionException> {
+        exception<SerializationException> {
             call.respond(InternalServerError, it.rootCause.createHttpErrorMessage())
         }
     }

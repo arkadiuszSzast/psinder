@@ -12,10 +12,11 @@ internal object JsonMapper {
         allowSpecialFloatingPointValues = true
         allowStructuredMapKeys = true
         prettyPrint = true
+        ignoreUnknownKeys = true
         serializersModule = IdKotlinXSerializationModule
     }
 }
 
-internal val jacksonModule = module {
+internal val jsonModule = module {
     single { JsonMapper.defaultMapper }
 }

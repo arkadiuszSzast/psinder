@@ -7,8 +7,10 @@ import arrow.core.invalid
 import arrow.core.valid
 import com.auth0.jwt.JWT
 import com.auth0.jwt.exceptions.JWTDecodeException
+import kotlinx.serialization.Serializable
 
 @JvmInline
+@Serializable
 value class JwtToken private constructor(val token: String) {
     companion object {
         internal fun create(token: String): Validated<JWTDecodeException, JwtToken> {

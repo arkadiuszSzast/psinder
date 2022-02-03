@@ -1,27 +1,26 @@
 package com.psinder.account.commands.handlers
 
-import an.awesome.pipelinr.Command
-import an.awesome.pipelinr.Pipeline
 import com.psinder.account.Account
 import com.psinder.account.AccountCreatedEvent
 import com.psinder.account.commands.CreateAccountCommand
 import com.psinder.account.commands.CreateAccountCommandResult
 import com.psinder.account.queries.FindAccountByEmailQuery
 import com.psinder.shared.events.toEventData
+import com.trendyol.kediatr.AsyncCommandWithResultHandler
+import com.trendyol.kediatr.CommandBus
 import io.traxter.eventstoredb.EventStoreDB
-import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 
 internal class CreateAccountHandler(
-    private val pipeline: Pipeline,
+    private val commandBus: CommandBus,
     private val eventStore: EventStoreDB
-) : Command.Handler<CreateAccountCommand, CreateAccountCommandResult> {
+) : AsyncCommandWithResultHandler<CreateAccountCommand, CreateAccountCommandResult> {
 
-    override fun handle(command: CreateAccountCommand): CreateAccountCommandResult = runBlocking {
+    override suspend fun handleAsync(command: CreateAccountCommand): CreateAccountCommandResult {
         logger.debug { "Starting creating account" }
         val (personalData, email, rawPassword, timeZoneId) = command.createAccountRequest
 
-        val isEmailAlreadyTaken = pipeline.send(FindAccountByEmailQuery(email)).accountDto.isDefined()
+        val isEmailAlreadyTaken = commandBus.executeQueryAsync(FindAccountByEmailQuery(email)).accountDto.isDefined()
         if (isEmailAlreadyTaken) {
             throw IllegalStateException("Cannot create account with already existing email")
         }
@@ -35,7 +34,7 @@ internal class CreateAccountHandler(
             accountCreatedEvent.toEventData<AccountCreatedEvent>()
         )
 
-        CreateAccountCommandResult(account.id)
+        return CreateAccountCommandResult(account.id)
     }
 
     companion object {

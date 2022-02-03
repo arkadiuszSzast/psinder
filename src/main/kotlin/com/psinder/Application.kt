@@ -35,11 +35,11 @@ internal fun main(args: Array<String>) {
 @Suppress("unused")
 internal fun Application.main() {
     configureEventStore(EventStoreConfig)
+    configureOpentracing(TracingConfig)
     configureKoin()
     configureSerialization(get())
     initializeSentry(SentryConfig)
     configureMicrometer(TracingConfig)
-    configureOpentracing(TracingConfig)
     configureRouting()
     configureExceptionsHandling()
     configureSecurity(JwtConfig)

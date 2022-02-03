@@ -1,18 +1,18 @@
 package com.psinder.account.commands.handlers
 
-import an.awesome.pipelinr.Command
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.account.commands.LoginAccountCommand
 import com.psinder.account.commands.LoginAccountCommandResult
 import com.psinder.config.JwtConfig
 import com.psinder.shared.jwt.JwtToken
+import com.trendyol.kediatr.AsyncCommandWithResultHandler
 import mu.KotlinLogging
 import java.util.Date
 
-internal class LoginAccountHandler : Command.Handler<LoginAccountCommand, LoginAccountCommandResult> {
+internal class LoginAccountHandler : AsyncCommandWithResultHandler<LoginAccountCommand, LoginAccountCommandResult> {
 
-    override fun handle(command: LoginAccountCommand): LoginAccountCommandResult {
+    override suspend fun handleAsync(command: LoginAccountCommand): LoginAccountCommandResult {
         val (username, password) = command.loginAccountRequest
         logger.debug { "Starting authentication process for user: [${username.value}]" }
 
