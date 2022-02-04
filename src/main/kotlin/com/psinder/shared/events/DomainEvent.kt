@@ -1,6 +1,6 @@
 package com.psinder.shared.events
 
-import an.awesome.pipelinr.Notification
+import com.trendyol.kediatr.Notification
 import org.litote.kmongo.Id
 import org.litote.kmongo.id.UUIDStringIdGenerator
 import java.util.UUID

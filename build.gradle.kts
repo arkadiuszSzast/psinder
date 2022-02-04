@@ -4,7 +4,6 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 val ktor_version: String by project
 val kotlin_version: String by project
 val koin_version: String by project
-val pipelinr_version: String by project
 val logback_version: String by project
 val jbcrypt_version: String by project
 val kmongo_version: String by project
@@ -100,7 +99,6 @@ dependencies {
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.arrow-kt:arrow-core")
-    implementation("com.github.arkadiuszSzast:pipelinr-fork:$pipelinr_version")
     implementation("com.github.arkadiuszSzast:kediatR-koin-starter:$kediatr_version")
     implementation("com.github.bright.codified:enums:$codified_version")
     implementation("com.github.bright.codified:enums-serializer:$codified_version")
