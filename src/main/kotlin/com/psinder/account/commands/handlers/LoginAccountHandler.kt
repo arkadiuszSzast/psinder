@@ -11,6 +11,7 @@ import mu.KotlinLogging
 import java.util.Date
 
 internal class LoginAccountHandler : AsyncCommandWithResultHandler<LoginAccountCommand, LoginAccountCommandResult> {
+    private val logger = KotlinLogging.logger {}
 
     override suspend fun handleAsync(command: LoginAccountCommand): LoginAccountCommandResult {
         val (username, password) = command.loginAccountRequest
@@ -27,7 +28,6 @@ internal class LoginAccountHandler : AsyncCommandWithResultHandler<LoginAccountC
     }
 
     companion object {
-        private val logger = KotlinLogging.logger {}
         private const val OneDayInMillis = 86400000
     }
 }

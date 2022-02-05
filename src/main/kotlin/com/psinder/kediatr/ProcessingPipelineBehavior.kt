@@ -1,33 +1,14 @@
 package com.psinder.kediatr
 
-import com.psinder.monitoring.activate
+import com.psinder.kediatr.middlewares.PipelineBehaviorMiddleware
 import com.trendyol.kediatr.PipelineBehavior
-import io.opentracing.Tracer
-import mu.KotlinLogging
-import org.litote.kmongo.newId
 
-internal class ProcessingPipelineBehavior(private val tracer: Tracer) : PipelineBehavior {
-
-    private val logger = KotlinLogging.logger {}
+internal class ProcessingPipelineBehavior(private val middlewares: List<PipelineBehaviorMiddleware>) :
+    PipelineBehavior {
 
     override fun <TRequest, TResponse> process(request: TRequest, act: () -> TResponse): TResponse {
-        val requestSimpleName = request!!::class.simpleName
-        val requestType = KediatrRequestTypeExtractor.extract(request).code()
-        val requestId = newId<TRequest>()
-
-        return tracer.buildSpan("$requestType-handler-$requestSimpleName")
-            .withTag(requestType, requestSimpleName)
-            .start()
-            .activate(tracer) {
-                logger.debug { "[RequestId ($requestId)] Executing $requestType $requestSimpleName. Payload: [$request]" }
-                runCatching { act() }
-                    .onFailure {
-                        logger.error { "[RequestId ($requestId)] Error while executing $requestType $requestSimpleName. Error message: $it" }
-                    }
-                    .onSuccess {
-                        logger.debug { "[RequestId ($requestId)] $requestType: $requestSimpleName executed successfully" }
-                    }
-                    .getOrThrow()
-            }
+        return middlewares
+            .sortedBy { it.order }
+            .foldRight(act) { curr, next -> { curr.apply(request, next) } }.invoke()
     }
 }

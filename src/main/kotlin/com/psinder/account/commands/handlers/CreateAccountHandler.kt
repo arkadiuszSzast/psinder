@@ -15,6 +15,7 @@ internal class CreateAccountHandler(
     private val commandBus: CommandBus,
     private val eventStore: EventStoreDB
 ) : AsyncCommandWithResultHandler<CreateAccountCommand, CreateAccountCommandResult> {
+    private val logger = KotlinLogging.logger {}
 
     override suspend fun handleAsync(command: CreateAccountCommand): CreateAccountCommandResult {
         logger.debug { "Starting creating account" }
@@ -35,9 +36,5 @@ internal class CreateAccountHandler(
         )
 
         return CreateAccountCommandResult(account.id)
-    }
-
-    companion object {
-        private val logger = KotlinLogging.logger {}
     }
 }
