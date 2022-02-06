@@ -7,8 +7,12 @@ internal class AsyncProcessingPipelineBehavior(private val middlewares: List<Asy
     AsyncPipelineBehavior {
 
     override suspend fun <TRequest, TResponse> process(request: TRequest, act: suspend () -> TResponse): TResponse {
-        return middlewares
-            .sortedBy { it.order }
-            .foldRight(act) { curr, next -> { curr.apply(request, next) } }.invoke()
+        return if (middlewares.isEmpty()) {
+            act()
+        } else {
+            middlewares
+                .sortedBy { it.order }
+                .foldRight(act) { curr, next -> { curr.apply(request, next) } }.invoke()
+        }
     }
 }
