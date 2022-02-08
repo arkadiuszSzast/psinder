@@ -1,6 +1,6 @@
 package com.psinder.plugins
 
-import com.psinder.utils.mockKtorInstallFunction
+import com.psinder.test.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.install
 import io.ktor.features.CORS

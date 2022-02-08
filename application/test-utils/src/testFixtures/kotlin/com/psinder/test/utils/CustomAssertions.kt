@@ -1,6 +1,5 @@
-package com.psinder.utils
+package com.psinder.test.utils
 
-import com.psinder.shared.json.JsonMapper
 import com.psinder.shared.json.decodeFromString
 import io.ktor.server.testing.TestApplicationResponse
 import strikt.api.Assertion

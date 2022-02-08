@@ -1,4 +1,4 @@
-package com.psinder.utils
+package com.psinder.test.utils
 
 import io.mockk.mockkStatic
 

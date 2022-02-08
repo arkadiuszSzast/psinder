@@ -9,7 +9,7 @@ import com.psinder.monitoring.plugins.initializeSentry
 import io.ktor.application.Application
 
 @Suppress("unused")
-internal fun Application.monitoringModule() {
+fun Application.monitoringModule() {
     configureOpentracing(TracingConfig)
     initializeSentry(SentryConfig)
     configureMicrometer(TracingConfig)

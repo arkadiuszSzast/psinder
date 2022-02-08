@@ -1,7 +1,7 @@
-package com.psinder.plugins
+package com.psinder.monitoring.plugins
 
-import com.psinder.config.TracingConfig
-import com.psinder.utils.mockKtorInstallFunction
+import com.psinder.monitoring.config.TracingConfig
+import com.psinder.test.utils.mockKtorInstallFunction
 import com.zopa.ktor.opentracing.OpenTracingServer
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.install

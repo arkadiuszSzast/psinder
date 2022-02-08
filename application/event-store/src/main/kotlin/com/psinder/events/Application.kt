@@ -5,6 +5,6 @@ import com.psinder.events.plugins.configureEventStore
 import io.ktor.application.Application
 
 @Suppress("unused")
-internal fun Application.eventStoreModule() {
+fun Application.eventStoreModule() {
     configureEventStore(EventStoreConfig)
 }

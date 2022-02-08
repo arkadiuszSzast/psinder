@@ -1,7 +1,6 @@
-package com.psinder.shared.json
+package com.psinder.test.utils
 
 import kotlinx.serialization.json.Json
-import org.koin.dsl.module
 import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 
 object JsonMapper {
@@ -15,8 +14,4 @@ object JsonMapper {
         ignoreUnknownKeys = true
         serializersModule = IdKotlinXSerializationModule
     }
-}
-
-val jsonModule = module {
-    single { JsonMapper.defaultMapper }
 }

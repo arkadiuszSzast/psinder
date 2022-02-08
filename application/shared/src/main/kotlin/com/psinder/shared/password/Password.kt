@@ -25,6 +25,6 @@ value class RawPassword(val value: String) : Validatable<RawPassword> {
 
 @JvmInline
 @Serializable
-value class HashedPassword(private val value: String) {
+value class HashedPassword(val value: String) {
     fun matches(value: String) = BCrypt.checkpw(value, this.value)
 }

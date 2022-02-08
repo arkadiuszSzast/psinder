@@ -2,7 +2,6 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 val ktor_version: String by project
-val kotlin_version: String by project
 val koin_version: String by project
 val kmongo_version: String by project
 val logback_version: String by project
@@ -20,6 +19,7 @@ val codified_version: String by project
 
 plugins {
     jacoco
+    `java-test-fixtures`
     id("org.sonarqube") version "3.3"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     id("io.gitlab.arturbosch.detekt").version("1.19.0")
@@ -42,6 +42,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "org.gradle.java-test-fixtures")
 
     sonarqube {
         properties {
@@ -77,11 +78,12 @@ subprojects {
     }
 
     dependencies {
+        implementation("io.ktor:ktor-serialization:${ktor_version}")
         implementation("io.insert-koin:koin-ktor:$koin_version")
+        implementation("org.litote.kmongo:kmongo-id:$kmongo_version")
         implementation("io.arrow-kt:arrow-core")
         implementation("com.github.bright.codified:enums:$codified_version")
         implementation("com.github.bright.codified:enums-serializer:$codified_version")
-        implementation("org.litote.kmongo:kmongo-id-serialization:$kmongo_version")
         implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlin_datetime_version")
         implementation("io.konform:konform-jvm:$konform_version")
         implementation("ch.qos.logback:logback-classic:$logback_version")

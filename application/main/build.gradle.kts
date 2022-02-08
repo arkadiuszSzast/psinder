@@ -22,7 +22,6 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common:$ktor_version")
     implementation("io.ktor:ktor-auth:$ktor_version")
     implementation("io.ktor:ktor-auth-jwt:$ktor_version")
-    implementation("io.ktor:ktor-serialization:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
     implementation("io.netty:netty-tcnative:$tcnative_version")
@@ -35,4 +34,10 @@ dependencies {
     implementation(project(":application:event-store"))
     implementation(project(":application:mongo-db-access"))
     implementation(project(":application:account"))
+
+    // testImplementation(project(":application:event-store"))
+    // testImplementation(project(":application:monitoring"))
+    // testImplementation(project(":application:account"))
+
+    testImplementation(testFixtures(project(":application:test-utils")))
 }
