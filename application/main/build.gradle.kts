@@ -29,15 +29,13 @@ dependencies {
     implementation("io.netty:netty-tcnative-boringssl-static:$tcnative_version:$tcnative_classifier")
 
     implementation(project(":application:shared"))
+    implementation(project(":application:jwt"))
     implementation(project(":application:mediator"))
     implementation(project(":application:monitoring"))
     implementation(project(":application:event-store"))
     implementation(project(":application:mongo-db-access"))
     implementation(project(":application:account"))
-
-    // testImplementation(project(":application:event-store"))
-    // testImplementation(project(":application:monitoring"))
-    // testImplementation(project(":application:account"))
+    implementation(project(":application:account:contract"))
 
     testImplementation(testFixtures(project(":application:test-utils")))
 }

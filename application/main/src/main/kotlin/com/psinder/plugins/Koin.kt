@@ -1,9 +1,9 @@
 package com.psinder.plugins
 
 import com.psinder.account.accountRepositoriesModule
-import com.psinder.account.commands.modules.commandHandlersModule
+import com.psinder.account.koin.accountCommandHandlersModule
 import com.psinder.kediatr.kediatrModule
-import com.psinder.account.commands.modules.queryHandlersModule
+import com.psinder.account.koin.accountQueryHandlersModule
 import com.psinder.database.kmongoModule
 import com.psinder.events.plugins.eventStoreDbKoinModule
 import com.psinder.json.jsonModule
@@ -17,8 +17,8 @@ internal fun Application.configureKoin() {
         jsonModule,
         tracerModule,
         kediatrModule,
-        queryHandlersModule,
-        commandHandlersModule,
+        accountQueryHandlersModule,
+        accountCommandHandlersModule,
         kmongoModule,
         accountRepositoriesModule,
         eventStoreDbKoinModule,

@@ -21,7 +21,7 @@ internal data class Account private constructor(
     @Serializable(with = AccountStatus.CodifiedSerializer::class)
     val status: CodifiedEnum<AccountStatus, String>,
     val timeZoneId: TimeZone,
-    val lastLoggedInUTCDate: LastLoggedInDate? = null
+    val lastLoggedInDate: LastLoggedInDate? = null
 ) : HasId<Account> {
     constructor(
         email: EmailAddress,
