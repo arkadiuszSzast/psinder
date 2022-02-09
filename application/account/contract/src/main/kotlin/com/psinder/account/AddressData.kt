@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AddressData(val city: City, val streetName: StreetName? = null) {
     companion object {
-        internal fun create(city: String, streetName: String?): AddressData {
+        fun create(city: String, streetName: String?): AddressData {
             return AddressData(
                 City.create(city),
                 streetName?.let { StreetName.create(it) })
@@ -17,7 +17,7 @@ data class AddressData(val city: City, val streetName: StreetName? = null) {
 @Serializable
 value class City private constructor(val value: String) {
     companion object {
-        internal fun create(city: String): City {
+        fun create(city: String): City {
             return City(city.trim().replaceFirstChar { it.uppercase() })
         }
     }
@@ -27,7 +27,7 @@ value class City private constructor(val value: String) {
 @Serializable
 value class StreetName private constructor(val value: String) {
     companion object {
-        internal fun create(streetName: String): StreetName {
+        fun create(streetName: String): StreetName {
             return StreetName(streetName.trim().replaceFirstChar { it.uppercase() })
         }
     }
