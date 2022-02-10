@@ -8,7 +8,8 @@ data class AddressData(val city: City, val streetName: StreetName? = null) {
         fun create(city: String, streetName: String?): AddressData {
             return AddressData(
                 City.create(city),
-                streetName?.let { StreetName.create(it) })
+                streetName?.let { StreetName.create(it) }
+            )
         }
     }
 }

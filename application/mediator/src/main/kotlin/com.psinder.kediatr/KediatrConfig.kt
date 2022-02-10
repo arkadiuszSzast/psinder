@@ -8,5 +8,4 @@ val kediatrModule = module {
     single { KediatrKoin.getCommandBus() }
     single { ProcessingPipelineBehavior(getAllDistinct()) }
     single { AsyncProcessingPipelineBehavior(getAllDistinct()) }
-
 }

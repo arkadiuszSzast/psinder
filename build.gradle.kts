@@ -78,7 +78,7 @@ subprojects {
     }
 
     dependencies {
-        implementation("io.ktor:ktor-serialization:${ktor_version}")
+        implementation("io.ktor:ktor-serialization:$ktor_version")
         implementation("io.insert-koin:koin-ktor:$koin_version")
         implementation("org.litote.kmongo:kmongo-id:$kmongo_version")
         implementation("io.arrow-kt:arrow-core")
@@ -125,5 +125,4 @@ subprojects {
             html.required.set(true)
         }
     }
-
 }

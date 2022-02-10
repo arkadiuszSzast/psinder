@@ -1,7 +1,6 @@
-package com.psinder.database.utils
+package com.psinder.database
 
 import com.mongodb.ConnectionString
-import com.psinder.database.config.DatabaseConfig
 import com.psinder.database.transactionally.Transactionally
 import com.psinder.database.transactionally.TransactionallyImpl
 import org.koin.dsl.bind
@@ -10,8 +9,8 @@ import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
 
-val kmongoModule = module {
+val kmongoTestingModule = module {
     single { KMongo.createClient(ConnectionString("mongodb://${MongoContainer.host}:${MongoContainer.port}")).coroutine }
-    factory { get<CoroutineClient>().getDatabase(DatabaseConfig.name) }
+    factory { get<CoroutineClient>().getDatabase("test") }
     single { TransactionallyImpl(get()) } bind Transactionally::class
 }

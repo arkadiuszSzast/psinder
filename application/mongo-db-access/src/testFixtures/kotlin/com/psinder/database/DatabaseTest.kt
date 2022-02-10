@@ -1,6 +1,7 @@
-package com.psinder.database.utils
+package com.psinder.database
 
 import com.psinder.database.transactionally.Transactionally
+import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
 import org.koin.core.context.startKoin
@@ -14,10 +15,14 @@ abstract class DatabaseTest(vararg neededModules: Module) : KoinTest, DescribeSp
     val db: CoroutineDatabase by inject()
 
     override fun beforeEach(testCase: TestCase) {
-        println("Before")
+        runBlocking {
+            db.dropAllCollections()
+        }
     }
 
     init {
-        startKoin { modules(*neededModules) }
+        startKoin { modules(*neededModules, kmongoTestingModule) }
     }
 }
+
+suspend fun CoroutineDatabase.dropAllCollections() = listCollectionNames().forEach { dropCollection(it) }
