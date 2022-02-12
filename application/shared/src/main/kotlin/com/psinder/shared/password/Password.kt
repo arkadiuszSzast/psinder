@@ -21,10 +21,18 @@ value class RawPassword(val value: String) : Validatable<RawPassword> {
 
     override val validator: Validation<RawPassword>
         get() = Companion.validator
+
+    override fun toString(): String {
+        return "RawPassword(value='*masked*')"
+    }
 }
 
 @JvmInline
 @Serializable
 value class HashedPassword(val value: String) {
     fun matches(value: String) = BCrypt.checkpw(value, this.value)
+
+    override fun toString(): String {
+        return "HashedPassword(value='*masked*')"
+    }
 }
