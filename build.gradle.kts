@@ -16,6 +16,7 @@ val logstash_logback_encoder_version: String by project
 val mockk_version: String by project
 val konform_version: String by project
 val codified_version: String by project
+val faker_version: String by project
 
 plugins {
     jacoco
@@ -125,4 +126,7 @@ subprojects {
             html.required.set(true)
         }
     }
+
+    kotlin.target.compilations["test"].associateWith(kotlin.target.compilations["main"])
+    kotlin.target.compilations["testFixtures"].associateWith(kotlin.target.compilations["main"])
 }

@@ -10,9 +10,9 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.litote.kmongo.coroutine.CoroutineDatabase
 
-abstract class DatabaseTest(vararg neededModules: Module) : KoinTest, DescribeSpec() {
-    val transactionally: Transactionally by inject()
-    val db: CoroutineDatabase by inject()
+abstract class DatabaseTest(vararg neededModules: Module) : KoinTest, HasDatabaseAndTransactionally, DescribeSpec() {
+    override val transactionally: Transactionally by inject()
+    override val db: CoroutineDatabase by inject()
 
     override fun beforeEach(testCase: TestCase) {
         runBlocking {

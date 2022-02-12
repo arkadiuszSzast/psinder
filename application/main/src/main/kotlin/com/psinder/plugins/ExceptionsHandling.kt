@@ -5,8 +5,10 @@ import com.psinder.shared.rootCause
 import com.psinder.shared.validation.ValidationException
 import io.konform.validation.ValidationError
 import io.ktor.application.Application
+import io.ktor.application.application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.application.log
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.InternalServerError
@@ -16,13 +18,15 @@ import kotlinx.serialization.SerializationException
 
 internal fun Application.configureExceptionsHandling() {
     install(StatusPages) {
-        exception<ValidationException>() {
+        exception<ValidationException> {
+            application.log.error(it.stackTraceToString())
             call.respond(
                 BadRequest,
                 ValidationErrorMessage(it.validationErrors.toInternalValidationCodes(), it::class.java.simpleName)
             )
         }
         exception<SerializationException> {
+            application.log.error(it.stackTraceToString())
             call.respond(InternalServerError, it.rootCause.createHttpErrorMessage())
         }
     }

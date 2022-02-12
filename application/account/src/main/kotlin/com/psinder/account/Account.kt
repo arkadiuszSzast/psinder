@@ -13,20 +13,32 @@ import pl.brightinventions.codified.enums.CodifiedEnum
 import pl.brightinventions.codified.enums.codifiedEnum
 
 @Serializable
-internal data class Account private constructor(
+data class Account constructor(
     @SerialName("_id") @Contextual override val id: Id<Account>,
     val email: EmailAddress,
     val personalData: PersonalData,
-    val password: HashedPassword,
+    var password: HashedPassword,
     @Serializable(with = AccountStatus.CodifiedSerializer::class)
-    val status: CodifiedEnum<AccountStatus, String>,
-    val timeZoneId: TimeZone,
-    val lastLoggedInDate: LastLoggedInDate? = null
+    var status: CodifiedEnum<AccountStatus, String>,
+    var timeZoneId: TimeZone,
+    var lastLoggedInDate: LastLoggedInDate? = null
 ) : HasId<Account> {
-    constructor(
-        email: EmailAddress,
-        personalData: PersonalData,
-        password: HashedPassword,
-        timeZoneId: TimeZone,
-    ) : this(newId(), email, personalData, password, AccountStatus.Staged.codifiedEnum(), timeZoneId)
+
+    companion object {
+        fun create(
+            email: EmailAddress,
+            personalData: PersonalData,
+            password: HashedPassword,
+            timeZoneId: TimeZone,
+        ): AccountCreatedEvent {
+            return AccountCreatedEvent(
+                newId(),
+                email,
+                personalData,
+                password,
+                AccountStatus.Staged.codifiedEnum(),
+                timeZoneId
+            )
+        }
+    }
 }
