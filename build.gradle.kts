@@ -17,6 +17,7 @@ val mockk_version: String by project
 val konform_version: String by project
 val codified_version: String by project
 val faker_version: String by project
+val global_calldata_version: String by project
 
 plugins {
     jacoco
@@ -79,6 +80,7 @@ subprojects {
     }
 
     dependencies {
+        implementation("io.ktor:ktor-auth-jwt:$ktor_version")
         implementation("io.ktor:ktor-serialization:$ktor_version")
         implementation("io.insert-koin:koin-ktor:$koin_version")
         implementation("org.litote.kmongo:kmongo-id:$kmongo_version")
@@ -87,6 +89,7 @@ subprojects {
         implementation("com.github.bright.codified:enums-serializer:$codified_version")
         implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlin_datetime_version")
         implementation("io.konform:konform-jvm:$konform_version")
+        implementation("com.github.MaaxGr:ktor-globalcalldata:$global_calldata_version")
         implementation("ch.qos.logback:logback-classic:$logback_version")
         implementation("io.github.microutils:kotlin-logging-jvm:$kotlin_logging_version")
         implementation("net.logstash.logback:logstash-logback-encoder:$logstash_logback_encoder_version")

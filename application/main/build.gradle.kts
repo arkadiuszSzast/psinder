@@ -21,7 +21,6 @@ dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-host-common:$ktor_version")
     implementation("io.ktor:ktor-auth:$ktor_version")
-    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
     implementation("io.netty:netty-tcnative:$tcnative_version")
@@ -29,7 +28,7 @@ dependencies {
     implementation("io.netty:netty-tcnative-boringssl-static:$tcnative_version:$tcnative_classifier")
 
     implementation(project(":application:shared"))
-    implementation(project(":application:jwt"))
+    implementation(project(":application:security"))
     implementation(project(":application:mediator"))
     implementation(project(":application:monitoring"))
     implementation(project(":application:event-store"))

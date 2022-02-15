@@ -9,6 +9,7 @@ import com.psinder.shared.validation.validateEagerly
 import com.trendyol.kediatr.CommandBus
 import io.ktor.application.Application
 import io.ktor.application.call
+import io.ktor.auth.authenticate
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
@@ -20,10 +21,13 @@ fun Application.configureAccountRouting() {
     val commandBus: CommandBus by inject()
 
     routing {
-        post("/account") {
-            val request = call.receive<CreateAccountRequest>().validateEagerly()
-            call.respond(commandBus.executeCommandAsync(CreateAccountCommand(request)))
+        authenticate {
+            post("/account") {
+                val request = call.receive<CreateAccountRequest>().validateEagerly()
+                call.respond(commandBus.executeCommandAsync(CreateAccountCommand(request)))
+            }
         }
+
         post("/login") {
             val request = call.receive<LoginAccountRequest>().validateEagerly()
             val loginCommandResult = commandBus.executeCommandAsync(LoginAccountCommand(request))

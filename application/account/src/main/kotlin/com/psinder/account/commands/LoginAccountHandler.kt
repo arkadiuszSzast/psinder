@@ -19,10 +19,13 @@ internal class LoginAccountHandler : AsyncCommandWithResultHandler<LoginAccountC
             .withAudience(JwtConfig.audience)
             .withIssuer(JwtConfig.issuer)
             .withClaim("username", username.value)
+            .withClaim("accountId", "123")
+            .withClaim("email", "joe@doe.com")
+            .withClaim("role", "admin")
             .withExpiresAt(Date(System.currentTimeMillis() + OneDayInMillis))
             .sign(Algorithm.HMAC256(JwtConfig.secret))
 
-        return LoginAccountCommandResult(JwtToken.createOrThrow(""))
+        return LoginAccountCommandResult(JwtToken.createOrThrow(token))
     }
 
     companion object {

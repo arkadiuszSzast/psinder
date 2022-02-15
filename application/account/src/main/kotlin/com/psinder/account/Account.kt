@@ -1,5 +1,8 @@
 package com.psinder.account
 
+import com.psinder.auth.AccountContext
+import com.psinder.auth.AccountId
+import com.psinder.auth.Role
 import com.psinder.database.HasId
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.password.HashedPassword
@@ -15,14 +18,16 @@ import pl.brightinventions.codified.enums.codifiedEnum
 @Serializable
 data class Account constructor(
     @SerialName("_id") @Contextual override val id: Id<Account>,
-    val email: EmailAddress,
+    override val email: EmailAddress,
     val personalData: PersonalData,
     var password: HashedPassword,
     @Serializable(with = AccountStatus.CodifiedSerializer::class)
     var status: CodifiedEnum<AccountStatus, String>,
+    @Serializable(with = Role.CodifiedSerializer::class)
+    override var role: CodifiedEnum<Role, String>,
     var timeZoneId: TimeZone,
     var lastLoggedInDate: LastLoggedInDate? = null
-) : HasId<Account> {
+) : HasId<Account>, AccountContext {
 
     companion object {
         fun create(
@@ -41,4 +46,7 @@ data class Account constructor(
             )
         }
     }
+
+    override val accountId: AccountId
+        get() = AccountId(id.toString())
 }

@@ -4,6 +4,7 @@ import arrow.core.nel
 import com.psinder.account.Account
 import com.psinder.account.AccountCreatedEvent
 import com.psinder.account.queries.FindAccountByEmailQuery
+import com.psinder.auth.AuthorizedAccountAbilityProvider
 import com.psinder.events.toEventData
 import com.psinder.shared.validation.ValidationError
 import com.psinder.shared.validation.ValidationException
@@ -14,11 +15,13 @@ import mu.KotlinLogging
 
 internal class CreateAccountHandler(
     private val commandBus: CommandBus,
-    private val eventStore: EventStoreDB
+    private val eventStore: EventStoreDB,
+    private val acl: AuthorizedAccountAbilityProvider
 ) : AsyncCommandWithResultHandler<CreateAccountCommand, CreateAccountCommandResult> {
     private val logger = KotlinLogging.logger {}
 
     override suspend fun handleAsync(command: CreateAccountCommand): CreateAccountCommandResult {
+        acl.canCreate(Account::class.java)
         logger.debug { "Starting creating account" }
         val (personalData, email, rawPassword, timeZoneId) = command.createAccountRequest
 

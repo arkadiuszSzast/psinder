@@ -1,0 +1,13 @@
+package com.psinder.auth
+
+import kotlinx.serialization.KSerializer
+import pl.brightinventions.codified.Codified
+import pl.brightinventions.codified.enums.CodifiedEnum
+import pl.brightinventions.codified.enums.serializer.codifiedEnumSerializer
+
+enum class Role(override val code: String) : Codified<String> {
+    Admin("admin"),
+    User("user");
+
+    object CodifiedSerializer : KSerializer<CodifiedEnum<Role, String>> by codifiedEnumSerializer()
+}

@@ -5,6 +5,6 @@ import com.psinder.account.commands.LoginAccountHandler
 import org.koin.dsl.module
 
 val accountCommandHandlersModule = module {
-    single { CreateAccountHandler(get(), get()) }
+    single { CreateAccountHandler(get(), get(), get()) }
     single { LoginAccountHandler() }
 }

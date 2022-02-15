@@ -18,11 +18,16 @@ internal fun Application.configureSecurity(jwtConfig: JwtConfig) {
                 JWT
                     .require(Algorithm.HMAC256(jwtConfig.secret))
                     .withAudience(jwtConfig.audience)
-                    .withIssuer(jwtConfig.domain)
+                    .withIssuer(jwtConfig.issuer)
                     .build()
             )
             validate { credential ->
-                if (credential.payload.audience.contains(jwtConfig.audience)) JWTPrincipal(credential.payload) else null
+                when (credential.payload.audience.contains(jwtConfig.audience)) {
+                    true -> JWTPrincipal(credential.payload)
+                }
+                if (credential.payload.audience.contains(jwtConfig.audience)) {
+                    JWTPrincipal(credential.payload)
+                } else null
             }
         }
     }

@@ -1,7 +1,7 @@
 rootProject.name = "psinder"
 
 include("application:main")
-include("application:jwt")
+include("application:security")
 include("application:shared")
 include("application:test-utils")
 include("application:mediator")
