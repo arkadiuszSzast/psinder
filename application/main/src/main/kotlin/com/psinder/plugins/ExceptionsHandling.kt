@@ -1,6 +1,7 @@
 package com.psinder.plugins
 
 import arrow.core.NonEmptyList
+import com.psinder.auth.AuthorityCheckException
 import com.psinder.shared.rootCause
 import com.psinder.shared.validation.ValidationException
 import io.konform.validation.ValidationError
@@ -12,6 +13,7 @@ import io.ktor.application.log
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.InternalServerError
+import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.response.respond
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -28,6 +30,10 @@ internal fun Application.configureExceptionsHandling() {
         exception<SerializationException> {
             application.log.error(it.stackTraceToString())
             call.respond(InternalServerError, it.rootCause.createHttpErrorMessage())
+        }
+        exception<AuthorityCheckException> {
+            application.log.error(it.stackTraceToString())
+            call.respond(Unauthorized, it.rootCause.createHttpErrorMessage())
         }
     }
 }

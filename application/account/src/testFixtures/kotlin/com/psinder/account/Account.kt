@@ -1,5 +1,6 @@
 package com.psinder.account
 
+import com.psinder.auth.role.Role
 import com.psinder.database.HasDatabaseAndTransactionally
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.password.HashedPassword
@@ -36,11 +37,12 @@ suspend fun HasDatabaseAndTransactionally.createAccount(
     streetName: StreetName = faker.accountModule.streetName(),
     password: HashedPassword = faker.accountModule.hashedPassword(),
     status: CodifiedEnum<AccountStatus, String> = faker.accountModule.accountStatus().codifiedEnum(),
+    role: CodifiedEnum<Role, String> = faker.accountModule.role().codifiedEnum(),
     timeZone: TimeZone = faker.accountModule.timeZone(),
     customize: Account.() -> Unit = {}
 ): Account {
     val account =
-        Account(id, email, PersonalData(name, surname, AddressData(city, streetName)), password, status, timeZone)
+        Account(id, email, PersonalData(name, surname, AddressData(city, streetName)), password, status, role, timeZone)
             .apply(customize)
     db.getCollection<Account>().insertOne(account)
     return account

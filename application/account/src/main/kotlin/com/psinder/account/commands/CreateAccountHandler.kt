@@ -4,7 +4,7 @@ import arrow.core.nel
 import com.psinder.account.Account
 import com.psinder.account.AccountCreatedEvent
 import com.psinder.account.queries.FindAccountByEmailQuery
-import com.psinder.auth.AuthorizedAccountAbilityProvider
+import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.events.toEventData
 import com.psinder.shared.validation.ValidationError
 import com.psinder.shared.validation.ValidationException

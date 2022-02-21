@@ -21,7 +21,7 @@ internal class LoginAccountHandler : AsyncCommandWithResultHandler<LoginAccountC
             .withClaim("username", username.value)
             .withClaim("accountId", "123")
             .withClaim("email", "joe@doe.com")
-            .withClaim("role", "admin")
+            .withClaim("role", "Admin")
             .withExpiresAt(Date(System.currentTimeMillis() + OneDayInMillis))
             .sign(Algorithm.HMAC256(JwtConfig.secret))
 

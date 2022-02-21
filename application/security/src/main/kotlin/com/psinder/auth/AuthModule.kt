@@ -1,9 +1,12 @@
 package com.psinder.auth
 
+import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
+import com.psinder.auth.principal.AuthorizedAccountAbilityProviderImpl
+import com.psinder.auth.principal.SecurityContext
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val authModule = module {
-    single { AuthorizedAccountAbilityProviderImpl(get(), get()) } bind AuthorizedAccountAbilityProvider::class
-    single { SecurityContext() }
+    single { AuthorizedAccountAbilityProviderImpl(get()) } bind AuthorizedAccountAbilityProvider::class
+    single { SecurityContext(get()) }
 }

@@ -1,8 +1,9 @@
 package com.psinder.account
 
-import com.psinder.auth.AccountContext
-import com.psinder.auth.AccountId
-import com.psinder.auth.Role
+import com.psinder.auth.account.AccountContext
+import com.psinder.auth.account.AccountId
+import com.psinder.auth.account.BelongsToAccount
+import com.psinder.auth.role.Role
 import com.psinder.database.HasId
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.password.HashedPassword
@@ -27,7 +28,7 @@ data class Account constructor(
     override var role: CodifiedEnum<Role, String>,
     var timeZoneId: TimeZone,
     var lastLoggedInDate: LastLoggedInDate? = null
-) : HasId<Account>, AccountContext {
+) : HasId<Account>, AccountContext, BelongsToAccount {
 
     companion object {
         fun create(

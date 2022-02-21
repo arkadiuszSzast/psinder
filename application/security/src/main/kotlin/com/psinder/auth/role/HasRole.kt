@@ -1,4 +1,4 @@
-package com.psinder.auth
+package com.psinder.auth.role
 
 import pl.brightinventions.codified.enums.CodifiedEnum
 

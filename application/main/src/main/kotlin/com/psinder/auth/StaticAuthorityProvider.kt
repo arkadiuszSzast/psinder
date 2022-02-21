@@ -1,19 +1,20 @@
 package com.psinder.auth
 
 import com.psinder.account.Account
+import com.psinder.auth.authority.Authorities
+import com.psinder.auth.authority.AuthoritiesProvider
+import com.psinder.auth.authority.authoritiesFor
+import com.psinder.auth.role.Role
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import pl.brightinventions.codified.enums.CodifiedEnum
-import pl.brightinventions.codified.enums.codifiedEnum
 
 class StaticAuthorityProvider : AuthoritiesProvider {
-    override val authorities: Map<CodifiedEnum<Role, String>, List<Authority>> = mapOf(
-        Role.Admin.codifiedEnum() to listOf(
-            Authority(
-                Account::class.java,
-                listOf(AuthorityLevel.Read, AuthorityLevel.Update, AuthorityLevel.Create)
-            )
-        )
+    override val authorities: Authorities = Authorities.create(
+        authoritiesFor(Role.Admin) {
+            entityAccess(Account::class.java) {
+                allScopes()
+            }
+        }
     )
 }
 

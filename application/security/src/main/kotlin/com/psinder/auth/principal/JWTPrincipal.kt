@@ -1,6 +1,8 @@
 package com.psinder.auth
 
 import com.auth0.jwt.exceptions.JWTDecodeException
+import com.psinder.auth.account.AccountId
+import com.psinder.auth.role.Role
 import com.psinder.shared.EmailAddress
 import io.ktor.auth.jwt.JWTPrincipal
 import pl.brightinventions.codified.enums.codifiedEnum

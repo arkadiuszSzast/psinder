@@ -76,7 +76,7 @@ subprojects {
     }
 
     detekt {
-        config = files("$projectDir/config/detekt/detekt.yml")
+        config = files("${project.rootProject.projectDir}/config/detekt/detekt.yml")
     }
 
     dependencies {

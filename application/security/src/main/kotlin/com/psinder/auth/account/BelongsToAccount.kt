@@ -1,4 +1,4 @@
-package com.psinder.auth
+package com.psinder.auth.account
 
 interface BelongsToAccount {
     val accountId: AccountId

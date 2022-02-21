@@ -270,6 +270,7 @@ exceptions:
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   TooGenericExceptionThrown:
     active: true
+    excludes: [ '**/test/**' ]
     exceptionNames:
       - 'Error'
       - 'Exception'
@@ -696,6 +697,7 @@ style:
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
+    excludes: [ '**/AsyncPipelineBehaviorTracingMiddleware.kt', '**/PipelineBehaviorTracingMiddleware.kt' ]
   MayBeConst:
     active: true
   ModifierOrder:
