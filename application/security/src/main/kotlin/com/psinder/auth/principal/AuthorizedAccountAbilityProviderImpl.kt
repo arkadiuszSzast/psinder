@@ -46,7 +46,6 @@ class AuthorizedAccountAbilityProviderImpl(
             .toOption()
             .tapNone {
                 val accountId = currentPrincipal().accountId
-                val className = entity::class.java.name
                 logger.warn("Account with id: [$accountId] cannot view ${entity.kClassSimpleName}.")
             }
             .map { it.predicates.all { it.invoke(entity, currentPrincipal()) } }

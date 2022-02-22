@@ -24,10 +24,8 @@ internal fun Application.configureSecurity(jwtConfig: JwtConfig) {
             validate { credential ->
                 when (credential.payload.audience.contains(jwtConfig.audience)) {
                     true -> JWTPrincipal(credential.payload)
+                    else -> null
                 }
-                if (credential.payload.audience.contains(jwtConfig.audience)) {
-                    JWTPrincipal(credential.payload)
-                } else null
             }
         }
     }
