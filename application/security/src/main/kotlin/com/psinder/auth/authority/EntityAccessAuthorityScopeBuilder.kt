@@ -2,16 +2,17 @@ package com.psinder.auth.authority
 
 import com.psinder.auth.account.AccountContext
 import pl.brightinventions.codified.enums.codifiedEnum
+import kotlin.reflect.KClass
 
-class EntityAccessAuthorityScopeBuilder<T>(private val entityRef: Class<T>) {
+class EntityAccessAuthorityScopeBuilder<T : Any>(private val entityRef: KClass<out T>) {
     private var scopes: MutableList<AuthorityScope<T>> = mutableListOf()
 
-    fun readScope(predicates: List<(T, AccountContext) -> Boolean> = emptyList()) {
-        scope(AuthorityLevel.Read, predicates)
+    fun viewScope(predicates: List<(T, AccountContext) -> Boolean> = emptyList()) {
+        scope(AuthorityLevel.View, predicates)
     }
 
-    fun readScope(predicate: (T, AccountContext) -> Boolean) {
-        scope(AuthorityLevel.Read, listOf(predicate))
+    fun viewScope(predicate: (T, AccountContext) -> Boolean) {
+        scope(AuthorityLevel.View, listOf(predicate))
     }
 
     fun createScope() {
@@ -28,13 +29,13 @@ class EntityAccessAuthorityScopeBuilder<T>(private val entityRef: Class<T>) {
 
     fun allScopes(predicates: List<(T, AccountContext) -> Boolean> = emptyList()) {
         scope(AuthorityLevel.Create)
-        scope(AuthorityLevel.Read, predicates)
+        scope(AuthorityLevel.View, predicates)
         scope(AuthorityLevel.Update, predicates)
     }
 
     fun allScopes(predicate: (T, AccountContext) -> Boolean) {
         scope(AuthorityLevel.Create)
-        scope(AuthorityLevel.Read, listOf(predicate))
+        scope(AuthorityLevel.View, listOf(predicate))
         scope(AuthorityLevel.Update, listOf(predicate))
     }
 

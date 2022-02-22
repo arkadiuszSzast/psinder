@@ -6,7 +6,7 @@ import pl.brightinventions.codified.enums.CodifiedEnum
 import pl.brightinventions.codified.enums.serializer.codifiedEnumSerializer
 
 enum class AuthorityLevel(override val code: String) : Codified<String> {
-    Read("Read"),
+    View("View"),
     Create("Create"),
     Update("Update");
 

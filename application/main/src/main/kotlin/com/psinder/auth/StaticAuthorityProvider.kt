@@ -8,10 +8,10 @@ import com.psinder.auth.role.Role
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-class StaticAuthorityProvider : AuthoritiesProvider {
+object StaticAuthorityProvider : AuthoritiesProvider {
     override val authorities: Authorities = Authorities.create(
         authoritiesFor(Role.Admin) {
-            entityAccess(Account::class.java) {
+            entityAccess(Account::class) {
                 allScopes()
             }
         }
@@ -19,5 +19,5 @@ class StaticAuthorityProvider : AuthoritiesProvider {
 }
 
 val authorityProviderModule = module {
-    single { StaticAuthorityProvider() } bind AuthoritiesProvider::class
+    single { StaticAuthorityProvider } bind AuthoritiesProvider::class
 }

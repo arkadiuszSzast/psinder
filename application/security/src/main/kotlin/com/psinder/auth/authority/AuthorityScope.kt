@@ -10,4 +10,4 @@ data class AuthorityScope<T>(
 
 fun <T> List<AuthorityScope<T>>.getCreateScope() = this.find { it.level.code() == AuthorityLevel.Create.code }
 fun <T> List<AuthorityScope<T>>.getUpdateScope() = this.find { it.level.code() == AuthorityLevel.Update.code }
-fun <T> List<AuthorityScope<T>>.getReadScope() = this.find { it.level.code() == AuthorityLevel.Read.code }
+fun <T> List<AuthorityScope<T>>.getReadScope() = this.find { it.level.code() == AuthorityLevel.View.code }

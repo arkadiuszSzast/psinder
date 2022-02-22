@@ -3,18 +3,20 @@ package com.psinder.auth.authority
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.BelongsToAccount
 import pl.brightinventions.codified.enums.CodifiedEnum
+import kotlin.reflect.KClass
 
 sealed class Authority
 data class FeatureAccessAuthority(val feature: CodifiedEnum<Feature, String>) : Authority()
-data class EntityAccessAuthority<T>(val entityRef: Class<T>, val scopes: List<AuthorityScope<T>>) : Authority()
+data class EntityAccessAuthority<T : Any>(val entityRef: KClass<out T>, val scopes: List<AuthorityScope<T>>) :
+    Authority()
 
-fun <T> List<EntityAccessAuthority<T>>.findCreateScopeFor(entityRef: Class<T>) =
+fun <T : Any> List<EntityAccessAuthority<T>>.findCreateScopeFor(entityRef: KClass<out T>) =
     this.find { it.entityRef == entityRef }?.scopes?.getCreateScope()
 
-fun <T> List<EntityAccessAuthority<T>>.findUpdateScopeFor(entityRef: Class<T>) =
+fun <T : Any> List<EntityAccessAuthority<T>>.findUpdateScopeFor(entityRef: KClass<out T>) =
     this.find { it.entityRef == entityRef }?.scopes?.getUpdateScope()
 
-fun <T> List<EntityAccessAuthority<T>>.findReadScopeFor(entityRef: Class<T>) =
+fun <T : Any> List<EntityAccessAuthority<T>>.findReadScopeFor(entityRef: KClass<out T>) =
     this.find { it.entityRef == entityRef }?.scopes?.getReadScope()
 
 fun <T : BelongsToAccount> ownedPredicate() =

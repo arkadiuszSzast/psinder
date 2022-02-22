@@ -8,8 +8,11 @@ import com.psinder.auth.authority.FeatureAccessAuthority
 import com.psinder.auth.authority.findCreateScopeFor
 import com.psinder.auth.authority.findReadScopeFor
 import com.psinder.auth.authority.findUpdateScopeFor
+import com.psinder.shared.kClass
+import com.psinder.shared.kClassSimpleName
 import mu.KotlinLogging
 import pl.brightinventions.codified.enums.CodifiedEnum
+import kotlin.reflect.KClass
 
 class AuthorizedAccountAbilityProviderImpl(
     private val securityContext: SecurityContext
@@ -27,32 +30,30 @@ class AuthorizedAccountAbilityProviderImpl(
             .isDefined()
     }
 
-    override suspend fun <T> canCreate(entityRef: Class<T>): Boolean {
+    override suspend fun <T : Any> canCreate(entityRef: KClass<T>): Boolean {
         return securityContext.authorities().filterIsInstance<EntityAccessAuthority<T>>().findCreateScopeFor(entityRef)
             .toOption()
             .tapNone {
                 val accountId = currentPrincipal().accountId
-                val className = entityRef::class.java.name
-                logger.warn("Account with id: [$accountId] cannot create $className.")
+                logger.warn("Account with id: [$accountId] cannot create ${entityRef.simpleName}.")
             }
             .isDefined()
     }
 
     override suspend fun <T : Any> canView(entity: T): Boolean {
         return securityContext.authorities().filterIsInstance<EntityAccessAuthority<T>>()
-            .findReadScopeFor(entity.javaClass)
+            .findReadScopeFor(entity.kClass)
             .toOption()
             .tapNone {
                 val accountId = currentPrincipal().accountId
                 val className = entity::class.java.name
-                logger.warn("Account with id: [$accountId] cannot view $className.")
+                logger.warn("Account with id: [$accountId] cannot view ${entity.kClassSimpleName}.")
             }
-            .map { it.predicates.any { it.invoke(entity, currentPrincipal()) } }
+            .map { it.predicates.all { it.invoke(entity, currentPrincipal()) } }
             .tap { allPredicatesPassed ->
                 if (!allPredicatesPassed) {
                     val accountId = currentPrincipal().accountId
-                    val className = entity::class.java.name
-                    logger.warn("Account with id: [$accountId] cannot view that instance of $className.")
+                    logger.warn("Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}.")
                 }
             }
             .getOrElse { false }
@@ -60,19 +61,17 @@ class AuthorizedAccountAbilityProviderImpl(
 
     override suspend fun <T : Any> canUpdate(entity: T): Boolean {
         return securityContext.authorities().filterIsInstance<EntityAccessAuthority<T>>()
-            .findUpdateScopeFor(entity.javaClass)
+            .findUpdateScopeFor(entity.kClass)
             .toOption()
             .tapNone {
                 val accountId = currentPrincipal().accountId
-                val className = entity::class.java.name
-                logger.warn("Account with id: [$accountId] cannot update $className.")
+                logger.warn("Account with id: [$accountId] cannot update ${entity.kClassSimpleName}.")
             }
             .map { it.predicates.any { it.invoke(entity, currentPrincipal()) } }
             .tap { allPredicatesPassed ->
                 if (allPredicatesPassed) {
                     val accountId = currentPrincipal().accountId
-                    val className = entity::class.java.name
-                    logger.warn("Account with id: [$accountId] cannot update that instance of $className.")
+                    logger.warn("Account with id: [$accountId] cannot update that instance of ${entity.kClassSimpleName}.")
                 }
             }
             .getOrElse { false }

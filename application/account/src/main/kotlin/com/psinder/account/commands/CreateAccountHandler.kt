@@ -21,7 +21,7 @@ internal class CreateAccountHandler(
     private val logger = KotlinLogging.logger {}
 
     override suspend fun handleAsync(command: CreateAccountCommand): CreateAccountCommandResult {
-        acl.canCreate(Account::class.java)
+        acl.canCreate(Account::class)
         logger.debug { "Starting creating account" }
         val (personalData, email, rawPassword, timeZoneId) = command.createAccountRequest
 

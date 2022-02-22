@@ -1,12 +1,13 @@
 package com.psinder.auth.authority
 
 import pl.brightinventions.codified.enums.codifiedEnum
+import kotlin.reflect.KClass
 
 class AuthoritiesListBuilder {
     private val authorities: MutableList<Authority> = mutableListOf()
 
-    fun <T> entityAccess(
-        entityRef: Class<T>,
+    fun <T : Any> entityAccess(
+        entityRef: KClass<out T>,
         customize: EntityAccessAuthorityScopeBuilder<T>.() -> Unit
     ) {
         val builder = EntityAccessAuthorityScopeBuilder(entityRef)
