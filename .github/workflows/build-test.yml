@@ -26,11 +26,15 @@ jobs:
           SONAR_LOGIN_TOKEN: ${{ secrets.SONAR_LOGIN_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          ./gradlew build 
           ./gradlew detektAllSneaky 
           ./gradlew ktlintCheck 
           ./gradlew jacocoRootReport 
           ./gradlew sonarqube
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: **/test-results/**/*.xml
 
   ktlint:
     runs-on: ubuntu-latest
