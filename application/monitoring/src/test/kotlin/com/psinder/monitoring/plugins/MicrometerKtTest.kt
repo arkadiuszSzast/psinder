@@ -26,5 +26,16 @@ internal class MicrometerKtTest : DescribeSpec({
             }
         }
 
+        it("should install when tracing is enabled") {
+            withTestApplication {
+                mockKtorInstallFunction()
+                mockkObject(TracingConfig)
+                every { TracingConfig.enabled } returns true
+
+                application.configureMicrometer(TracingConfig)
+
+                verify(exactly = 1) { application.install(eq(MicrometerMetrics), any()) }
+            }
+        }
     }
 })
