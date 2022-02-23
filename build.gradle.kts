@@ -19,6 +19,8 @@ val codified_version: String by project
 val faker_version: String by project
 val global_calldata_version: String by project
 
+val detekt_reports_directories = project.allprojects.map { "${it.buildDir}/reports/detekt/detekt.xml" }
+
 plugins {
     jacoco
     `java-test-fixtures`
@@ -52,7 +54,7 @@ subprojects {
             property("sonar.organization", "arkadiuszszast")
             property("sonar.host.url", "https://sonarcloud.io")
             property("sonar.login", System.getenv("SONAR_LOGIN_TOKEN"))
-            property("sonar.kotlin.detekt.reportPaths", "${project.buildDir}/reports/detekt/detekt.xml")
+            property("sonar.kotlin.detekt.reportPaths", detekt_reports_directories)
             property(
                 "sonar.kotlin.ktlint.reportPaths",
                 arrayOf(
