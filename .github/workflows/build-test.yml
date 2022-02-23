@@ -25,7 +25,12 @@ jobs:
         env:
           SONAR_LOGIN_TOKEN: ${{ secrets.SONAR_LOGIN_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: ./gradlew build detektAll ktlintCheck jacocoRootReport sonarqube --continue
+        run: |
+          ./gradlew build 
+          ./gradlew detektAllSneaky 
+          ./gradlew ktlintCheck 
+          ./gradlew jacocoRootReport 
+          ./gradlew sonarqube
 
   ktlint:
     runs-on: ubuntu-latest
@@ -59,7 +64,7 @@ jobs:
           java-version: 16
 
       - name: Detekt checks
-        run: ./gradlew detekt
+        run: ./gradlew detektAll
 
   test:
     runs-on: ubuntu-latest

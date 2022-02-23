@@ -58,6 +58,18 @@ task<Detekt>("detektAll") {
     buildUponDefaultConfig = false
 }
 
+task<Detekt>("detektAllSneaky") {
+    parallel = true
+    setSource(files(projectDir))
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("**/resources/**")
+    exclude("**/build/**")
+    config.setFrom(files("${project.rootProject.projectDir}/config/detekt/detekt.yml"))
+    buildUponDefaultConfig = false
+    ignoreFailures = true
+}
+
 task<JacocoReport>("jacocoRootReport") {
     dependsOn(subprojects.map { it.tasks.withType<Test>() })
     dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() })
