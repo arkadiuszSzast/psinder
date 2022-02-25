@@ -1,6 +1,7 @@
 package com.psinder.auth.authorities
 
 import com.psinder.auth.authority.AccountAuthorities
+import com.psinder.auth.authority.Feature
 import com.psinder.auth.authority.authorities
 import com.psinder.auth.support.Cat
 import com.psinder.auth.support.Dog
@@ -70,6 +71,27 @@ class AccountAuthoritiesTest : DescribeSpec({
             expectThat(authorities.findViewScopeFor(Dog::class))
                 .isSome()
             expectThat(authorities.findUpdateScopeFor(Dog::class))
+                .isNone()
+        }
+    }
+
+    describe("features abilities") {
+
+        it("should find matching ability") {
+            val authorities = authorities {
+                featureAccess(Feature("feature_a"))
+            }.let { AccountAuthorities(it) }
+
+            expectThat(authorities.findFeature(Feature("feature_a")))
+                .isSome()
+        }
+
+        it("should not find ability") {
+            val authorities = authorities {
+                featureAccess(Feature("feature_a"))
+            }.let { AccountAuthorities(it) }
+
+            expectThat(authorities.findFeature(Feature("feature_b")))
                 .isNone()
         }
     }
