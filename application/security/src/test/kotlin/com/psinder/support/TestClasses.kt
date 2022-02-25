@@ -1,4 +1,4 @@
-package com.psinder.auth.support
+package com.psinder.support
 
 import com.psinder.auth.account.AccountId
 import com.psinder.auth.account.BelongsToAccount

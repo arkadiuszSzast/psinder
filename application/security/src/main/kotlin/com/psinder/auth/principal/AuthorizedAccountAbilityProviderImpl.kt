@@ -56,9 +56,9 @@ class AuthorizedAccountAbilityProviderImpl(
                 val accountId = currentPrincipal().accountId
                 logger.warn("Account with id: [$accountId] cannot update ${entity.kClassSimpleName}.")
             }
-            .map { it.predicates.any { it.invoke(entity, currentPrincipal()) } }
+            .map { it.predicates.all { it.invoke(entity, currentPrincipal()) } }
             .tap { allPredicatesPassed ->
-                if (allPredicatesPassed) {
+                if (!allPredicatesPassed) {
                     val accountId = currentPrincipal().accountId
                     logger.warn("Account with id: [$accountId] cannot update that instance of ${entity.kClassSimpleName}.")
                 }

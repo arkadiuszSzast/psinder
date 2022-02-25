@@ -3,8 +3,8 @@ package com.psinder.auth.authorities
 import com.psinder.auth.authority.AccountAuthorities
 import com.psinder.auth.authority.Feature
 import com.psinder.auth.authority.authorities
-import com.psinder.auth.support.Cat
-import com.psinder.auth.support.Dog
+import com.psinder.support.Cat
+import com.psinder.support.Dog
 import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
 import strikt.arrow.isNone

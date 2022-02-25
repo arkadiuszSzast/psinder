@@ -34,7 +34,7 @@ dependencies {
     implementation(project(":application:event-store"))
     implementation(project(":application:mongo-db-access"))
     implementation(project(":application:account"))
-    implementation(project(":application:account:contract"))
+    implementation(project(":application:account:account-contract"))
 
     testImplementation(testFixtures(project(":application:test-utils")))
 }

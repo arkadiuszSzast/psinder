@@ -1,10 +1,10 @@
 dependencies {
-    implementation(project(":application:shared"))
+    api(project(":application:account:account-contract"))
     implementation(project(":application:security"))
+    implementation(project(":application:shared"))
     implementation(project(":application:mongo-db-access"))
     implementation(project(":application:event-store"))
     implementation(project(":application:mediator"))
-    implementation(project(":application:account:contract"))
 
     testFixturesImplementation(testFixtures(project(":application:mongo-db-access")))
     testFixturesImplementation(testFixtures(project(":application:test-utils")))
