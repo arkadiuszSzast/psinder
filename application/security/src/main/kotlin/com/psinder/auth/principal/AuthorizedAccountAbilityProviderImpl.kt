@@ -5,7 +5,6 @@ import com.psinder.auth.authority.Feature
 import com.psinder.shared.kClass
 import com.psinder.shared.kClassSimpleName
 import mu.KotlinLogging
-import pl.brightinventions.codified.enums.CodifiedEnum
 import kotlin.reflect.KClass
 
 class AuthorizedAccountAbilityProviderImpl(
@@ -13,12 +12,12 @@ class AuthorizedAccountAbilityProviderImpl(
 ) : AuthorizedAccountAbilityProvider {
     private val logger = KotlinLogging.logger {}
 
-    override suspend fun hasAccessTo(feature: CodifiedEnum<Feature, String>): Boolean {
+    override suspend fun hasAccessTo(feature: Feature): Boolean {
         return authenticatedAccountProvider.authorities()
             .findFeature(feature)
             .tapNone {
                 val accountId = currentPrincipal().accountId
-                logger.warn("Account with id: [$accountId] has no access to ${feature.code()} feature.")
+                logger.warn("Account with id: [$accountId] has no access to ${feature.code} feature.")
             }
             .isDefined()
     }

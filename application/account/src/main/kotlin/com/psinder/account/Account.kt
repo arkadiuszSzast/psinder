@@ -19,7 +19,7 @@ import pl.brightinventions.codified.enums.codifiedEnum
 @Serializable
 data class Account constructor(
     @SerialName("_id") @Contextual override val id: Id<Account>,
-    override val email: EmailAddress,
+    val email: EmailAddress,
     val personalData: PersonalData,
     var password: HashedPassword,
     @Serializable(with = AccountStatus.CodifiedSerializer::class)

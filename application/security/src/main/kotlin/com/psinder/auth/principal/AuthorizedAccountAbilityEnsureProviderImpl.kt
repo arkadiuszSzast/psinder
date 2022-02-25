@@ -3,7 +3,6 @@ package com.psinder.auth.principal
 import com.psinder.auth.AuthorityCheckException
 import com.psinder.auth.authority.Feature
 import com.psinder.shared.kClassSimpleName
-import pl.brightinventions.codified.enums.CodifiedEnum
 import kotlin.reflect.KClass
 
 class AuthorizedAccountAbilityEnsureProviderImpl(
@@ -11,10 +10,10 @@ class AuthorizedAccountAbilityEnsureProviderImpl(
     private val authenticatedAccountProvider: AuthenticatedAccountProvider
 ) : AuthorizedAccountAbilityEnsureProvider {
 
-    override suspend fun hasAccessTo(feature: CodifiedEnum<Feature, String>) {
+    override suspend fun hasAccessTo(feature: Feature) {
         if (!acl.hasAccessTo(feature)) {
             val accountId = currentPrincipal().accountId
-            throw AuthorityCheckException("Account with id: [$accountId] has no access to ${feature.code()} feature")
+            throw AuthorityCheckException("Account with id: [$accountId] has no access to ${feature.code} feature")
         }
     }
 

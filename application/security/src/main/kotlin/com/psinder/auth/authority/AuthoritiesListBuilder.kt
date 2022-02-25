@@ -1,6 +1,5 @@
 package com.psinder.auth.authority
 
-import pl.brightinventions.codified.enums.codifiedEnum
 import kotlin.reflect.KClass
 
 class AuthoritiesListBuilder {
@@ -16,7 +15,7 @@ class AuthoritiesListBuilder {
     }
 
     fun featureAccess(feature: Feature) {
-        authorities.add(FeatureAccessAuthority(feature.codifiedEnum()))
+        authorities.add(FeatureAccessAuthority(feature))
     }
 
     fun build() = authorities.toList()

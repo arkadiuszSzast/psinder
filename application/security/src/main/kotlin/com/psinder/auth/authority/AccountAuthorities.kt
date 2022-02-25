@@ -1,14 +1,13 @@
 package com.psinder.auth.authority
 
 import arrow.core.toOption
-import pl.brightinventions.codified.enums.CodifiedEnum
 import kotlin.reflect.KClass
 
 data class AccountAuthorities(private val authorities: List<Authority>) {
 
-    fun findFeature(feature: CodifiedEnum<Feature, String>) =
+    fun findFeature(feature: Feature) =
         authorities.filterIsInstance<FeatureAccessAuthority>()
-            .find { it.feature.code() == feature.code() }
+            .find { it.feature.code == feature.code }
             .toOption()
 
     fun <T : Any> findCreateScopeFor(entityRef: KClass<out T>) =
