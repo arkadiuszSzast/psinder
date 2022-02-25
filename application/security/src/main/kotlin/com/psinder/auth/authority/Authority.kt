@@ -10,14 +10,5 @@ data class FeatureAccessAuthority(val feature: CodifiedEnum<Feature, String>) : 
 data class EntityAccessAuthority<T : Any>(val entityRef: KClass<out T>, val scopes: List<AuthorityScope<T>>) :
     Authority()
 
-fun <T : Any> List<EntityAccessAuthority<T>>.findCreateScopeFor(entityRef: KClass<out T>) =
-    this.find { it.entityRef == entityRef }?.scopes?.getCreateScope()
-
-fun <T : Any> List<EntityAccessAuthority<T>>.findUpdateScopeFor(entityRef: KClass<out T>) =
-    this.find { it.entityRef == entityRef }?.scopes?.getUpdateScope()
-
-fun <T : Any> List<EntityAccessAuthority<T>>.findReadScopeFor(entityRef: KClass<out T>) =
-    this.find { it.entityRef == entityRef }?.scopes?.getReadScope()
-
 fun <T : BelongsToAccount> ownedPredicate() =
     { entity: T, accountContext: AccountContext -> accountContext.accountId == entity.accountId }

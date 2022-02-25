@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 
 class AuthorizedAccountAbilityEnsureProviderImpl(
     private val acl: AuthorizedAccountAbilityProvider,
-    private val securityContext: SecurityContext
+    private val authenticatedAccountProvider: AuthenticatedAccountProvider
 ) : AuthorizedAccountAbilityEnsureProvider {
 
     override suspend fun hasAccessTo(feature: CodifiedEnum<Feature, String>) {
@@ -39,5 +39,5 @@ class AuthorizedAccountAbilityEnsureProviderImpl(
         }
     }
 
-    private suspend fun currentPrincipal() = securityContext.currentPrincipal()
+    private suspend fun currentPrincipal() = authenticatedAccountProvider.currentPrincipal()
 }

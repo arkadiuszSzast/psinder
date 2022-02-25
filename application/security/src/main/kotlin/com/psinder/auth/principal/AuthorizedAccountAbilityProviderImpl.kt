@@ -1,13 +1,7 @@
 package com.psinder.auth.principal
 
 import arrow.core.getOrElse
-import arrow.core.toOption
-import com.psinder.auth.authority.EntityAccessAuthority
 import com.psinder.auth.authority.Feature
-import com.psinder.auth.authority.FeatureAccessAuthority
-import com.psinder.auth.authority.findCreateScopeFor
-import com.psinder.auth.authority.findReadScopeFor
-import com.psinder.auth.authority.findUpdateScopeFor
 import com.psinder.shared.kClass
 import com.psinder.shared.kClassSimpleName
 import mu.KotlinLogging
@@ -15,14 +9,13 @@ import pl.brightinventions.codified.enums.CodifiedEnum
 import kotlin.reflect.KClass
 
 class AuthorizedAccountAbilityProviderImpl(
-    private val securityContext: SecurityContext
+    private val authenticatedAccountProvider: AuthenticatedAccountProvider
 ) : AuthorizedAccountAbilityProvider {
     private val logger = KotlinLogging.logger {}
 
     override suspend fun hasAccessTo(feature: CodifiedEnum<Feature, String>): Boolean {
-        return securityContext.authorities().filterIsInstance<FeatureAccessAuthority>()
-            .find { it.feature.code() == feature.code() }
-            .toOption()
+        return authenticatedAccountProvider.authorities()
+            .findFeature(feature)
             .tapNone {
                 val accountId = currentPrincipal().accountId
                 logger.warn("Account with id: [$accountId] has no access to ${feature.code()} feature.")
@@ -31,8 +24,8 @@ class AuthorizedAccountAbilityProviderImpl(
     }
 
     override suspend fun <T : Any> canCreate(entityRef: KClass<T>): Boolean {
-        return securityContext.authorities().filterIsInstance<EntityAccessAuthority<T>>().findCreateScopeFor(entityRef)
-            .toOption()
+        return authenticatedAccountProvider.authorities()
+            .findCreateScopeFor(entityRef)
             .tapNone {
                 val accountId = currentPrincipal().accountId
                 logger.warn("Account with id: [$accountId] cannot create ${entityRef.simpleName}.")
@@ -41,9 +34,8 @@ class AuthorizedAccountAbilityProviderImpl(
     }
 
     override suspend fun <T : Any> canView(entity: T): Boolean {
-        return securityContext.authorities().filterIsInstance<EntityAccessAuthority<T>>()
-            .findReadScopeFor(entity.kClass)
-            .toOption()
+        return authenticatedAccountProvider.authorities()
+            .findViewScopeFor(entity.kClass)
             .tapNone {
                 val accountId = currentPrincipal().accountId
                 logger.warn("Account with id: [$accountId] cannot view ${entity.kClassSimpleName}.")
@@ -59,9 +51,8 @@ class AuthorizedAccountAbilityProviderImpl(
     }
 
     override suspend fun <T : Any> canUpdate(entity: T): Boolean {
-        return securityContext.authorities().filterIsInstance<EntityAccessAuthority<T>>()
+        return authenticatedAccountProvider.authorities()
             .findUpdateScopeFor(entity.kClass)
-            .toOption()
             .tapNone {
                 val accountId = currentPrincipal().accountId
                 logger.warn("Account with id: [$accountId] cannot update ${entity.kClassSimpleName}.")
@@ -80,7 +71,7 @@ class AuthorizedAccountAbilityProviderImpl(
         return entities.filter { canView(it) }
     }
 
-    override suspend fun ensure() = AuthorizedAccountAbilityEnsureProviderImpl(this, securityContext)
+    override suspend fun ensure() = AuthorizedAccountAbilityEnsureProviderImpl(this, authenticatedAccountProvider)
 
-    private suspend fun currentPrincipal() = securityContext.currentPrincipal()
+    private suspend fun currentPrincipal() = authenticatedAccountProvider.currentPrincipal()
 }

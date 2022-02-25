@@ -19,5 +19,5 @@ class AuthoritiesListBuilder {
         authorities.add(FeatureAccessAuthority(feature.codifiedEnum()))
     }
 
-    fun build() = authorities
+    fun build() = authorities.toList()
 }

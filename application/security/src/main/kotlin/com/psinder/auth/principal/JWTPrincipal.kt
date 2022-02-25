@@ -1,4 +1,4 @@
-package com.psinder.auth
+package com.psinder.auth.principal
 
 import com.auth0.jwt.exceptions.JWTDecodeException
 import com.psinder.auth.account.AccountId
