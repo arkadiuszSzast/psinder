@@ -3,6 +3,7 @@ val micrometer_dd_version: String by project
 val ktor_opentracing_version: String by project
 val dd_tracer_version: String by project
 val sentry_version: String by project
+val opentracing_mock_version: String by project
 
 dependencies {
     implementation("com.zopa:ktor-opentracing:$ktor_opentracing_version")
@@ -17,4 +18,5 @@ dependencies {
     implementation(project(":application:shared"))
 
     testImplementation(testFixtures(project(":application:test-utils")))
+    testImplementation("io.opentracing:opentracing-mock:$opentracing_mock_version")
 }
