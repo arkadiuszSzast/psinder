@@ -21,7 +21,7 @@ abstract class DatabaseTest(vararg neededModules: Module) : KoinTest, HasDatabas
     }
 
     init {
-        startKoin { modules(*neededModules, kmongoTestingModule) }
+        startKoin { modules(neededModules.toList().plus(kmongoTestingModule)) }
     }
 }
 

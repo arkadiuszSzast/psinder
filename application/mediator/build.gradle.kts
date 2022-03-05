@@ -4,4 +4,6 @@ dependencies {
     api("com.github.arkadiuszSzast:kediatR-koin-starter:$kediatr_version")
 
     implementation(project(":application:shared"))
+
+    testImplementation(testFixtures(project(":application:test-utils")))
 }

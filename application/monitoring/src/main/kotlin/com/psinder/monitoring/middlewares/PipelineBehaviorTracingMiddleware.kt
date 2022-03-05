@@ -3,6 +3,7 @@ package com.psinder.monitoring.middlewares
 import com.psinder.kediatr.KediatrRequestTypeExtractor
 import com.psinder.kediatr.middlewares.PipelineBehaviorMiddleware
 import com.psinder.monitoring.activate
+import com.psinder.shared.kClassSimpleName
 import io.opentracing.Tracer
 import mu.KotlinLogging
 import org.litote.kmongo.newId
@@ -13,7 +14,7 @@ class PipelineBehaviorTracingMiddleware(private val tracer: Tracer) : PipelineBe
     private val logger = KotlinLogging.logger {}
 
     override fun <TRequest, TResponse> apply(request: TRequest, act: () -> TResponse): TResponse {
-        val requestSimpleName = request!!::class.simpleName
+        val requestSimpleName = request?.kClassSimpleName
         val requestType = KediatrRequestTypeExtractor.extract(request).code()
         val requestId = newId<TRequest>()
 
