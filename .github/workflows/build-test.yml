@@ -25,11 +25,7 @@ jobs:
         env:
           SONAR_LOGIN_TOKEN: ${{ secrets.SONAR_LOGIN_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: |
-          ./gradlew detektAllSneaky 
-          ./gradlew ktlintCheck 
-          ./gradlew jacocoRootReport 
-          ./gradlew sonarqube
+        run: ./gradlew detektAllSneaky ktlintCheck jacocoRootReport sonarqube --continur
 
   ktlint:
     runs-on: ubuntu-latest
