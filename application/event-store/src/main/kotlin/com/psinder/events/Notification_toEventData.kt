@@ -5,8 +5,8 @@ import com.psinder.shared.koin.getKoinInstance
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-inline fun <reified T : DomainEvent> DomainEvent.toEventData(): EventData {
+inline fun <R, reified T : DomainEvent<R>> DomainEvent<R>.toEventData(): EventData {
     val objectMapper = getKoinInstance<Json>()
     val valueAsBytes = objectMapper.encodeToString(this as T).encodeToByteArray()
-    return EventData(this.eventId.uuid, this.eventType.code, "application/json", valueAsBytes, null)
+    return EventData(this.eventId.uuid, this.fullEventType.get(), "application/json", valueAsBytes, null)
 }

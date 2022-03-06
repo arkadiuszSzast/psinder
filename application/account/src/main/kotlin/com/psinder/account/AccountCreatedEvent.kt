@@ -10,6 +10,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
+import pl.brightinventions.codified.enums.codifiedEnum
 
 @Serializable
 data class AccountCreatedEvent(
@@ -20,10 +21,16 @@ data class AccountCreatedEvent(
     @Serializable(with = AccountStatus.CodifiedSerializer::class)
     val status: CodifiedEnum<AccountStatus, String>,
     val timeZoneId: TimeZone
-) : DomainEvent {
+) : DomainEvent<Account> {
 
-    override val eventType: EventType = AccountCreatedEvent.eventType
-    override val eventFamily: EventFamily = AccountCreatedEvent.eventFamily
+    @Contextual
+    override val aggregateId: Id<Account> = accountId
+
+    @Serializable(with = EventType.CodifiedSerializer::class)
+    override val eventType: CodifiedEnum<EventType, String> = AccountCreatedEvent.eventType.codifiedEnum()
+
+    @Serializable(with = EventFamily.CodifiedSerializer::class)
+    override val eventFamily: CodifiedEnum<EventFamily, String> = AccountCreatedEvent.eventFamily.codifiedEnum()
 
     companion object {
         val eventType: EventType = EventType.Created

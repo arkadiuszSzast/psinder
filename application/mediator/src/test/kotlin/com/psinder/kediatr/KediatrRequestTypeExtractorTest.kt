@@ -5,7 +5,6 @@ import com.trendyol.kediatr.CommandWithResult
 import com.trendyol.kediatr.Notification
 import com.trendyol.kediatr.Query
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import pl.brightinventions.codified.enums.codifiedEnum
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -48,7 +47,6 @@ class KediatrRequestTypeExtractorTest : DescribeSpec({
             }
         }
     }
-
 })
 
 private class SimpleCommand : Command

@@ -1,9 +1,9 @@
 package com.psinder.test.utils
 
 import org.koin.core.Koin
-import org.koin.core.module.Module
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.core.module.Module
 
 suspend fun <R> withKoin(module: Module, action: suspend Koin.() -> R) {
     try {

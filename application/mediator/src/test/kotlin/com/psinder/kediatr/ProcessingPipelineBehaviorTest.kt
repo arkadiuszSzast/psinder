@@ -13,7 +13,6 @@ import io.kotest.core.spec.style.DescribeSpec
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.koin.test.KoinTest
-import org.koin.test.inject
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
 import strikt.assertions.doesNotContain

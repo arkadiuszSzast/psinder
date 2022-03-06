@@ -5,7 +5,6 @@ import com.trendyol.kediatr.Command
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.opentracing.mock.MockTracer
 import mu.KotlinLogging
 import strikt.api.expectThat

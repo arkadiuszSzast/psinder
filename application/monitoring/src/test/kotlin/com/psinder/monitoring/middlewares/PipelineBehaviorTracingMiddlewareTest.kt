@@ -2,8 +2,6 @@ package com.psinder.monitoring.middlewares
 
 import com.psinder.test.utils.withLogRecorder
 import com.trendyol.kediatr.Command
-import com.trendyol.kediatr.CommandHandler
-import io.kotest.common.runBlocking
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.opentracing.mock.MockTracer
