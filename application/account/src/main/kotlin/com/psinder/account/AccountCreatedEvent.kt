@@ -1,5 +1,6 @@
 package com.psinder.account
 
+import com.psinder.auth.role.Role
 import com.psinder.events.DomainEvent
 import com.psinder.events.EventFamily
 import com.psinder.events.EventType
@@ -20,6 +21,8 @@ data class AccountCreatedEvent(
     val password: HashedPassword,
     @Serializable(with = AccountStatus.CodifiedSerializer::class)
     val status: CodifiedEnum<AccountStatus, String>,
+    @Serializable(with = Role.CodifiedSerializer::class)
+    val role: CodifiedEnum<Role, String>,
     val timeZoneId: TimeZone
 ) : DomainEvent<Account> {
 
@@ -31,6 +34,8 @@ data class AccountCreatedEvent(
 
     @Serializable(with = EventFamily.CodifiedSerializer::class)
     override val eventFamily: CodifiedEnum<EventFamily, String> = AccountCreatedEvent.eventFamily.codifiedEnum()
+
+    fun apply() = Account(accountId, email, personalData, password, status, role, timeZoneId)
 
     companion object {
         val eventType: EventType = EventType.Created

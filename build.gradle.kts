@@ -34,6 +34,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt").version("1.19.0")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
     kotlin("jvm") version "1.6.0"
+    kotlin("kapt") version "1.6.10"
 }
 allprojects {
     group = "com.psinder"
@@ -116,6 +117,7 @@ subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "io.gitlab.arturbosch.detekt")
     apply(plugin = "org.gradle.java-test-fixtures")
+    apply(plugin = "kotlin-kapt")
 
     ktlint {
         verbose.set(true)
@@ -129,11 +131,13 @@ subprojects {
     }
 
     dependencies {
+        kapt("io.arrow-kt:arrow-meta:1.0.1")
         implementation("io.ktor:ktor-auth-jwt:$ktor_version")
         implementation("io.ktor:ktor-serialization:$ktor_version")
         implementation("io.insert-koin:koin-ktor:$koin_version")
         implementation("org.litote.kmongo:kmongo-id:$kmongo_version")
         implementation("io.arrow-kt:arrow-core")
+        implementation("io.arrow-kt:arrow-optics")
         implementation("com.github.bright.codified:enums:$codified_version")
         implementation("com.github.bright.codified:enums-serializer:$codified_version")
         implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlin_datetime_version")

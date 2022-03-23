@@ -1,5 +1,6 @@
 package com.psinder.events
 
+import io.traxter.eventstoredb.StreamName
 import kotlinx.serialization.KSerializer
 import pl.brightinventions.codified.Codified
 import pl.brightinventions.codified.enums.CodifiedEnum
@@ -12,4 +13,4 @@ enum class EventFamily(override val code: String) : Codified<String> {
 }
 
 val EventFamily.streamName
-    get() = "\$ce-$code"
+    get() = StreamName("\$ce-$code")

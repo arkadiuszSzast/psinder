@@ -5,5 +5,5 @@ import io.ktor.application.Application
 import org.koin.ktor.ext.get
 
 internal fun Application.configureEventStoreSubscribers() {
-    accountProjectionUpdater(get())
+    accountProjectionUpdater(get(), get())
 }

@@ -34,6 +34,7 @@ data class Account constructor(
         fun create(
             email: EmailAddress,
             personalData: PersonalData,
+            role: CodifiedEnum<Role, String>,
             password: HashedPassword,
             timeZoneId: TimeZone,
         ): AccountCreatedEvent {
@@ -43,6 +44,7 @@ data class Account constructor(
                 personalData,
                 password,
                 AccountStatus.Staged.codifiedEnum(),
+                role,
                 timeZoneId
             )
         }
