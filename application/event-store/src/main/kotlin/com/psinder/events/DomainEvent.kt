@@ -3,7 +3,6 @@ package com.psinder.events
 import com.trendyol.kediatr.Notification
 import org.litote.kmongo.Id
 import org.litote.kmongo.id.UUIDStringIdGenerator
-import pl.brightinventions.codified.enums.CodifiedEnum
 import java.util.UUID
 
 interface DomainEvent<T> : Notification {
@@ -13,16 +12,17 @@ interface DomainEvent<T> : Notification {
 
     val aggregateId: Id<T>
 
-    val eventType: CodifiedEnum<EventType, String>
-
-    val eventFamily: CodifiedEnum<EventFamily, String>
+    val eventName: EventName
 }
 
 val <T> Id<DomainEvent<T>>.uuid: UUID
     get() = UUID.fromString(this.toString())
 
-val <T> DomainEvent<T>.streamName: String
-    get() = "${eventFamily.code()}-$aggregateId"
+inline val <reified T> DomainEvent<T>.streamName: String
+    get() = "${aggregateType}-$aggregateId"
 
-val <T> DomainEvent<T>.fullEventType: FullEventType
-    get() = FullEventType(eventFamily, eventType)
+inline val <reified T> DomainEvent<T>.fullEventType: FullEventType
+    get() = FullEventType(AggregateType(aggregateType), eventName)
+
+inline val <reified T> DomainEvent<T>.aggregateType
+    get() = T::class.simpleName?.lowercase() ?: ""

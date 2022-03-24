@@ -2,8 +2,8 @@ package com.psinder.account
 
 import com.psinder.auth.role.Role
 import com.psinder.events.DomainEvent
-import com.psinder.events.EventFamily
-import com.psinder.events.EventType
+import com.psinder.events.EventName
+import com.psinder.events.FullEventType
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.password.HashedPassword
 import kotlinx.datetime.TimeZone
@@ -11,7 +11,6 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
-import pl.brightinventions.codified.enums.codifiedEnum
 
 @Serializable
 data class AccountCreatedEvent(
@@ -29,16 +28,12 @@ data class AccountCreatedEvent(
     @Contextual
     override val aggregateId: Id<Account> = accountId
 
-    @Serializable(with = EventType.CodifiedSerializer::class)
-    override val eventType: CodifiedEnum<EventType, String> = AccountCreatedEvent.eventType.codifiedEnum()
-
-    @Serializable(with = EventFamily.CodifiedSerializer::class)
-    override val eventFamily: CodifiedEnum<EventFamily, String> = AccountCreatedEvent.eventFamily.codifiedEnum()
+    override val eventName = AccountCreatedEvent.eventName
 
     fun apply() = Account(accountId, email, personalData, password, status, role, timeZoneId)
 
     companion object {
-        val eventType: EventType = EventType.Created
-        val eventFamily: EventFamily = EventFamily.Account
+        val eventName: EventName = EventName("created")
+        val fullEventType = FullEventType(accountAggregateType, eventName)
     }
 }
