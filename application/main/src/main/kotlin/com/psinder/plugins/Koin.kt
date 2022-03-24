@@ -2,6 +2,7 @@ package com.psinder.plugins
 
 import com.psinder.account.accountRepositoriesModule
 import com.psinder.account.koin.accountCommandHandlersModule
+import com.psinder.account.koin.accountEventStoreModule
 import com.psinder.account.koin.accountQueryHandlersModule
 import com.psinder.auth.authModule
 import com.psinder.auth.authorityProviderModule
@@ -22,6 +23,7 @@ internal fun Application.configureKoin() {
         accountQueryHandlersModule,
         accountCommandHandlersModule,
         accountRepositoriesModule,
+        accountEventStoreModule,
         kmongoModule,
         authModule,
         authorityProviderModule,

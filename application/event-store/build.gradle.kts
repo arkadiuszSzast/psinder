@@ -16,4 +16,5 @@ dependencies {
     testFixturesImplementation("org.testcontainers:testcontainers:$test_containers_version")
     testFixturesImplementation("io.insert-koin:koin-test:$koin_version")
     testFixturesImplementation("io.kotest:kotest-runner-junit5:$kotest_version")
+    testFixturesImplementation(testFixtures(project(":application:test-utils")))
 }

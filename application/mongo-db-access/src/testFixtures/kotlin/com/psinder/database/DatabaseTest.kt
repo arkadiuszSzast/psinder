@@ -1,6 +1,7 @@
 package com.psinder.database
 
 import com.psinder.database.transactionally.Transactionally
+import com.psinder.test.utils.serializationModule
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
@@ -21,7 +22,7 @@ abstract class DatabaseTest(vararg neededModules: Module) : KoinTest, HasDatabas
     }
 
     init {
-        startKoin { modules(neededModules.toList().plus(kmongoTestingModule)) }
+        startKoin { modules(neededModules.toList().plus(kmongoTestingModule).plus(serializationModule)) }
     }
 }
 

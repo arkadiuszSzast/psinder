@@ -2,6 +2,7 @@ package com.psinder.database
 
 import com.eventstore.dbclient.EventStoreDBClient
 import com.eventstore.dbclient.EventStoreDBPersistentSubscriptionsClient
+import com.psinder.test.utils.serializationModule
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
@@ -23,6 +24,6 @@ abstract class EventStoreTest(vararg neededModules: Module) : KoinTest, HasEvent
     }
 
     init {
-        startKoin { modules(neededModules.toList().plus(eventStoreTestingModule)) }
+        startKoin { modules(neededModules.toList().plus(eventStoreTestingModule).plus(serializationModule)) }
     }
 }
