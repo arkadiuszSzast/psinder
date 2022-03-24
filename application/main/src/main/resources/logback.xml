@@ -9,12 +9,10 @@
                 <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </encoder>
         </appender>
-        <root level="trace">
+        <root level="info">
             <appender-ref ref="STDOUT"/>
         </root>
         <logger name="com.psinder" level="trace"/>
-        <logger name="org.eclipse.jetty" level="info"/>
-        <logger name="io.netty" level="info"/>
     </then>
     <else>
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -22,14 +20,10 @@
                 <version>${VCS_VERSION}</version>
             </encoder>
         </appender>
-
-        <logger name="com.psinder" level="trace"/>
-        <logger name="org.eclipse.jetty" level="info"/>
-        <logger name="io.netty" level="info"/>
-
-        <root level="trace">
+        <root level="info">
             <appender-ref ref="CONSOLE"/>
         </root>
+        <logger name="com.psinder" level="trace"/>
     </else>
 </if>
 </configuration>

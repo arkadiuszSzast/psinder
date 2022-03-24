@@ -19,7 +19,7 @@ val <T> Id<DomainEvent<T>>.uuid: UUID
     get() = UUID.fromString(this.toString())
 
 inline val <reified T> DomainEvent<T>.streamName: String
-    get() = "${aggregateType}-$aggregateId"
+    get() = "$aggregateType-$aggregateId"
 
 inline val <reified T> DomainEvent<T>.fullEventType: FullEventType
     get() = FullEventType(AggregateType(aggregateType), eventName)

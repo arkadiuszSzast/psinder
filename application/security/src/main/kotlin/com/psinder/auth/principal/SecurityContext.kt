@@ -6,7 +6,6 @@ import com.github.maaxgr.ktor.globalcalldata.callData
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.authority.AccountAuthorities
 import com.psinder.auth.authority.AuthoritiesProvider
-import com.psinder.auth.unauthorizedUserAuthorities
 import io.ktor.auth.Principal
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.principal
@@ -26,6 +25,6 @@ class SecurityContext(private val authorityProvider: AuthoritiesProvider) : Auth
 
     override suspend fun authorities() = authorityProvider.authorities[currentPrincipal().role].toOption()
         .tapNone { logger.warn("No authorities found for role: ${currentPrincipal().role}") }
-        .getOrElse { unauthorizedUserAuthorities }
+        .getOrElse { emptyList() }
         .let { AccountAuthorities(it) }
 }

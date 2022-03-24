@@ -28,7 +28,7 @@ class AsyncPipelineBehaviorTracingMiddleware(private val tracer: Tracer) : Async
                         logger.error { "[RequestId ($requestId)] Error while executing $requestType $requestSimpleName. Error message: $it" }
                     }
                     .onSuccess {
-                        logger.debug { "[RequestId ($requestId)] $requestType: $requestSimpleName executed successfully" }
+                        logger.debug { "[RequestId ($requestId)] $requestType: $requestSimpleName executed successfully. Result: $it" }
                     }
                     .getOrThrow()
             }

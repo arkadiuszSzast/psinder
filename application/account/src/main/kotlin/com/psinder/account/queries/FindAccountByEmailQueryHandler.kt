@@ -14,8 +14,8 @@ internal class FindAccountByEmailQueryHandler(private val accountRepository: Acc
     override suspend fun handleAsync(query: FindAccountByEmailQuery): FindAccountByEmailQueryResult {
         val email = query.email
         val optAccount = accountRepository.findOneByEmail(email).toOption()
-            .tapNone { logger.debug { "Found account with email: [$email]" } }
-            .tap { logger.debug { "Account with email: [$email] not found" } }
+            .tap { logger.debug { "Found account with email: [$email]" } }
+            .tapNone { logger.debug { "Account with email: [$email] not found" } }
 
         return FindAccountByEmailQueryResult(optAccount.map { AccountDto.fromAccount(it) })
     }

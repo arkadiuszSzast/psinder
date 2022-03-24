@@ -28,7 +28,7 @@ class PipelineBehaviorTracingMiddleware(private val tracer: Tracer) : PipelineBe
                         logger.error { "[RequestId ($requestId)] Error while executing $requestType $requestSimpleName. Error message: $it" }
                     }
                     .onSuccess {
-                        logger.debug { "[RequestId ($requestId)] $requestType: $requestSimpleName executed successfully" }
+                        logger.debug { "[RequestId ($requestId)] $requestType: $requestSimpleName executed successfully. Result: $it" }
                     }
                     .getOrThrow()
             }
