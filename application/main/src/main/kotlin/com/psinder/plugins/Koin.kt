@@ -10,6 +10,7 @@ import com.psinder.database.kmongoModule
 import com.psinder.events.plugins.eventStoreDbKoinModule
 import com.psinder.json.jsonModule
 import com.psinder.kediatr.kediatrModule
+import com.psinder.mail.koin.mailCommandHandlersModule
 import com.psinder.mail.sendGridModule
 import com.psinder.monitoring.middlewares.kediatrMonitoringMiddlewaresModule
 import com.psinder.monitoring.plugins.tracerModule
@@ -27,9 +28,10 @@ internal fun Application.configureKoin() {
         accountEventStoreModule,
         kmongoModule,
         sendGridModule,
+        mailCommandHandlersModule,
         authModule,
         authorityProviderModule,
         eventStoreDbKoinModule,
-        kediatrMonitoringMiddlewaresModule
+        kediatrMonitoringMiddlewaresModule,
     )
 }

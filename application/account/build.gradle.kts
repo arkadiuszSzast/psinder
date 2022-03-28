@@ -5,9 +5,11 @@ dependencies {
     implementation(project(":application:mongo-db-access"))
     implementation(project(":application:event-store"))
     implementation(project(":application:mediator"))
+    implementation(project(":application:mail"))
 
     testFixturesImplementation(testFixtures(project(":application:mongo-db-access")))
     testFixturesImplementation(testFixtures(project(":application:test-utils")))
+    testFixturesImplementation(testFixtures(project(":application:event-store")))
 
     testImplementation(testFixtures(project(":application:mongo-db-access")))
     testImplementation(testFixtures(project(":application:event-store")))

@@ -1,7 +1,6 @@
 package com.psinder.mail
 
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
