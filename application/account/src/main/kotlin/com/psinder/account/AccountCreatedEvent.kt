@@ -5,12 +5,14 @@ import com.psinder.events.DomainEvent
 import com.psinder.events.EventName
 import com.psinder.events.FullEventType
 import com.psinder.shared.EmailAddress
+import com.psinder.shared.UUIDSerializer
 import com.psinder.shared.password.HashedPassword
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
+import java.util.UUID
 
 @Serializable
 data class AccountCreatedEvent(
@@ -25,8 +27,11 @@ data class AccountCreatedEvent(
     val timeZoneId: TimeZone
 ) : DomainEvent<Account> {
 
+    @Serializable(with = UUIDSerializer::class)
+    override val eventId: UUID = UUID.randomUUID()
+
     @Contextual
-    override val aggregateId: Id<Account> = accountId
+    override val aggregateId = accountId
 
     override val eventName = AccountCreatedEvent.eventName
 

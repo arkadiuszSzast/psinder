@@ -4,9 +4,11 @@ import com.psinder.events.DomainEvent
 import com.psinder.events.EventName
 import com.psinder.events.FullEventType
 import com.psinder.shared.EmailAddress
+import com.psinder.shared.UUIDSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
+import java.util.UUID
 
 @Serializable
 data class MailSentSuccessfullyEvent(
@@ -18,8 +20,12 @@ data class MailSentSuccessfullyEvent(
     val variables: MailVariables
 ) : DomainEvent<Mail>, MailSendingEvent() {
 
+    @Serializable(with = UUIDSerializer::class)
+    override val eventId: UUID = UUID.randomUUID()
+
     @Contextual
-    override val aggregateId = mailId
+    override val aggregateId: Id<Mail> = mailId
+
     override val eventName = MailSentSuccessfullyEvent.eventName
 
     companion object {

@@ -25,7 +25,9 @@ object TracingPipelineMiddleware {
                 logger.debug { "[RequestId ($requestId)] Executing $requestType $requestSimpleName. Payload: [$request]" }
                 runCatching { act() }
                     .onFailure {
-                        logger.error { "[RequestId ($requestId)] Error while executing $requestType $requestSimpleName. Error message: $it" }
+                        logger.error {
+                            "[RequestId ($requestId)] Error while executing $requestType $requestSimpleName. Error message: $it"
+                        }
                     }
                     .onSuccess {
                         logger.debug { "[RequestId ($requestId)] $requestType: $requestSimpleName executed successfully. Result: $it" }
