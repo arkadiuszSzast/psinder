@@ -2,8 +2,11 @@ package com.psinder.shared.response
 
 import com.psinder.shared.isBetween
 
+private const val MIN_SUCCESS_RESPONSE_CODE = 200
+private const val MAX_SUCCESS_RESPONSE_CODE = 299
+
 @JvmInline
 value class ResponseCode(val code: Int) {
     val isSuccess
-        get() = code.isBetween(200, 299)
+        get() = code.isBetween(MIN_SUCCESS_RESPONSE_CODE, MAX_SUCCESS_RESPONSE_CODE)
 }

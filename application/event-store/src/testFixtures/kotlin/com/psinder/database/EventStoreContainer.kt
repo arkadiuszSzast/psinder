@@ -3,14 +3,16 @@ package com.psinder.database
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 
+private const val EVENT_STORE_DB_PORT = 1113
+
 object EventStoreContainer {
     private val instance by lazy { startEventStoreContainer() }
     val host: String by lazy { instance.host }
-    val port: Int by lazy { instance.getMappedPort(1113) }
+    val port: Int by lazy { instance.getMappedPort(EVENT_STORE_DB_PORT) }
 
     private fun startEventStoreContainer() = GenericContainer("eventstore/eventstore:20.10.2-buster-slim")
         .apply {
-            addExposedPorts(1113)
+            addExposedPorts(EVENT_STORE_DB_PORT)
             addEnv("EVENTSTORE_CLUSTER_SIZE", "1")
             addEnv("EVENTSTORE_RUN_PROJECTIONS", "All")
             addEnv("EVENTSTORE_START_STANDARD_PROJECTIONS", "true")
