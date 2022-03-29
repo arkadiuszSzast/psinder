@@ -17,7 +17,7 @@ data class MailSendingErrorEvent(
     val templateId: MailTemplateId,
     val variables: MailVariables,
     val error: MailSendingError
-) : DomainEvent<Mail> {
+) : DomainEvent<Mail>, MailSendingEvent() {
 
     @Contextual
     override val aggregateId = mailId

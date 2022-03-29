@@ -9,7 +9,7 @@
                 <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </encoder>
         </appender>
-        <root level="debug">
+        <root level="info">
             <appender-ref ref="STDOUT"/>
         </root>
         <logger name="com.psinder" level="trace"/>
@@ -20,7 +20,7 @@
                 <version>${VCS_VERSION}</version>
             </encoder>
         </appender>
-        <root level="debug">
+        <root level="info">
             <appender-ref ref="CONSOLE"/>
         </root>
         <logger name="com.psinder" level="trace"/>

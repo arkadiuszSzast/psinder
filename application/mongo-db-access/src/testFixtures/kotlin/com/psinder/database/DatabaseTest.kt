@@ -5,7 +5,9 @@ import com.psinder.test.utils.serializationModule
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.module.Module
 import org.koin.test.KoinTest
 import org.koin.test.inject
@@ -19,6 +21,10 @@ abstract class DatabaseTest(vararg neededModules: Module) : KoinTest, HasDatabas
         runBlocking {
             db.dropAllCollections()
         }
+    }
+
+    override fun afterEach(testCase: TestCase, result: TestResult) {
+        stopKoin()
     }
 
     init {

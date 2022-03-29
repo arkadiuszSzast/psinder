@@ -9,6 +9,7 @@ import com.psinder.mail.MailSentSuccessfullyEvent
 import com.psinder.mail.RecordingMailSender
 import com.psinder.mail.mailAggregateType
 import com.psinder.mail.mailModule
+import com.psinder.mail.toDomain
 import com.psinder.shared.EmailAddress
 import com.psinder.test.utils.faker
 import com.psinder.test.utils.withKoin
@@ -23,18 +24,17 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isTrue
 
 class SendMailCommandHandlerTest : DescribeSpec() {
-    // override fun isolationMode() = IsolationMode.InstancePerTest
 
     init {
 
         describe("SendMailCommandHandler") {
             val modules = module {
                 single {
-                    RecordingMailSender() {
+                    RecordingMailSender {
                         when (it.to) {
                             EmailAddress.create("invalid@mail.com") ->
-                                MailSentResult.Error(it.id, MailSendingError("Invalid mail address"))
-                            else -> MailSentResult.Success(it.id)
+                                MailSentResult.Error(it.id.cast(), MailSendingError("Invalid mail address"))
+                            else -> MailSentResult.Success(it.id.cast())
                         }
                     }
                 } bind MailSender::class
@@ -48,14 +48,14 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                     val mailSender = get<RecordingMailSender>()
                     val eventStore = get<RecordingEventStoreDB>()
 
-                    val mail = faker.mailModule.mail()
+                    val mail = faker.mailModule.mailDto()
 
                     val result = handler.handleAsync(SendMailCommand(mail))
                     val mailSentEvents =
                         eventStore.readStream(StreamName("${mailAggregateType.type}-${mail.id}")).events
 
                     expectThat(result).isEqualTo(MailSentResult.Success(mail.id))
-                    expectThat(mailSender.hasBeenSentSuccessfully(mail)).isTrue()
+                    expectThat(mailSender.hasBeenSentSuccessfully(mail.toDomain())).isTrue()
                     expectThat(eventStore.readStream(StreamName(MailSentSuccessfullyEvent.fullEventType.get())))
                     expectThat(mailSentEvents) {
                         hasSize(1)
@@ -70,7 +70,7 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                     val mailSender = get<RecordingMailSender>()
                     val eventStore = get<RecordingEventStoreDB>()
 
-                    val mail = faker.mailModule.mail().copy(to = EmailAddress.create("invalid@mail.com"))
+                    val mail = faker.mailModule.mailDto().copy(to = EmailAddress.create("invalid@mail.com"))
 
                     val result = handler.handleAsync(SendMailCommand(mail))
                     val mailSentEvents =
@@ -82,7 +82,7 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                             MailSendingError("Invalid mail address")
                         )
                     )
-                    expectThat(mailSender.hasNotBeenSentSuccessfully(mail)).isTrue()
+                    expectThat(mailSender.hasNotBeenSentSuccessfully(mail.toDomain())).isTrue()
                     expectThat(eventStore.readStream(StreamName(MailSendingErrorEvent.fullEventType.get())))
                     expectThat(mailSentEvents) {
                         hasSize(1)

@@ -7,6 +7,7 @@ import com.psinder.mail.MailSender
 import com.psinder.mail.MailSendingErrorEvent
 import com.psinder.mail.MailSentResult
 import com.psinder.mail.MailSentSuccessfullyEvent
+import com.psinder.mail.toDomain
 import com.trendyol.kediatr.AsyncCommandWithResultHandler
 import io.traxter.eventstoredb.EventStoreDB
 import mu.KotlinLogging
@@ -16,20 +17,19 @@ internal class SendMailCommandHandler(private val mailSender: MailSender, privat
     private val log = KotlinLogging.logger {}
 
     override suspend fun handleAsync(command: SendMailCommand): MailSentResult {
-        val mail = command.mail
-        val result = mailSender.send(mail)
+        val mail = command.mail.toDomain()
 
-        when (result) {
-            is MailSentResult.Success -> MailSentSuccessfullyEvent.create(mail).also {
-                log.debug { "Mail with id: ${it.mailId} sent successfully" }
-                eventStore.appendToStream(it.streamName, it.toEventData<Mail, MailSentSuccessfullyEvent>())
+        return when (val event = mail.send(mailSender)) {
+            is MailSentSuccessfullyEvent -> {
+                log.debug { "Mail with id: ${event.mailId} sent successfully" }
+                eventStore.appendToStream(event.streamName, event.toEventData<Mail, MailSentSuccessfullyEvent>())
+                MailSentResult.Success(event.mailId.cast())
             }
-            is MailSentResult.Error -> MailSendingErrorEvent.create(mail, result.cause).also {
-                log.debug { "Error when sending mail with id: ${it.mailId}. Cause: ${it.error}" }
-                eventStore.appendToStream(it.streamName, it.toEventData<Mail, MailSendingErrorEvent>())
+            is MailSendingErrorEvent -> {
+                log.debug { "Error when sending mail with id: ${event.mailId}. Cause: ${event.error}" }
+                eventStore.appendToStream(event.streamName, event.toEventData<Mail, MailSendingErrorEvent>())
+                MailSentResult.Error(event.mailId.cast(), event.error)
             }
         }
-
-        return result
     }
 }

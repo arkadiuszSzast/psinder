@@ -16,7 +16,7 @@ data class MailSentSuccessfullyEvent(
     val subject: MailSubject,
     val templateId: MailTemplateId,
     val variables: MailVariables
-) : DomainEvent<Mail> {
+) : DomainEvent<Mail>, MailSendingEvent() {
 
     @Contextual
     override val aggregateId = mailId

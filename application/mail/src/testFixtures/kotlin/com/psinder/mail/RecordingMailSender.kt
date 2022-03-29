@@ -12,11 +12,11 @@ class RecordingMailSender(private val mailMapper: (Mail) -> MailSentResult = ::d
     }
 
     fun getAll() = sentMails.toMap()
-    fun hasBeenSentSuccessfully(mail: Mail) = sentMails[mail] == MailSentResult.Success(mail.id)
+    fun hasBeenSentSuccessfully(mail: Mail) = sentMails[mail] == MailSentResult.Success(mail.id.cast())
     fun hasNotBeenSentSuccessfully(mail: Mail) = sentMails[mail] is MailSentResult.Error
     fun clear() = sentMails.clear()
 }
 
 private fun defaultRecordingMailSenderMapper(mail: Mail): MailSentResult {
-    return MailSentResult.Success(mail.id)
+    return MailSentResult.Success(mail.id.cast())
 }

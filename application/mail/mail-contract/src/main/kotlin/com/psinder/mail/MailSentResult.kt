@@ -6,8 +6,8 @@ import org.litote.kmongo.Id
 
 sealed class MailSentResult {
     @Serializable
-    data class Success(@Contextual val id: Id<Mail>) : MailSentResult()
+    data class Success(@Contextual val mailId: Id<MailDto>) : MailSentResult()
 
     @Serializable
-    data class Error(@Contextual val id: Id<Mail>, val cause: MailSendingError) : MailSentResult()
+    data class Error(@Contextual val mailId: Id<MailDto>, val cause: MailSendingError) : MailSentResult()
 }

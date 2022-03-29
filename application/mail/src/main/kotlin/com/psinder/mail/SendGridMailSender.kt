@@ -22,8 +22,8 @@ internal class SendGridMailSender(private val sendGridClient: SendGrid) : MailSe
         val statusCode = ResponseCode(response.statusCode)
 
         return when {
-            statusCode.isSuccess -> MailSentResult.Success(mail.id)
-            else -> MailSentResult.Error(mail.id, MailSendingError(response.body))
+            statusCode.isSuccess -> MailSentResult.Success(mail.id.cast())
+            else -> MailSentResult.Error(mail.id.cast(), MailSendingError(response.body))
         }
     }
 
