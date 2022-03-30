@@ -1,9 +1,13 @@
 package com.psinder.auth.principal
 
 import arrow.core.getOrElse
+import arrow.core.toOption
+import com.psinder.auth.InjectedAuthorityContext
+import com.psinder.auth.authority.AccountAuthorities
 import com.psinder.auth.authority.Feature
 import com.psinder.shared.kClass
 import com.psinder.shared.kClassSimpleName
+import kotlinx.coroutines.currentCoroutineContext
 import mu.KotlinLogging
 import kotlin.reflect.KClass
 
@@ -13,7 +17,7 @@ class AuthorizedAccountAbilityProviderImpl(
     private val logger = KotlinLogging.logger {}
 
     override suspend fun hasAccessTo(feature: Feature): Boolean {
-        return authenticatedAccountProvider.authorities()
+        return getAuthorities()
             .findFeature(feature)
             .tapNone {
                 val accountId = currentPrincipal().accountId
@@ -23,7 +27,7 @@ class AuthorizedAccountAbilityProviderImpl(
     }
 
     override suspend fun <T : Any> canCreate(entityRef: KClass<T>): Boolean {
-        return authenticatedAccountProvider.authorities()
+        return getAuthorities()
             .findCreateScopeFor(entityRef)
             .tapNone {
                 val accountId = currentPrincipal().accountId
@@ -33,7 +37,7 @@ class AuthorizedAccountAbilityProviderImpl(
     }
 
     override suspend fun <T : Any> canView(entity: T): Boolean {
-        return authenticatedAccountProvider.authorities()
+        return getAuthorities()
             .findViewScopeFor(entity.kClass)
             .tapNone {
                 val accountId = currentPrincipal().accountId
@@ -50,7 +54,7 @@ class AuthorizedAccountAbilityProviderImpl(
     }
 
     override suspend fun <T : Any> canUpdate(entity: T): Boolean {
-        return authenticatedAccountProvider.authorities()
+        return getAuthorities()
             .findUpdateScopeFor(entity.kClass)
             .tapNone {
                 val accountId = currentPrincipal().accountId
@@ -73,4 +77,8 @@ class AuthorizedAccountAbilityProviderImpl(
     override suspend fun ensure() = AuthorizedAccountAbilityEnsureProviderImpl(this, authenticatedAccountProvider)
 
     private suspend fun currentPrincipal() = authenticatedAccountProvider.currentPrincipal()
+
+    private suspend fun getAuthorities() = currentCoroutineContext()[InjectedAuthorityContext].toOption()
+        .map { AccountAuthorities(it.authorities) }
+        .getOrElse { authenticatedAccountProvider.authorities() }
 }

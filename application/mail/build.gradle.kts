@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":application:shared"))
     implementation(project(":application:mediator"))
     implementation(project(":application:event-store"))
+    implementation(project(":application:security:security-contract"))
 
     testFixturesImplementation(testFixtures(project(":application:test-utils")))
 
