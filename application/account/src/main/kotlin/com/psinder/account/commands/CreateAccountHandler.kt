@@ -26,8 +26,9 @@ internal class CreateAccountHandler(
 
     override suspend fun handleAsync(command: CreateAccountCommand): CreateAccountCommandResult {
         acl.ensure().hasAccessTo(createAccountFeature)
+        val (createAccountRequest, metadata) = command
         logger.debug { "Starting creating account" }
-        val (personalData, email, rawPassword, timeZoneId) = command.createAccountRequest
+        val (personalData, email, rawPassword, timeZoneId) = createAccountRequest
 
         val alreadyRegisteredAccount = commandBus.executeQueryAsync(FindAccountByEmailQuery(email)).accountDto
         alreadyRegisteredAccount.tap {
@@ -45,7 +46,7 @@ internal class CreateAccountHandler(
         logger.debug { "Account created. Sending event: $accountCreatedEvent" }
         eventStore.appendToStream(
             accountCreatedEvent.streamName,
-            accountCreatedEvent.toEventData<Account, AccountCreatedEvent>()
+            accountCreatedEvent.toEventData<Account, AccountCreatedEvent>(metadata),
         )
 
         return CreateAccountCommandResult(accountCreatedEvent.accountId.cast())

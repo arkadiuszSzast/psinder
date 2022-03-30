@@ -17,17 +17,20 @@ internal class SendMailCommandHandler(private val mailSender: MailSender, privat
     private val log = KotlinLogging.logger {}
 
     override suspend fun handleAsync(command: SendMailCommand): MailSentResult {
-        val mail = command.mail.toDomain()
+        val (mailDto, metadata) = command
 
-        return when (val event = mail.send(mailSender)) {
+        return when (val event = mailDto.toDomain().send(mailSender)) {
             is MailSentSuccessfullyEvent -> {
                 log.debug { "Mail with id: ${event.mailId} sent successfully" }
-                eventStore.appendToStream(event.streamName, event.toEventData<Mail, MailSentSuccessfullyEvent>())
+                eventStore.appendToStream(
+                    event.streamName,
+                    event.toEventData<Mail, MailSentSuccessfullyEvent>(metadata)
+                )
                 MailSentResult.Success(event.mailId.cast())
             }
             is MailSendingErrorEvent -> {
                 log.debug { "Error when sending mail with id: ${event.mailId}. Cause: ${event.error}" }
-                eventStore.appendToStream(event.streamName, event.toEventData<Mail, MailSendingErrorEvent>())
+                eventStore.appendToStream(event.streamName, event.toEventData<Mail, MailSendingErrorEvent>(metadata))
                 MailSentResult.Error(event.mailId.cast(), event.error)
             }
         }

@@ -1,5 +1,6 @@
 package com.psinder.database
 
+import arrow.core.computations.ResultEffect.bind
 import com.eventstore.dbclient.AppendToStreamOptions
 import com.eventstore.dbclient.DeleteResult
 import com.eventstore.dbclient.DeleteStreamOptions
@@ -17,6 +18,8 @@ import com.eventstore.dbclient.SubscribeToAllOptions
 import com.eventstore.dbclient.SubscribeToStreamOptions
 import com.eventstore.dbclient.Subscription
 import com.eventstore.dbclient.WriteResult
+import com.psinder.events.CorrelationId
+import com.psinder.events.getMetadata
 import io.traxter.eventstoredb.EventStoreDB
 import io.traxter.eventstoredb.PersistentSubscriptionOptions
 import io.traxter.eventstoredb.Prefix
@@ -93,6 +96,13 @@ class RecordingEventStoreDB : EventStoreDB {
         }.let { ReadResult(it) }
     }
 
+    override suspend fun readByCorrelationId(id: UUID): ReadResult {
+        return readAll().events
+            .filter { it.event.getMetadata().orNone().isDefined() }
+            .filter { it.event.getMetadata().bind().correlationId == CorrelationId(id) }
+            .let { ReadResult(it) }
+    }
+
     override suspend fun readStream(streamName: StreamName) = readStream(streamName, ReadStreamOptions.get())
 
     override suspend fun readStream(streamName: StreamName, options: ReadStreamOptions) =
@@ -123,6 +133,10 @@ class RecordingEventStoreDB : EventStoreDB {
                     ResolvedEvent(recordedEvent, recordedEvent)
                 }
             }.let { ReadResult(it) }
+    }
+
+    override suspend fun subscribeByCorrelationId(id: UUID, listener: suspend ResolvedEvent.() -> Unit): Subscription {
+        TODO("Not yet implemented")
     }
 
     override suspend fun subscribeByEventTypeFiltered(
