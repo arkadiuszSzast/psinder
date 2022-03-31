@@ -1,7 +1,7 @@
 package com.psinder.plugins
 
-import com.github.maaxgr.ktor.globalcalldata.GlobalCallData
 import com.psinder.test.utils.mockKtorInstallFunction
+import com.szastarek.ktor.globalrequestdata.GlobalRequestData
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.install
 import io.ktor.server.testing.withTestApplication
@@ -15,9 +15,9 @@ internal class GlobalCallDataKtTest : DescribeSpec({
             withTestApplication {
                 mockKtorInstallFunction()
 
-                application.configureGlobalCallData()
+                application.configureGlobalRequestData()
 
-                verify(exactly = 1) { application.install(GlobalCallData) }
+                verify(exactly = 1) { application.install(GlobalRequestData) }
             }
         }
     }

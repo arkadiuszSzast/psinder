@@ -2,7 +2,7 @@ package com.psinder
 
 import com.psinder.config.JwtConfig
 import com.psinder.plugins.configureExceptionsHandling
-import com.psinder.plugins.configureGlobalCallData
+import com.psinder.plugins.configureGlobalRequestData
 import com.psinder.plugins.configureHTTP
 import com.psinder.plugins.configureKoin
 import com.psinder.plugins.configureSecurity
@@ -25,7 +25,7 @@ internal fun main(args: Array<String>) {
 
 @Suppress("unused")
 internal fun Application.main() {
-    configureGlobalCallData()
+    configureGlobalRequestData()
     configureKoin()
     configureSerialization(get())
     configureExceptionsHandling()
