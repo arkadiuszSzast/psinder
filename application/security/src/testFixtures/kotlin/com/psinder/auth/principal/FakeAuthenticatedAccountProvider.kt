@@ -24,3 +24,8 @@ fun fakeAuthenticatedAccountProvider(
     val authorities = AuthoritiesListBuilder().apply(customize).build().let { AccountAuthorities(it) }
     return FakeAuthenticatedAccountProvider(principal, authorities)
 }
+
+fun unauthenticatedAccountProvider(customize: AuthoritiesListBuilder.() -> Unit): FakeAuthenticatedAccountProvider {
+    val authorities = AuthoritiesListBuilder().apply(customize).build().let { AccountAuthorities(it) }
+    return FakeAuthenticatedAccountProvider(AccountContext.unknown, authorities)
+}
