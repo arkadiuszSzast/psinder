@@ -1,6 +1,7 @@
 package com.psinder.kediatr
 
 import com.trendyol.kediatr.Command
+import com.trendyol.kediatr.CommandMetadata
 import com.trendyol.kediatr.CommandWithResult
 import com.trendyol.kediatr.Notification
 import com.trendyol.kediatr.Query
@@ -49,8 +50,8 @@ class KediatrRequestTypeExtractorTest : DescribeSpec({
     }
 })
 
-private class SimpleCommand : Command
-private class SimpleCommandWithResult : CommandWithResult<String>
+private class SimpleCommand(override val metadata: CommandMetadata? = null) : Command
+private class SimpleCommandWithResult(override val metadata: CommandMetadata? = null) : CommandWithResult<String>
 private class SimpleQuery : Query<String>
 private class SimpleNotification : Notification
 private class Dog

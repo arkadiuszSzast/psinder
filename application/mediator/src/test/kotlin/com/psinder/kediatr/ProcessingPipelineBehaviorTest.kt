@@ -6,6 +6,7 @@ import com.psinder.shared.getAllDistinct
 import com.psinder.test.utils.withKoin
 import com.trendyol.kediatr.AsyncCommandWithResultHandler
 import com.trendyol.kediatr.CommandBus
+import com.trendyol.kediatr.CommandMetadata
 import com.trendyol.kediatr.CommandWithResult
 import com.trendyol.kediatr.CommandWithResultHandler
 import com.trendyol.kediatr.koin.KediatrKoin
@@ -165,7 +166,7 @@ class AsyncPipelineBehaviorMiddlewareB(private val invokesList: MutableList<Stri
     }
 }
 
-class PongCommand : CommandWithResult<String>
+class PongCommand(override val metadata: CommandMetadata? = null) : CommandWithResult<String>
 class PongCommandHandler(private val invokesList: MutableList<String>) : CommandWithResultHandler<PongCommand, String> {
     override fun handle(command: PongCommand): String {
         invokesList.add("pong")
