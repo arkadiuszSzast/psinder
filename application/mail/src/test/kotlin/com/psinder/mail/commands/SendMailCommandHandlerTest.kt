@@ -55,7 +55,7 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                 single { SendMailCommandHandler(get(), get(), get()) }
             }
             val denyAllHandlerModule = module {
-                single { DenyAllAbilityProvider(authenticationAccountProvider) } bind AuthorizedAccountAbilityProvider::class
+                single { DenyAllAbilityProvider() } bind AuthorizedAccountAbilityProvider::class
                 single { SendMailCommandHandler(get(), get(), get()) }
             }
 

@@ -5,7 +5,7 @@ import com.psinder.auth.authority.Deny
 import com.psinder.auth.authority.Feature
 import kotlin.reflect.KClass
 
-class DenyAllAbilityProvider(private val authenticatedAccountProvider: AuthenticatedAccountProvider) :
+class DenyAllAbilityProvider :
     AuthorizedAccountAbilityProvider {
 
     override suspend fun hasAccessTo(feature: Feature) = Deny(AuthorityCheckException("DenyAllAbilityProvider"))
@@ -22,6 +22,6 @@ class DenyAllAbilityProvider(private val authenticatedAccountProvider: Authentic
     }
 
     override suspend fun ensure(): AuthorizedAccountAbilityEnsureProvider {
-        return AuthorizedAccountAbilityEnsureProviderImpl(this, authenticatedAccountProvider)
+        return AuthorizedAccountAbilityEnsureProviderImpl(this)
     }
 }

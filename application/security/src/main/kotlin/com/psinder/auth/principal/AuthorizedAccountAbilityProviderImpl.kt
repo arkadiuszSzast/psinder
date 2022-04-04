@@ -99,7 +99,7 @@ class AuthorizedAccountAbilityProviderImpl(
         return entities.filter { canView(it).toBoolean() }
     }
 
-    override suspend fun ensure() = AuthorizedAccountAbilityEnsureProviderImpl(this, authenticatedAccountProvider)
+    override suspend fun ensure() = AuthorizedAccountAbilityEnsureProviderImpl(this)
 
     private suspend fun currentPrincipal() = authenticatedAccountProvider.currentPrincipal()
 

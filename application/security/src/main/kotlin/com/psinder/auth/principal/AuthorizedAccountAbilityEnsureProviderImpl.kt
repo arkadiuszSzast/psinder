@@ -7,7 +7,6 @@ import kotlin.reflect.KClass
 
 class AuthorizedAccountAbilityEnsureProviderImpl(
     private val acl: AuthorizedAccountAbilityProvider,
-    private val authenticatedAccountProvider: AuthenticatedAccountProvider
 ) : AuthorizedAccountAbilityEnsureProvider {
 
     override suspend fun hasAccessTo(feature: Feature) {
@@ -37,6 +36,4 @@ class AuthorizedAccountAbilityEnsureProviderImpl(
             is Deny -> throw decision.reason
         }
     }
-
-    private suspend fun currentPrincipal() = authenticatedAccountProvider.currentPrincipal()
 }

@@ -5,8 +5,7 @@ import com.psinder.auth.authority.Feature
 import java.util.UUID
 import kotlin.reflect.KClass
 
-class CanDoAnythingAbilityProvider(private val authenticatedAccountProvider: AuthenticatedAccountProvider) :
-    AuthorizedAccountAbilityProvider {
+class CanDoAnythingAbilityProvider : AuthorizedAccountAbilityProvider {
 
     override suspend fun hasAccessTo(feature: Feature) = Allow(UUID.randomUUID())
 
@@ -21,6 +20,6 @@ class CanDoAnythingAbilityProvider(private val authenticatedAccountProvider: Aut
     }
 
     override suspend fun ensure(): AuthorizedAccountAbilityEnsureProvider {
-        return AuthorizedAccountAbilityEnsureProviderImpl(this, authenticatedAccountProvider)
+        return AuthorizedAccountAbilityEnsureProviderImpl(this)
     }
 }

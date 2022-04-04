@@ -15,4 +15,5 @@ dependencies {
     testImplementation(testFixtures(project(":application:event-store")))
     testImplementation(testFixtures(project(":application:test-utils")))
     testImplementation(testFixtures(project(":application:mediator")))
+    testImplementation(testFixtures(project(":application:security")))
 }
