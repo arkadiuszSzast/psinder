@@ -1,6 +1,8 @@
 package com.psinder.auth.principal
 
 import com.psinder.auth.account.AccountId
+import com.psinder.auth.authority.Allow
+import com.psinder.auth.authority.Deny
 import com.psinder.auth.authority.Feature
 import com.psinder.auth.authority.ownedPredicate
 import com.psinder.auth.role.Role
@@ -8,8 +10,7 @@ import com.psinder.support.Cat
 import com.psinder.support.Dog
 import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
-import strikt.assertions.isFalse
-import strikt.assertions.isTrue
+import strikt.assertions.isA
 
 class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
 
@@ -27,7 +28,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canView(dog)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should return false when account has permissions only on different entity") {
@@ -40,7 +41,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canView(dog)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should return false when has permission but not meet additional predicate") {
@@ -53,7 +54,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canView(dog)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should pass when has access") {
@@ -66,7 +67,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canView(dog)
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
 
             it("should pass when has access and is owner") {
@@ -79,7 +80,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("123"))
                 val result = acl.canView(dog)
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
         }
 
@@ -95,7 +96,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canUpdate(dog)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should return false when account has permissions only on different entity") {
@@ -108,7 +109,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canUpdate(dog)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should return false when has permission but not meet additional predicate") {
@@ -121,7 +122,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canUpdate(dog)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should pass when has access") {
@@ -134,7 +135,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("000"))
                 val result = acl.canUpdate(dog)
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
 
             it("should pass when has access and is owner") {
@@ -147,7 +148,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val dog = Dog(AccountId("123"))
                 val result = acl.canUpdate(dog)
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
         }
 
@@ -162,7 +163,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
                 val result = acl.canCreate(Dog::class)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should return false when account has permissions only on different entity") {
@@ -174,7 +175,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
                 val result = acl.canCreate(Dog::class)
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
 
             it("should pass when has access") {
@@ -186,7 +187,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
                 val result = acl.canCreate(Dog::class)
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
         }
 
@@ -201,7 +202,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
                 val result = acl.hasAccessTo(Feature("feature_a"))
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
 
             it("should return false when feature not found") {
@@ -213,7 +214,7 @@ class AuthorizedAccountAbilityProviderImplTest : DescribeSpec({
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
                 val result = acl.hasAccessTo(Feature("feature_b"))
 
-                expectThat(result).isFalse()
+                expectThat(result).isA<Deny>()
             }
         }
     }

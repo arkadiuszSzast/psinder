@@ -14,4 +14,6 @@ fun getPropertyAsBoolean(key: ConfigKey) = ConfigMap.config.property(key.key).ge
 fun getPropertyOrNull(key: ConfigKey) = ConfigMap.config.propertyOrNull(key.key)?.getString()
 
 @JvmInline
-value class ConfigKey(val key: String)
+value class ConfigKey(val key: String) {
+    operator fun plus(other: ConfigKey) = ConfigKey("$key.${other.key}")
+}

@@ -5,7 +5,9 @@ import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.events.streamName
 import com.psinder.events.toEventData
 import com.psinder.mail.Mail
+import com.psinder.mail.MailDto
 import com.psinder.mail.MailSender
+import com.psinder.mail.MailSendingError
 import com.psinder.mail.MailSendingErrorEvent
 import com.psinder.mail.MailSentResult
 import com.psinder.mail.MailSentSuccessfullyEvent
@@ -22,8 +24,19 @@ internal class SendMailCommandHandler(
     private val log = KotlinLogging.logger {}
 
     override suspend fun handleAsync(command: SendMailCommand): MailSentResult {
-        acl.ensure().hasAccessTo(sendingMailsFeature) // TODO handle it
         val (mailDto, metadata) = command
+        acl.hasAccessTo(sendingMailsFeature).onDeny {
+            val mailSendingErrorEvent = mailDto.toMailSendingErrorEvent(
+                MailSendingError("Mail send failed because of lack of permissions")
+            )
+
+            eventStore.appendToStream(
+                mailSendingErrorEvent.streamName,
+                mailSendingErrorEvent.toEventData<Mail, MailSendingErrorEvent>(metadata)
+            )
+
+            return MailSentResult.Error(mailSendingErrorEvent.mailId.cast(), mailSendingErrorEvent.error)
+        }
 
         return when (val event = mailDto.toDomain().send(mailSender)) {
             is MailSentSuccessfullyEvent -> {
@@ -41,4 +54,14 @@ internal class SendMailCommandHandler(
             }
         }
     }
+
+    private fun MailDto.toMailSendingErrorEvent(reason: MailSendingError) = MailSendingErrorEvent(
+        id.cast(),
+        from,
+        to,
+        subject,
+        templateId,
+        variables,
+        reason
+    )
 }

@@ -1,9 +1,9 @@
 package com.psinder.auth
 
 import com.psinder.auth.account.AccountId
+import com.psinder.auth.authority.Allow
 import com.psinder.auth.authority.authorities
 import com.psinder.auth.authority.withInjectedAuthorities
-import com.psinder.auth.principal.AuthorizedAccountAbilityEnsureProviderImpl
 import com.psinder.auth.principal.AuthorizedAccountAbilityProviderImpl
 import com.psinder.auth.principal.fakeAuthenticatedAccountProvider
 import com.psinder.auth.principal.unauthenticatedAccountProvider
@@ -11,8 +11,8 @@ import com.psinder.auth.role.Role
 import com.psinder.support.Dog
 import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
+import strikt.assertions.isA
 import strikt.assertions.isSuccess
-import strikt.assertions.isTrue
 
 class InjectedAuthorityContextTest : DescribeSpec({
 
@@ -30,7 +30,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
             withInjectedAuthorities(authoritiesToInject) {
                 val result = acl.canView(dog)
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
         }
 
@@ -47,7 +47,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
             withInjectedAuthorities(authoritiesToInject) {
                 val result = acl.canCreate(Dog::class)
 
-                expectThat(result).isTrue()
+                expectThat(result).isA<Allow>()
             }
         }
     }
@@ -82,5 +82,4 @@ class InjectedAuthorityContextTest : DescribeSpec({
                 .isSuccess()
         }
     }
-
 })

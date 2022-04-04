@@ -5,4 +5,5 @@ data class FullEventType(
     private val eventName: EventName
 ) {
     fun get() = "${aggregateType.type}-${eventName.name}"
+    fun streamName() = "\$et-${aggregateType.type}-${eventName.name}"
 }

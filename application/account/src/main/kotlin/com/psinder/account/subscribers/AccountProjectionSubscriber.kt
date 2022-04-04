@@ -11,12 +11,11 @@ import kotlinx.coroutines.launch
 internal fun Application.accountProjectionUpdater(
     eventStoreDb: EventStoreDB,
     accountProjectionUpdater: AccountProjectionUpdater
-) =
-    launch {
-        eventStoreDb.subscribeToPersistedStream(
-            StreamName(accountAggregateType.streamName),
-            StreamGroup("account-projection-updater")
-        ) { _, event ->
-            accountProjectionUpdater.update(event.event)
-        }
+) = launch {
+    eventStoreDb.subscribeToPersistedStream(
+        StreamName(accountAggregateType.streamName),
+        StreamGroup("account-projection-updater")
+    ) { _, event ->
+        accountProjectionUpdater.update(event.event)
     }
+}
