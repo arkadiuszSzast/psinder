@@ -15,3 +15,14 @@ suspend fun <R> withKoin(module: Module, action: suspend Koin.() -> R) {
         stopKoin()
     }
 }
+
+suspend fun <R> withKoin(modules: List<Module>, action: suspend Koin.() -> R) {
+    try {
+        val koin = startKoin {
+            modules(modules)
+        }.koin
+        action(koin)
+    } finally {
+        stopKoin()
+    }
+}

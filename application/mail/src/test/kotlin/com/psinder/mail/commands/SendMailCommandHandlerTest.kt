@@ -1,5 +1,12 @@
 package com.psinder.mail.commands
 
+import com.psinder.auth.account.AccountId
+import com.psinder.auth.authority.sendingMailsFeature
+import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
+import com.psinder.auth.principal.DenyAllAbilityProvider
+import com.psinder.auth.principal.FakeAuthorizedAccountAbilityProvider
+import com.psinder.auth.principal.fakeAuthenticatedAccountProvider
+import com.psinder.auth.role.Role
 import com.psinder.database.RecordingEventStoreDB
 import com.psinder.mail.MailSender
 import com.psinder.mail.MailSendingError
@@ -28,7 +35,10 @@ class SendMailCommandHandlerTest : DescribeSpec() {
     init {
 
         describe("SendMailCommandHandler") {
-            val modules = module {
+            val authenticationAccountProvider = fakeAuthenticatedAccountProvider(AccountId("123"), Role.User) {
+                featureAccess(sendingMailsFeature)
+            }
+            val mainModules = module {
                 single {
                     RecordingMailSender {
                         when (it.to) {
@@ -39,11 +49,18 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                     }
                 } bind MailSender::class
                 single { RecordingEventStoreDB() } bind EventStoreDB::class
-                single { SendMailCommandHandler(get(), get()) }
+            }
+            val handlerModule = module {
+                single { FakeAuthorizedAccountAbilityProvider(authenticationAccountProvider) } bind AuthorizedAccountAbilityProvider::class
+                single { SendMailCommandHandler(get(), get(), get()) }
+            }
+            val denyAllHandlerModule = module {
+                single { DenyAllAbilityProvider(authenticationAccountProvider) } bind AuthorizedAccountAbilityProvider::class
+                single { SendMailCommandHandler(get(), get(), get()) }
             }
 
             it("should send mail") {
-                withKoin(modules) {
+                withKoin(mainModules + handlerModule) {
                     val handler = get<SendMailCommandHandler>()
                     val mailSender = get<RecordingMailSender>()
                     val eventStore = get<RecordingEventStoreDB>()
@@ -56,7 +73,6 @@ class SendMailCommandHandlerTest : DescribeSpec() {
 
                     expectThat(result).isEqualTo(MailSentResult.Success(mail.id))
                     expectThat(mailSender.hasBeenSentSuccessfully(mail.toDomain())).isTrue()
-                    expectThat(eventStore.readStream(StreamName(MailSentSuccessfullyEvent.fullEventType.get())))
                     expectThat(mailSentEvents) {
                         hasSize(1)
                         get { first().event.eventType == MailSentSuccessfullyEvent.fullEventType.get() }.isTrue()
@@ -65,7 +81,7 @@ class SendMailCommandHandlerTest : DescribeSpec() {
             }
 
             it("when sending failed should save MailSendingErrorEvent") {
-                withKoin(modules) {
+                withKoin(mainModules + handlerModule) {
                     val handler = get<SendMailCommandHandler>()
                     val mailSender = get<RecordingMailSender>()
                     val eventStore = get<RecordingEventStoreDB>()
@@ -83,7 +99,32 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                         )
                     )
                     expectThat(mailSender.hasNotBeenSentSuccessfully(mail.toDomain())).isTrue()
-                    expectThat(eventStore.readStream(StreamName(MailSendingErrorEvent.fullEventType.get())))
+                    expectThat(mailSentEvents) {
+                        hasSize(1)
+                        get { first().event.eventType == MailSendingErrorEvent.fullEventType.get() }.isTrue()
+                    }
+                }
+            }
+
+            it("should save MailSendingErrorEvent when have no permissions") {
+                withKoin(mainModules + denyAllHandlerModule) {
+                    val handler = get<SendMailCommandHandler>()
+                    val mailSender = get<RecordingMailSender>()
+                    val eventStore = get<RecordingEventStoreDB>()
+
+                    val mail = faker.mailModule.mailDto()
+
+                    val result = handler.handleAsync(SendMailCommand(mail))
+                    val mailSentEvents =
+                        eventStore.readStream(StreamName("${mailAggregateType.type}-${mail.id}")).events
+
+                    expectThat(result).isEqualTo(
+                        MailSentResult.Error(
+                            mail.id,
+                            MailSendingError("Mail send failed because of lack of permissions")
+                        )
+                    )
+                    expectThat(mailSender.getAll().isEmpty()).isTrue()
                     expectThat(mailSentEvents) {
                         hasSize(1)
                         get { first().event.eventType == MailSendingErrorEvent.fullEventType.get() }.isTrue()
