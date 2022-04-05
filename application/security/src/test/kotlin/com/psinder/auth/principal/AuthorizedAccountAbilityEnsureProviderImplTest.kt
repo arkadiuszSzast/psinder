@@ -25,7 +25,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectThrows<AuthorityCheckException> {
@@ -40,7 +40,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectThrows<AuthorityCheckException> {
@@ -55,7 +55,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectThrows<AuthorityCheckException> {
@@ -70,7 +70,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectCatching { aclEnsure.canView(dog) }
@@ -84,7 +84,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("123"))
 
                 expectCatching { aclEnsure.canView(dog) }
@@ -101,7 +101,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectThrows<AuthorityCheckException> {
@@ -116,7 +116,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectThrows<AuthorityCheckException> {
@@ -131,7 +131,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectThrows<AuthorityCheckException> {
@@ -146,7 +146,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("000"))
 
                 expectCatching { aclEnsure.canUpdate(dog) }
@@ -160,7 +160,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
                 val dog = Dog(AccountId("123"))
 
                 expectCatching { aclEnsure.canUpdate(dog) }
@@ -177,7 +177,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
 
                 expectThrows<AuthorityCheckException> {
                     aclEnsure.canCreate(Dog::class)
@@ -191,7 +191,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
 
                 expectThrows<AuthorityCheckException> {
                     aclEnsure.canCreate(Dog::class)
@@ -205,7 +205,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
 
                 expectCatching { aclEnsure.canCreate(Dog::class) }
                     .isSuccess()
@@ -221,7 +221,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
 
                 expectCatching { aclEnsure.hasAccessTo(Feature("feature_a")) }
                     .isSuccess()
@@ -234,7 +234,7 @@ class AuthorizedAccountAbilityEnsureProviderImplTest : DescribeSpec({
                 }
 
                 val acl = AuthorizedAccountAbilityProviderImpl(provider)
-                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl, provider)
+                val aclEnsure = AuthorizedAccountAbilityEnsureProviderImpl(acl)
 
                 expectThrows<AuthorityCheckException> {
                     aclEnsure.hasAccessTo(Feature("feature_b"))
