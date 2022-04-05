@@ -1,7 +1,9 @@
 package com.psinder.account
 
+import com.psinder.account.requests.CreateAccountRequest
 import com.psinder.auth.role.Role
 import com.psinder.shared.EmailAddress
+import com.psinder.shared.date.CreatedDate
 import com.psinder.shared.password.RawPassword
 import com.psinder.test.utils.date
 import io.github.serpro69.kfaker.Faker
@@ -26,4 +28,9 @@ class AccountModule(private val faker: Faker) {
     fun timeZone() = TimeZone.of(faker.address.timeZone())
     fun lastLoggedInDate(atMost: Long = 10, unit: TimeUnit = TimeUnit.DAYS) =
         LastLoggedInDate(faker.date.localDateTime.past(atMost, unit))
+
+    fun created(atMost: Long = 10, unit: TimeUnit = TimeUnit.DAYS) =
+        CreatedDate(faker.date.localDateTime.past(atMost, unit))
+
+    fun accountRequest() = CreateAccountRequest(personalData(), emailAddress(), rawPassword(), timeZone())
 }

@@ -6,8 +6,8 @@ import com.psinder.events.EventName
 import com.psinder.events.FullEventType
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.UUIDSerializer
+import com.psinder.shared.date.CreatedDate
 import com.psinder.shared.password.HashedPassword
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -21,7 +21,7 @@ data class AccountCreatedEvent(
     val email: EmailAddress,
     val personalData: PersonalData,
     val password: HashedPassword,
-    val created: LocalDateTime,
+    val created: CreatedDate,
     @Serializable(with = AccountStatus.CodifiedSerializer::class)
     val status: CodifiedEnum<AccountStatus, String>,
     @Serializable(with = Role.CodifiedSerializer::class)

@@ -3,6 +3,7 @@ package com.psinder.account
 import com.psinder.auth.role.Role
 import com.psinder.database.HasDatabaseAndTransactionally
 import com.psinder.shared.EmailAddress
+import com.psinder.shared.date.CreatedDate
 import com.psinder.shared.password.HashedPassword
 import com.psinder.test.utils.faker
 import kotlinx.datetime.TimeZone
@@ -23,6 +24,7 @@ suspend fun HasDatabaseAndTransactionally.createRandomAccount(customize: Account
         typeGenerator { faker.accountModule.accountStatus().codifiedEnum() }
         typeGenerator { faker.accountModule.timeZone() }
         typeGenerator { faker.accountModule.lastLoggedInDate() }
+        typeGenerator { faker.accountModule.created() }
     }.apply(customize)
     db.getCollection<Account>().insertOne(account)
     return account
@@ -36,14 +38,23 @@ suspend fun HasDatabaseAndTransactionally.createAccount(
     city: City = faker.accountModule.city(),
     streetName: StreetName = faker.accountModule.streetName(),
     password: HashedPassword = faker.accountModule.hashedPassword(),
+    created: CreatedDate = faker.accountModule.created(),
     status: CodifiedEnum<AccountStatus, String> = faker.accountModule.accountStatus().codifiedEnum(),
     role: CodifiedEnum<Role, String> = faker.accountModule.role().codifiedEnum(),
     timeZone: TimeZone = faker.accountModule.timeZone(),
     customize: Account.() -> Unit = {}
 ): Account {
     val account =
-        Account(id, email, PersonalData(name, surname, AddressData(city, streetName)), password, status, role, timeZone)
-            .apply(customize)
+        Account(
+            id,
+            email,
+            PersonalData(name, surname, AddressData(city, streetName)),
+            password,
+            created,
+            status,
+            role,
+            timeZone
+        ).apply(customize)
     db.getCollection<Account>().insertOne(account)
     return account
 }

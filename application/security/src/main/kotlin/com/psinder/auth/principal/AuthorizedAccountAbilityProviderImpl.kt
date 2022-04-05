@@ -65,7 +65,11 @@ class AuthorizedAccountAbilityProviderImpl(
                     if (!allPredicatesPassed) {
                         val accountId = currentPrincipal().accountId
                         logger.warn("Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}.")
-                        Deny(AuthorityCheckException("Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}."))
+                        Deny(
+                            AuthorityCheckException(
+                                "Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}."
+                            )
+                        )
                     } else {
                         Allow(UUID.randomUUID())
                     }
@@ -87,7 +91,11 @@ class AuthorizedAccountAbilityProviderImpl(
                     if (!allPredicatesPassed) {
                         val accountId = currentPrincipal().accountId
                         logger.warn("Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}.")
-                        Deny(AuthorityCheckException("Account with id: [$accountId] cannot update that instance of ${entity.kClassSimpleName}."))
+                        Deny(
+                            AuthorityCheckException(
+                                "Account with id: [$accountId] cannot update that instance of ${entity.kClassSimpleName}."
+                            )
+                        )
                     } else {
                         Allow(UUID.randomUUID())
                     }

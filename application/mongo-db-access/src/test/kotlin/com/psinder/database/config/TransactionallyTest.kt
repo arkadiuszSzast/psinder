@@ -10,7 +10,7 @@ import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isEmpty
 
-class TransactionallyTest : DatabaseTest() {
+class TransactionallyTest : DatabaseTest(emptyList()) {
     init {
         describe("rollback transaction") {
 

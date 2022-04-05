@@ -91,7 +91,7 @@ class FakeAuthorizedAccountAbilityProvider(private val authenticatedAccountProvi
     }
 
     override suspend fun ensure(): AuthorizedAccountAbilityEnsureProvider {
-        return AuthorizedAccountAbilityEnsureProviderImpl(this, authenticatedAccountProvider)
+        return AuthorizedAccountAbilityEnsureProviderImpl(this)
     }
 
     private suspend fun currentPrincipal() = authenticatedAccountProvider.currentPrincipal()

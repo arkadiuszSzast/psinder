@@ -32,7 +32,11 @@ import java.util.UUID
 import kotlin.coroutines.CoroutineContext
 
 class RecordingEventStoreDB : EventStoreDB {
-    private val streams: MutableMap<Stream, MutableList<EventData>> = mutableMapOf()
+    private var streams: MutableMap<Stream, MutableList<EventData>> = mutableMapOf()
+
+    fun clean() {
+        streams = mutableMapOf()
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val parent: CompletableJob = Job()

@@ -1,5 +1,6 @@
 package com.psinder.account.subscribers
 
+import arrow.core.nel
 import com.psinder.account.AccountCreatedEvent
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
@@ -22,7 +23,7 @@ private val testingModules = module {
     single { AccountMongoRepository(get<CoroutineDatabase>().getCollection()) } bind AccountRepository::class
 }
 
-class AccountProjectionUpdaterKtTest : DatabaseTest(testingModules) {
+class AccountProjectionUpdaterKtTest : DatabaseTest(testingModules.nel()) {
     private val updater = get<AccountProjectionUpdater>()
     private val accountRepository = get<AccountRepository>()
 
@@ -35,6 +36,7 @@ class AccountProjectionUpdaterKtTest : DatabaseTest(testingModules) {
                     faker.accountModule.emailAddress(),
                     faker.accountModule.personalData(),
                     faker.accountModule.hashedPassword(),
+                    faker.accountModule.created(),
                     faker.accountModule.accountStatus().codifiedEnum(),
                     faker.accountModule.role().codifiedEnum(),
                     faker.accountModule.timeZone()

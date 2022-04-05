@@ -2,6 +2,7 @@ package com.psinder.monitoring.middlewares
 
 import com.psinder.test.utils.withLogRecorder
 import com.trendyol.kediatr.Command
+import com.trendyol.kediatr.CommandMetadata
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -102,4 +103,4 @@ class AsyncPipelineBehaviorTracingMiddlewareTest : DescribeSpec() {
     }
 }
 
-private class AsyncHelloCommand : Command
+private class AsyncHelloCommand(override val metadata: CommandMetadata? = null) : Command

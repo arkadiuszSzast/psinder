@@ -1,5 +1,6 @@
 package com.psinder.account.queries
 
+import arrow.core.nel
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
 import com.psinder.account.createAccount
@@ -20,7 +21,7 @@ private val testingModules = module {
     single { AccountMongoRepository(get<CoroutineDatabase>().getCollection()) } bind AccountRepository::class
 }
 
-internal class FindAccountByEmailQueryHandlerTest : DatabaseTest(testingModules) {
+internal class FindAccountByEmailQueryHandlerTest : DatabaseTest(testingModules.nel()) {
     private val handler = get<FindAccountByEmailQueryHandler>()
 
     init {

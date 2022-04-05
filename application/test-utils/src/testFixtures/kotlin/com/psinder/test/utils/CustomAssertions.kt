@@ -2,9 +2,13 @@ package com.psinder.test.utils
 
 import com.psinder.shared.json.decodeFromString
 import io.ktor.server.testing.TestApplicationResponse
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
 import strikt.api.Assertion
+import java.time.LocalDateTime.now
+import java.time.ZoneId
 
-private inline fun <reified T> Assertion.Builder<TestApplicationResponse>.contentIsTypeOf() {
+inline fun <reified T> Assertion.Builder<TestApplicationResponse>.contentIsTypeOf() {
     assert("Request content can be deserialized to: ${T::class.qualifiedName}") {
         with(it.content) {
             when (this) {
@@ -17,6 +21,19 @@ private inline fun <reified T> Assertion.Builder<TestApplicationResponse>.conten
                     )
                 }
             }
+        }
+    }
+}
+
+fun Assertion.Builder<LocalDateTime>.isEqualToNowIgnoringSeconds() {
+    assert("LocalDateTime is equal to now ignoring seconds") {
+        val nowMinusOneSecond = now(ZoneId.of("UTC")).minusSeconds(1)
+        val nowPlusOneSecond = now(ZoneId.of("UTC")).plusSeconds(1)
+        val givenDate = it.toJavaLocalDateTime()
+        if (givenDate.isBefore(nowPlusOneSecond) && givenDate.isAfter(nowMinusOneSecond)) {
+            pass()
+        } else {
+            fail("Given LocalDateTime [$it] is not between $nowMinusOneSecond and $nowPlusOneSecond")
         }
     }
 }

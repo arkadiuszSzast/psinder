@@ -6,8 +6,8 @@ import com.psinder.auth.account.BelongsToAccount
 import com.psinder.auth.role.Role
 import com.psinder.database.HasId
 import com.psinder.shared.EmailAddress
+import com.psinder.shared.date.CreatedDate
 import com.psinder.shared.password.HashedPassword
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.Contextual
@@ -26,7 +26,7 @@ data class Account constructor(
     val email: EmailAddress,
     val personalData: PersonalData,
     val password: HashedPassword,
-    val created: LocalDateTime,
+    val created: CreatedDate,
     @Serializable(with = AccountStatus.CodifiedSerializer::class)
     val status: CodifiedEnum<AccountStatus, String>,
     @Serializable(with = Role.CodifiedSerializer::class)
@@ -48,7 +48,7 @@ data class Account constructor(
                 email,
                 personalData,
                 password,
-                now(ZoneId.of("UTC")).toKotlinLocalDateTime(),
+                CreatedDate(now(ZoneId.of("UTC")).toKotlinLocalDateTime()),
                 AccountStatus.Staged.codifiedEnum(),
                 role,
                 timeZoneId
