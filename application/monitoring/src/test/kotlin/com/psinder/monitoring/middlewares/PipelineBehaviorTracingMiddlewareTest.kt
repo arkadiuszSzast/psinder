@@ -29,12 +29,16 @@ class PipelineBehaviorTracingMiddlewareTest : DescribeSpec() {
 
             it("should start span") {
                 withLogRecorder {
+                    // arrange
                     val logAppender = this
                     val middleware = PipelineBehaviorTracingMiddleware(tracer)
+
+                    // act
                     middleware.apply(HelloCommand()) {
                         logger.info { "Hello!" }
                     }
 
+                    // assert
                     expectThat(tracer) {
                         get { finishedSpans() }
                             .hasSize(1)
@@ -61,9 +65,11 @@ class PipelineBehaviorTracingMiddlewareTest : DescribeSpec() {
 
             it("should log error") {
                 withLogRecorder {
+                    // arrange
                     val logAppender = this
                     val middleware = PipelineBehaviorTracingMiddleware(tracer)
 
+                    // act && assert
                     expectThrows<Error> {
                         middleware.apply(HelloCommand()) {
                             logger.info { "Hello before error!" }

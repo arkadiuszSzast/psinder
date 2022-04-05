@@ -26,6 +26,7 @@ class RegisterRequestTest : DescribeSpec({
         describe("should throw exception when") {
 
             it("invalid email format") {
+                // arrange && act && assert
                 expectThat(
                     CreateAccountRequest(
                         validPersonalData,
@@ -39,6 +40,7 @@ class RegisterRequestTest : DescribeSpec({
             }
 
             it("too short password") {
+                // arrange && act && assert
                 expectThat(
                     CreateAccountRequest(
                         validPersonalData,
@@ -53,6 +55,7 @@ class RegisterRequestTest : DescribeSpec({
             }
 
             it("all fields are invalid") {
+                // arrange && act && assert
                 expectThat(
                     CreateAccountRequest(
                         validPersonalData,
@@ -76,6 +79,7 @@ class RegisterRequestTest : DescribeSpec({
         describe("trimming values") {
 
             it("should trim email") {
+                // arrange && act
                 val result = CreateAccountRequest(
                     validPersonalData,
                     EmailAddress.create(" joe@doe.com "),
@@ -83,6 +87,7 @@ class RegisterRequestTest : DescribeSpec({
                     validTimeZone
                 ).validate()
 
+                // assert
                 expectThat(result)
                     .isValid()
                     .get { value }

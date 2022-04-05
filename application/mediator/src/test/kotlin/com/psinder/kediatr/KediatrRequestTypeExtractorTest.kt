@@ -16,32 +16,42 @@ class KediatrRequestTypeExtractorTest : DescribeSpec({
     describe("KediatrRequestTypeExtractor") {
 
         it("can extract command type") {
+            // arrange && act
             val result = KediatrRequestTypeExtractor.extract(SimpleCommand())
 
+            // assert
             expectThat(result).isEqualTo(KediatrRequestType.Command.codifiedEnum())
         }
 
         it("can extract commandWithResult type") {
+            // arrange && act
             val result = KediatrRequestTypeExtractor.extract(SimpleCommandWithResult())
 
+            // assert
             expectThat(result).isEqualTo(KediatrRequestType.CommandWithResult.codifiedEnum())
         }
 
         it("can extract query type") {
+            // arrange && act
             val result = KediatrRequestTypeExtractor.extract(SimpleQuery())
 
+            // assert
             expectThat(result).isEqualTo(KediatrRequestType.Query.codifiedEnum())
         }
 
         it("can extract notification type") {
+            // arrange && act
             val result = KediatrRequestTypeExtractor.extract(SimpleNotification())
 
+            // assert
             expectThat(result).isEqualTo(KediatrRequestType.Notification.codifiedEnum())
         }
 
         it("should return unknown when not found") {
+            // arrange && act
             val result = KediatrRequestTypeExtractor.extract(Dog())
 
+            // assert
             expectThat(result) {
                 get { knownOrNull() }.isNull()
                 get { code() }.isEqualTo("unknown")

@@ -13,10 +13,13 @@ class MonitoringKtTest : DescribeSpec({
 
         it("should install") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
 
+                // act
                 application.configureMonitoring()
 
+                // assert
                 verify(exactly = 1) { application.install(eq(CallLogging), any()) }
             }
         }

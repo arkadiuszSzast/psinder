@@ -16,26 +16,32 @@ class SentryKtTest : DescribeSpec({
 
         it("should not install when disabled") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
                 mockkObject(SentryConfig)
                 every { SentryConfig.enabled } returns false
                 every { SentryConfig.dsn } returns "https://public@sentry.example.com/1"
 
+                // act
                 application.initializeSentry(SentryConfig)
 
+                // assert
                 verify(exactly = 0) { application.install(eq(SentryFeature), any()) }
             }
         }
 
         it("should install when enabled") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
                 mockkObject(SentryConfig)
                 every { SentryConfig.enabled } returns true
                 every { SentryConfig.dsn } returns "https://public@sentry.example.com/1"
 
+                // act
                 application.initializeSentry(SentryConfig)
 
+                // assert
                 verify(exactly = 1) { application.install(eq(SentryFeature), any()) }
             }
         }

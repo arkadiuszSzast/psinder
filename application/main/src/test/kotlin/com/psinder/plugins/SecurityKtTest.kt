@@ -1,6 +1,6 @@
 package com.psinder.plugins
 
-import com.psinder.config.JwtConfig
+import com.psinder.config.JwtAuthConfig
 import com.psinder.test.utils.mockKtorInstallFunction
 import io.kotest.core.spec.style.DescribeSpec
 import io.ktor.application.install
@@ -14,10 +14,13 @@ class SecurityKtTest : DescribeSpec({
 
         it("should install") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
 
-                application.configureSecurity(JwtConfig)
+                // act
+                application.configureSecurity(JwtAuthConfig)
 
+                // assert
                 verify(exactly = 1) { application.install(eq(Authentication), any()) }
             }
         }

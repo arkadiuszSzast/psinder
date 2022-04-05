@@ -4,7 +4,6 @@ import com.psinder.auth.authority.sendingMailsFeature
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.events.streamName
 import com.psinder.events.toEventData
-import com.psinder.mail.Mail
 import com.psinder.mail.MailDto
 import com.psinder.mail.MailSender
 import com.psinder.mail.MailSendingError
@@ -32,7 +31,7 @@ internal class SendMailCommandHandler(
 
             eventStore.appendToStream(
                 mailSendingErrorEvent.streamName,
-                mailSendingErrorEvent.toEventData<Mail, MailSendingErrorEvent>(metadata)
+                mailSendingErrorEvent.toEventData<MailSendingErrorEvent>(metadata)
             )
 
             return MailSentResult.Error(mailSendingErrorEvent.mailId.cast(), mailSendingErrorEvent.error)
@@ -43,13 +42,13 @@ internal class SendMailCommandHandler(
                 log.debug { "Mail with id: ${event.mailId} sent successfully" }
                 eventStore.appendToStream(
                     event.streamName,
-                    event.toEventData<Mail, MailSentSuccessfullyEvent>(metadata)
+                    event.toEventData<MailSentSuccessfullyEvent>(metadata)
                 )
                 MailSentResult.Success(event.mailId.cast())
             }
             is MailSendingErrorEvent -> {
                 log.debug { "Error when sending mail with id: ${event.mailId}. Cause: ${event.error}" }
-                eventStore.appendToStream(event.streamName, event.toEventData<Mail, MailSendingErrorEvent>(metadata))
+                eventStore.appendToStream(event.streamName, event.toEventData<MailSendingErrorEvent>(metadata))
                 MailSentResult.Error(event.mailId.cast(), event.error)
             }
         }

@@ -9,6 +9,7 @@ internal class ApplicationConfigTest : DescribeSpec({
     describe("get application config") {
 
         it("get properties") {
+            // arrange && act && assert
             expectThat(ApplicationConfig) {
                 get { environment }.isEqualTo("dev")
             }

@@ -14,9 +14,13 @@ class SerializationKtTest : DescribeSpec({
 
         it("should install") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
-                application.configureSerialization(Json { })
 
+                // act
+                application.configureSerialization(Json)
+
+                // assert
                 verify(exactly = 1) { application.install(eq(ContentNegotiation), any()) }
             }
         }

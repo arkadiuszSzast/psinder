@@ -16,8 +16,10 @@ class EmailTest : DescribeSpec({
     describe("create email object") {
 
         it("should be valid") {
+            // arrange && act
             val emailAddress = EmailAddress.create("joe@doe.com").validate()
 
+            // assert
             expectThat(emailAddress)
                 .isValid()
                 .get { value }
@@ -26,8 +28,10 @@ class EmailTest : DescribeSpec({
         }
 
         it("address should be trimmed") {
+            // arrange && act
             val emailAddress = EmailAddress.create(" joe@doe.com ")
 
+            // assert
             expectThat(emailAddress)
                 .get { value }
                 .not().startsWith(" ")
@@ -37,8 +41,10 @@ class EmailTest : DescribeSpec({
         describe("validations") {
 
             it("invalid format") {
+                // arrange && act
                 val emailAddress = EmailAddress.create("invalid_email").validate()
 
+                // assert
                 expectThat(emailAddress)
                     .isInvalid()
                     .get { value.mergeAll().validationErrors.map { it.message } }

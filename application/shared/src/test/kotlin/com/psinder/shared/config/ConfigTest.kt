@@ -11,11 +11,13 @@ class ConfigTest : DescribeSpec({
     describe("config test") {
 
         it("get property") {
+            // arrange && act && assert
             expectThat(getProperty(ConfigKey("application.env")))
                 .isNotBlank()
         }
 
         it("throw exception when property does not exist") {
+            // arrange && act && assert
             expectThrows<ApplicationConfigurationException> {
                 getProperty(ConfigKey("not_existing"))
             }

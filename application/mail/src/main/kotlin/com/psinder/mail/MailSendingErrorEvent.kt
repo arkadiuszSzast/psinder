@@ -1,5 +1,6 @@
 package com.psinder.mail
 
+import com.psinder.events.AggregateType
 import com.psinder.events.DomainEvent
 import com.psinder.events.EventName
 import com.psinder.events.FullEventType
@@ -19,7 +20,7 @@ data class MailSendingErrorEvent(
     val templateId: MailTemplateId,
     val variables: MailVariables,
     val error: MailSendingError
-) : DomainEvent<Mail>, MailSendingEvent() {
+) : DomainEvent, MailSendingEvent() {
 
     @Serializable(with = UUIDSerializer::class)
     override val eventId: UUID = UUID.randomUUID()
@@ -29,7 +30,10 @@ data class MailSendingErrorEvent(
 
     override val eventName = MailSendingErrorEvent.eventName
 
+    override val aggregateType: AggregateType = mailAggregateType
+
     companion object {
+
         fun create(mail: Mail, error: MailSendingError) =
             MailSendingErrorEvent(mail.id, mail.from, mail.to, mail.subject, mail.templateId, mail.variables, error)
 

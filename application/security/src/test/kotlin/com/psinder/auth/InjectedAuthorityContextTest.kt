@@ -19,6 +19,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
     describe("can inject authorities") {
 
         it("works with AuthorizedAccountAbilityProvider") {
+            // arrange
             val provider = unauthenticatedAccountProvider { }
 
             val acl = AuthorizedAccountAbilityProviderImpl(provider)
@@ -27,6 +28,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
                 entityAccess(Dog::class) { viewScope() }
             }
 
+            // act && assert
             withInjectedAuthorities(authoritiesToInject) {
                 val result = acl.canView(dog)
 
@@ -35,6 +37,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
         }
 
         it("injected authorities are checked before original ones in AuthorizedAccountAbilityProvider") {
+            // arrange
             val provider = fakeAuthenticatedAccountProvider(AccountId("123"), Role.User) {
                 entityAccess(Dog::class) { viewScope() }
             }
@@ -44,6 +47,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
                 entityAccess(Dog::class) { createScope() }
             }
 
+            // act && assert
             withInjectedAuthorities(authoritiesToInject) {
                 val result = acl.canCreate(Dog::class)
 
@@ -53,6 +57,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
     }
 
     it("works with AuthorizedAccountAbilityEnsureProvider") {
+        // arrange
         val provider = unauthenticatedAccountProvider { }
 
         val acl = AuthorizedAccountAbilityProviderImpl(provider)
@@ -61,6 +66,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
             entityAccess(Dog::class) { viewScope() }
         }
 
+        // act && assert
         withInjectedAuthorities(authoritiesToInject) {
             expectThat(runCatching { acl.ensure().canView(dog) })
                 .isSuccess()
@@ -68,6 +74,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
     }
 
     it("injected authorities are checked before original ones in AuthorizedAccountAbilityEnsureProvider") {
+        // arrange
         val provider = fakeAuthenticatedAccountProvider(AccountId("123"), Role.User) {
             entityAccess(Dog::class) { viewScope() }
         }
@@ -77,6 +84,7 @@ class InjectedAuthorityContextTest : DescribeSpec({
             entityAccess(Dog::class) { createScope() }
         }
 
+        // act && assert
         withInjectedAuthorities(authoritiesToInject) {
             expectThat(runCatching { acl.ensure().canCreate(Dog::class) })
                 .isSuccess()

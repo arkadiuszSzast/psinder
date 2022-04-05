@@ -1,6 +1,6 @@
 package com.psinder
 
-import com.psinder.config.JwtConfig
+import com.psinder.config.JwtAuthConfig
 import com.psinder.plugins.configureExceptionsHandling
 import com.psinder.plugins.configureGlobalRequestData
 import com.psinder.plugins.configureHTTP
@@ -29,6 +29,6 @@ internal fun Application.main() {
     configureKoin()
     configureSerialization(get())
     configureExceptionsHandling()
-    configureSecurity(JwtConfig)
+    configureSecurity(JwtAuthConfig)
     configureHTTP()
 }

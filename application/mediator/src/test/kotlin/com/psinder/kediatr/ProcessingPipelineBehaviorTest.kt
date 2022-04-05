@@ -32,9 +32,13 @@ class ProcessingPipelineBehaviorTest : KoinTest, DescribeSpec() {
                 }
 
                 withKoin(koinModules) {
+                    // arrange
+
                     val commandBus = get<CommandBus>()
+                    // act
                     commandBus.executeCommand(PongCommand())
 
+                    // assert
                     expectThat(invokesList)
                         .containsExactly("middlewareA", "pong")
                 }
@@ -50,9 +54,13 @@ class ProcessingPipelineBehaviorTest : KoinTest, DescribeSpec() {
                 }
 
                 withKoin(koinModules) {
+                    // arrange
                     val commandBus = get<CommandBus>()
+
+                    // act
                     commandBus.executeCommandAsync(PongCommand())
 
+                    // assert
                     expectThat(invokesList)
                         .containsExactly("asyncMiddlewareA", "pong")
                 }
@@ -71,17 +79,24 @@ class ProcessingPipelineBehaviorTest : KoinTest, DescribeSpec() {
                 }
 
                 withKoin(koinModules) {
+                    // arrange
                     val commandBus = get<CommandBus>()
+                    // act
                     commandBus.executeCommand(PongCommand())
 
+                    // assert
                     expectThat(invokesList) {
                         containsExactly("middlewareA", "pong")
                         doesNotContain("asyncMiddlewareA")
                     }
+
+                    // clean
                     invokesList.clear()
 
+                    // act
                     commandBus.executeCommandAsync(PongCommand())
 
+                    // assert
                     expectThat(invokesList) {
                         containsExactly("asyncMiddlewareA", "pong")
                         doesNotContain("middlewareA")
@@ -100,9 +115,13 @@ class ProcessingPipelineBehaviorTest : KoinTest, DescribeSpec() {
                 }
 
                 withKoin(koinModules) {
+                    // arrange
                     val commandBus = get<CommandBus>()
+
+                    // act
                     commandBus.executeCommand(PongCommand())
 
+                    // assert
                     expectThat(invokesList)
                         .containsExactly("middlewareA", "middlewareB", "pong")
                 }
@@ -119,9 +138,13 @@ class ProcessingPipelineBehaviorTest : KoinTest, DescribeSpec() {
                 }
 
                 withKoin(koinModules) {
+                    // arrange
                     val commandBus = get<CommandBus>()
+
+                    // act
                     commandBus.executeCommandAsync(PongCommand())
 
+                    // assert
                     expectThat(invokesList)
                         .containsExactly("asyncMiddlewareA", "asyncMiddlewareB", "pong")
                 }

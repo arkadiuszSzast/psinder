@@ -9,6 +9,7 @@ class DatabaseConfigTest : DescribeSpec({
     describe("get database config") {
 
         it("get properties") {
+            // arrange && act && assert
             expectThat(DatabaseConfig) {
                 get { name }.isEqualTo("test-database-name")
                 get { connectionString }.isEqualTo("mongodb://test-database-connection-string")

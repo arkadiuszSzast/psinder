@@ -56,10 +56,13 @@ class CreateAccountHandlerTest : DatabaseTest(testingModules) {
         describe("CreateAccountHandle") {
 
             it("should create account") {
+                // arrange
                 val request = faker.accountModule.accountRequest()
 
+                // act
                 val result = commandBus.executeCommandAsync(CreateAccountCommand(request))
 
+                // assert
                 expectThat(result.accountId).shouldNotBeNull()
                 val events =
                     eventStoreDb.readStream(StreamName("${accountAggregateType.type}-${result.accountId}")).events
@@ -79,9 +82,11 @@ class CreateAccountHandlerTest : DatabaseTest(testingModules) {
             }
 
             it("should not create account when email is already taken") {
+                // arrange
                 val request = faker.accountModule.accountRequest()
                 createAccount(email = request.email)
 
+                // act && assert
                 expectThrows<ValidationException> {
                     commandBus.executeCommandAsync(CreateAccountCommand(request))
                 }

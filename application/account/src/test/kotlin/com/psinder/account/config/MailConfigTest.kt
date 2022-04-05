@@ -13,6 +13,7 @@ class MailConfigTest : DescribeSpec({
     describe("get mail config test") {
 
         it("get properties") {
+            // arrange && act && assert
             expectThat(MailConfig) {
                 get { activateAccount }.isEqualTo(
                     MailProperties(

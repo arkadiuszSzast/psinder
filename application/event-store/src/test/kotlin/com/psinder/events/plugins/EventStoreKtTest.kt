@@ -14,10 +14,13 @@ class EventStoreKtTest : DescribeSpec({
 
         it("should install") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
 
+                // act
                 application.configureEventStore(EventStoreConfig)
 
+                // assert
                 verify(exactly = 1) { application.install(eq(EventStoreDB), any()) }
             }
         }

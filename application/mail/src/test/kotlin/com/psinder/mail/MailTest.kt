@@ -19,10 +19,13 @@ class MailTest : DescribeSpec({
     describe("send mail") {
 
         it("should return mail MailSentSuccessfullyEvent") {
+            // arrange
             val mail = faker.mailModule.mail()
 
+            // act
             val result = mail.send(mailSender)
 
+            // assert
             expectThat(result) {
                 isA<MailSentSuccessfullyEvent>()
             }

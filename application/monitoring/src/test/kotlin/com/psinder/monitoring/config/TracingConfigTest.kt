@@ -9,6 +9,7 @@ internal class TracingConfigTest : DescribeSpec({
     describe("get tracing config") {
 
         it("get properties") {
+            // arrange && act && assert
             expectThat(TracingConfig) {
                 get { enabled }.isEqualTo(false)
             }

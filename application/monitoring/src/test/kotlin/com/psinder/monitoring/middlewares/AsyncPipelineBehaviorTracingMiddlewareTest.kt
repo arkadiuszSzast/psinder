@@ -30,14 +30,18 @@ class AsyncPipelineBehaviorTracingMiddlewareTest : DescribeSpec() {
 
             it("should start span") {
                 withLogRecorder {
+                    // arrange
                     val logAppender = this
                     val middleware = AsyncPipelineBehaviorTracingMiddleware(tracer)
+
+                    // act
                     runBlocking {
                         middleware.apply(AsyncHelloCommand()) {
                             logger.info { "Hello!" }
                         }
                     }
 
+                    // assert
                     expectThat(tracer) {
                         get { finishedSpans() }
                             .hasSize(1)
@@ -64,9 +68,11 @@ class AsyncPipelineBehaviorTracingMiddlewareTest : DescribeSpec() {
 
             it("should log error when async") {
                 withLogRecorder {
+                    // arrange
                     val logAppender = this
                     val middleware = AsyncPipelineBehaviorTracingMiddleware(tracer)
 
+                    // act && assert
                     expectThrows<Error> {
                         middleware.apply(AsyncHelloCommand()) {
                             logger.info { "Hello before error!" }

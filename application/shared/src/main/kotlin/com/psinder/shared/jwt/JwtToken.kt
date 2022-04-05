@@ -22,9 +22,9 @@ value class JwtToken private constructor(val token: String) {
         }
 
         fun createOrThrow(token: String): JwtToken =
-            when (val vRegisterRequest = create(token)) {
-                is Invalid -> throw vRegisterRequest.value
-                is Valid -> vRegisterRequest.value
+            when (val vToken = create(token)) {
+                is Invalid -> throw vToken.value
+                is Valid -> vToken.value
             }
     }
 }

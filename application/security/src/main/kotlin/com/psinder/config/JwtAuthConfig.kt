@@ -3,7 +3,7 @@ package com.psinder.config
 import com.psinder.shared.config.ConfigKey
 import com.psinder.shared.config.getProperty
 
-object JwtConfig {
+object JwtAuthConfig {
     val domain by lazy { getProperty(Keys.jwt_domain) }
     val audience by lazy { getProperty(Keys.audience) }
     val realm by lazy { getProperty(Keys.realm) }

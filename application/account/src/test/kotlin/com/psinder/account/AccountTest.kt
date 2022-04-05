@@ -11,6 +11,7 @@ internal class AccountTest : DescribeSpec({
     describe("create account") {
 
         it("should have staged status") {
+            // arrange && act
             val account = Account.create(
                 faker.accountModule.emailAddress(),
                 faker.accountModule.personalData(),
@@ -19,6 +20,7 @@ internal class AccountTest : DescribeSpec({
                 faker.accountModule.timeZone()
             )
 
+            // assert
             expectThat(account)
                 .get { status.knownOrNull() }
                 .isEqualTo(AccountStatus.Staged)

@@ -14,10 +14,13 @@ class HTTPKtTest : DescribeSpec({
 
         it("should install") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
 
+                // act
                 application.configureHTTP()
 
+                // assert
                 verify(exactly = 1) { application.install(eq(CORS), any()) }
                 verify(exactly = 1) { application.install(eq(PartialContent), any()) }
             }

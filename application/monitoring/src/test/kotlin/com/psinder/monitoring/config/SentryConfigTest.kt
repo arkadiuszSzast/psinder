@@ -9,6 +9,7 @@ internal class SentryConfigTest : DescribeSpec({
     describe("get sentry config") {
 
         it("get properties") {
+            // arrange && act && assert
             expectThat(SentryConfig) {
                 get { enabled }.isEqualTo(false)
                 get { dsn }.isEqualTo("sentry-dsn")

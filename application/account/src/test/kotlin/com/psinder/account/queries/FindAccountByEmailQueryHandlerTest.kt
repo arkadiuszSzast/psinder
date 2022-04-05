@@ -28,19 +28,26 @@ internal class FindAccountByEmailQueryHandlerTest : DatabaseTest(testingModules.
         describe("FindAccountByEmailQuery test") {
 
             it("should be empty when account not exist") {
+                // arrange
                 val account = createAccount(email = EmailAddress.create("joe@doe.com"))
+
+                // act
                 val result = handler.handleAsync(FindAccountByEmailQuery(EmailAddress.create("not_existing@mail.com")))
 
+                // assert
                 expectThat(result)
                     .get { accountDto }
                     .isNone()
             }
 
             it("should found account") {
+                // arrange
                 val account = createRandomAccount()
 
+                // act
                 val result = handler.handleAsync(FindAccountByEmailQuery(account.email))
 
+                // assert
                 expectThat(result)
                     .get { accountDto }
                     .isSome()

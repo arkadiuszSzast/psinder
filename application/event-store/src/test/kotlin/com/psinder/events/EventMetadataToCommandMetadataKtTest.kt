@@ -10,10 +10,13 @@ class EventMetadataToCommandMetadataKtTest : DescribeSpec({
     describe("EventMetadataToCommandMetadata") {
 
         it("can map correctly") {
+            // arrange
             val eventMetadata = EventMetadata(CorrelationId(UUID.randomUUID()), CausationId(UUID.randomUUID()))
 
+            // act
             val result = eventMetadata.toCommandMetadata()
 
+            // assert
             expectThat(result) {
                 get { correlationId }.isEqualTo(eventMetadata.correlationId?.correlationId)
                 get { causationId }.isEqualTo(eventMetadata.causationId?.causationId)
@@ -21,10 +24,13 @@ class EventMetadataToCommandMetadataKtTest : DescribeSpec({
         }
 
         it("can map correctly when causationId is null") {
+            // arrange
             val eventMetadata = EventMetadata(CorrelationId(UUID.randomUUID()), null)
 
+            // act
             val result = eventMetadata.toCommandMetadata()
 
+            // assert
             expectThat(result) {
                 get { correlationId }.isEqualTo(eventMetadata.correlationId?.correlationId)
                 get { causationId }.isEqualTo(eventMetadata.causationId?.causationId)
@@ -32,10 +38,13 @@ class EventMetadataToCommandMetadataKtTest : DescribeSpec({
         }
 
         it("can map correctly when correlationId is null") {
+            // arrange
             val eventMetadata = EventMetadata(null, CausationId(UUID.randomUUID()))
 
+            // act
             val result = eventMetadata.toCommandMetadata()
 
+            // assert
             expectThat(result) {
                 get { correlationId }.isEqualTo(eventMetadata.correlationId?.correlationId)
                 get { causationId }.isEqualTo(eventMetadata.causationId?.causationId)
@@ -43,10 +52,13 @@ class EventMetadataToCommandMetadataKtTest : DescribeSpec({
         }
 
         it("can map correctly when correlationId and causationId are nulls") {
+            // arrange
             val eventMetadata = EventMetadata(null, null)
 
+            // act
             val result = eventMetadata.toCommandMetadata()
 
+            // assert
             expectThat(result) {
                 get { correlationId }.isEqualTo(eventMetadata.correlationId?.correlationId)
                 get { causationId }.isEqualTo(eventMetadata.causationId?.causationId)

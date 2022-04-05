@@ -17,3 +17,10 @@ suspend fun withInjectedAuthorities(authorities: List<Authority>, block: suspend
         block()
     }
 }
+
+suspend fun <T> withInjectedAuthoritiesReturning(features: List<Feature>, block: suspend () -> T): T {
+    val authorities = features.map { FeatureAccessAuthority(it) }
+    return withContext(currentCoroutineContext() + InjectedAuthorityContext(authorities)) {
+        block()
+    }
+}

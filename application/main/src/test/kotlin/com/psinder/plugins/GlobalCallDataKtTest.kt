@@ -13,10 +13,13 @@ internal class GlobalCallDataKtTest : DescribeSpec({
 
         it("should install") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
 
+                // act
                 application.configureGlobalRequestData()
 
+                // assert
                 verify(exactly = 1) { application.install(GlobalRequestData) }
             }
         }

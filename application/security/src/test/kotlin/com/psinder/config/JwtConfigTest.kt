@@ -9,7 +9,8 @@ class JwtConfigTest : DescribeSpec({
     describe("get jwt config") {
 
         it("get properties") {
-            expectThat(JwtConfig) {
+            // arrange && act && assert
+            expectThat(JwtAuthConfig) {
                 get { domain }.isEqualTo("https://jwt-test-domain/")
                 get { audience }.isEqualTo("jwt-test-audience")
                 get { realm }.isEqualTo("jwt-test-realm")

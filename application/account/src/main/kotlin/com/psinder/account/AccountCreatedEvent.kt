@@ -1,6 +1,7 @@
 package com.psinder.account
 
 import com.psinder.auth.role.Role
+import com.psinder.events.AggregateType
 import com.psinder.events.DomainEvent
 import com.psinder.events.EventName
 import com.psinder.events.FullEventType
@@ -27,7 +28,7 @@ data class AccountCreatedEvent(
     @Serializable(with = Role.CodifiedSerializer::class)
     val role: CodifiedEnum<Role, String>,
     val timeZoneId: TimeZone
-) : DomainEvent<Account> {
+) : DomainEvent {
 
     @Serializable(with = UUIDSerializer::class)
     override val eventId: UUID = UUID.randomUUID()
@@ -36,6 +37,8 @@ data class AccountCreatedEvent(
     override val aggregateId = accountId
 
     override val eventName = AccountCreatedEvent.eventName
+
+    override val aggregateType: AggregateType = accountAggregateType
 
     fun apply() = Account(accountId, email, personalData, password, created, status, role, timeZoneId)
 

@@ -15,6 +15,7 @@ class TransactionallyTest : DatabaseTest(emptyList()) {
         describe("rollback transaction") {
 
             it("should rollback insert when exception occurred") {
+                // arrange && act
                 runCatching {
                     transactionally.call { session ->
                         db.getCollection<Person>().insertOne(session, Person(newId(), "Joe"))
@@ -24,13 +25,16 @@ class TransactionallyTest : DatabaseTest(emptyList()) {
                     }
                 }
 
+                // assert
                 expectThat(db.getCollection<Person>().find().toList())
                     .isEmpty()
             }
 
             it("should rollback delete when exception occurred") {
+                // arrange
                 db.getCollection<Person>().insertOne(Person(newId(), "Joe"))
 
+                // act
                 runCatching {
                     transactionally.call { session ->
                         db.getCollection<Person>().deleteOne(session, Person::name eq "Joe")
@@ -38,6 +42,7 @@ class TransactionallyTest : DatabaseTest(emptyList()) {
                     }
                 }
 
+                // assert
                 expectThat(db.getCollection<Person>().find().toList())
                     .hasSize(1)
             }
@@ -46,6 +51,7 @@ class TransactionallyTest : DatabaseTest(emptyList()) {
         describe("without transaction") {
 
             it("should save everything before exception") {
+                // arrange && act
                 runCatching {
                     db.getCollection<Person>().insertOne(Person(newId(), "Joe"))
                     throw Error()
@@ -53,6 +59,7 @@ class TransactionallyTest : DatabaseTest(emptyList()) {
                     db.getCollection<Person>().insertOne(Person(newId(), "Doe"))
                 }
 
+                // assert
                 expectThat(db.getCollection<Person>().find().toList())
                     .hasSize(1)
             }

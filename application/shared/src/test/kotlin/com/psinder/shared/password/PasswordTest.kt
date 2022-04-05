@@ -15,18 +15,26 @@ class PasswordTest : DescribeSpec({
     describe("create raw password object") {
 
         it("created object should store raw password") {
+            // arrange
             val notHashedPassword = "super_secret"
+
+            // act
             val password = RawPassword(notHashedPassword)
 
+            // assert
             expectThat(password)
                 .get { value }
                 .isEqualTo(notHashedPassword)
         }
 
         it("hashing password") {
+            // arrange
             val notHashedPassword = "super_secret"
+
+            // act
             val password = RawPassword(notHashedPassword).hashpw()
 
+            // assert
             expectThat(password)
                 .get { value }
                 .not().isEqualTo(notHashedPassword)
@@ -35,8 +43,10 @@ class PasswordTest : DescribeSpec({
     }
 
     describe("default validation rules") {
+        // arrange && act
         val password = RawPassword("\t").validate()
 
+        // assert
         expectThat(password)
             .isInvalid()
             .get { value.mergeAll().validationErrors.map { it.message } }

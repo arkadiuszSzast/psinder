@@ -17,10 +17,13 @@ class KoinKtTest : DescribeSpec({
 
         it("should install") {
             withTestApplication {
+                // arrange
                 mockKtorInstallFunction()
 
+                // act
                 application.configureKoin()
 
+                // assert
                 verify(exactly = 1) { application.install(eq(Koin), any()) }
             }
         }
@@ -30,6 +33,7 @@ class KoinKtTest : DescribeSpec({
 
         it("verify all modules") {
             withTestApplication(Application::allModules) {
+                // arrange && act && assert
                 application.getKoin().checkModules()
             }
         }

@@ -1,5 +1,6 @@
 package com.psinder.mail
 
+import com.psinder.events.AggregateType
 import com.psinder.events.DomainEvent
 import com.psinder.events.EventName
 import com.psinder.events.FullEventType
@@ -18,7 +19,7 @@ data class MailSentSuccessfullyEvent(
     val subject: MailSubject,
     val templateId: MailTemplateId,
     val variables: MailVariables
-) : DomainEvent<Mail>, MailSendingEvent() {
+) : DomainEvent, MailSendingEvent() {
 
     @Serializable(with = UUIDSerializer::class)
     override val eventId: UUID = UUID.randomUUID()
@@ -27,6 +28,8 @@ data class MailSentSuccessfullyEvent(
     override val aggregateId: Id<Mail> = mailId
 
     override val eventName = MailSentSuccessfullyEvent.eventName
+
+    override val aggregateType: AggregateType = mailAggregateType
 
     companion object {
         fun create(mail: Mail) =

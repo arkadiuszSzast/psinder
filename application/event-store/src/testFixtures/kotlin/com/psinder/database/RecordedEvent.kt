@@ -1,14 +1,13 @@
-package com.psinder.account
+package com.psinder.database
 
 import com.eventstore.dbclient.Position
 import com.eventstore.dbclient.RecordedEvent
 import com.eventstore.dbclient.StreamRevision
-import com.psinder.database.getSystemMetadata
-import com.psinder.events.aggregateType
+import com.psinder.events.DomainEvent
 import com.psinder.events.toEventData
 
-fun AccountCreatedEvent.recordedEvent(): RecordedEvent {
-    val eventData = this.toEventData<Account, AccountCreatedEvent>()
+inline fun <reified T : DomainEvent> DomainEvent.recordedEvent(): RecordedEvent {
+    val eventData = this.toEventData<T>()
 
     return RecordedEvent(
         "$aggregateType-$aggregateId",

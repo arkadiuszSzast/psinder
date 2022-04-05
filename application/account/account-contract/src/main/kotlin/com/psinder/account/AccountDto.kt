@@ -3,13 +3,14 @@ package com.psinder.account
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.date.CreatedDate
 import kotlinx.datetime.TimeZone
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
 
 @Serializable
 data class AccountDto(
-    val id: Id<AccountDto>,
+    @Contextual val id: Id<AccountDto>,
     val email: EmailAddress,
     val personalData: PersonalData,
     val created: CreatedDate,
