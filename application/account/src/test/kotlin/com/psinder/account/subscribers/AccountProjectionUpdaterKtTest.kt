@@ -1,7 +1,7 @@
 package com.psinder.account.subscribers
 
 import arrow.core.nel
-import com.psinder.account.AccountCreatedEvent
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
 import com.psinder.account.accountModule

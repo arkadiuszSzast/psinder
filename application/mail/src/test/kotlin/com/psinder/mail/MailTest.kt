@@ -1,5 +1,7 @@
 package com.psinder.mail
 
+import com.psinder.mail.events.MailSendingErrorEvent
+import com.psinder.mail.events.MailSentSuccessfullyEvent
 import com.psinder.shared.EmailAddress
 import com.psinder.test.utils.faker
 import io.kotest.core.spec.style.DescribeSpec

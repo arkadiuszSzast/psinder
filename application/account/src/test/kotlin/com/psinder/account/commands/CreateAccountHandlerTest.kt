@@ -1,6 +1,6 @@
 package com.psinder.account.commands
 
-import com.psinder.account.AccountCreatedEvent
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
 import com.psinder.account.AccountStatus

@@ -1,7 +1,7 @@
 package com.psinder.account.subscribers
 
 import arrow.core.nel
-import com.psinder.account.AccountCreatedEvent
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.activation.commands.GenerateAccountActivateTokenCommand
 import com.psinder.account.config.MailConfig
 import com.psinder.auth.authority.generateAccountActivateTokenFeature

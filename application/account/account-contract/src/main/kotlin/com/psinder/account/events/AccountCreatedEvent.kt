@@ -1,5 +1,9 @@
-package com.psinder.account
+package com.psinder.account.events
 
+import com.psinder.account.AccountDto
+import com.psinder.account.AccountStatus
+import com.psinder.account.PersonalData
+import com.psinder.account.accountAggregateType
 import com.psinder.auth.role.Role
 import com.psinder.events.AggregateType
 import com.psinder.events.DomainEvent
@@ -18,7 +22,7 @@ import java.util.UUID
 
 @Serializable
 data class AccountCreatedEvent(
-    @Contextual val accountId: Id<Account>,
+    @Contextual val accountId: Id<AccountDto>,
     val email: EmailAddress,
     val personalData: PersonalData,
     val password: HashedPassword,
@@ -36,11 +40,9 @@ data class AccountCreatedEvent(
     @Contextual
     override val aggregateId = accountId
 
-    override val eventName = AccountCreatedEvent.eventName
+    override val eventName = Companion.eventName
 
     override val aggregateType: AggregateType = accountAggregateType
-
-    fun apply() = Account(accountId, email, personalData, password, created, status, role, timeZoneId)
 
     companion object {
         val eventName: EventName = EventName("created")

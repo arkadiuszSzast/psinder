@@ -1,5 +1,6 @@
 package com.psinder.account
 
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.AccountId
 import com.psinder.auth.account.BelongsToAccount
@@ -42,18 +43,27 @@ data class Account constructor(
             role: CodifiedEnum<Role, String>,
             password: HashedPassword,
             timeZoneId: TimeZone,
-        ): AccountCreatedEvent {
-            return AccountCreatedEvent(
-                newId(),
-                email,
-                personalData,
-                password,
-                CreatedDate(now(ZoneId.of("UTC")).toKotlinLocalDateTime()),
-                AccountStatus.Staged.codifiedEnum(),
-                role,
-                timeZoneId
-            )
-        }
+        ) = AccountCreatedEvent(
+            newId(),
+            email,
+            personalData,
+            password,
+            CreatedDate(now(ZoneId.of("UTC")).toKotlinLocalDateTime()),
+            AccountStatus.Staged.codifiedEnum(),
+            role,
+            timeZoneId
+        )
+
+        fun applyCreatedEvent(event: AccountCreatedEvent) = Account(
+            event.accountId.cast(),
+            event.email,
+            event.personalData,
+            event.password,
+            event.created,
+            event.status,
+            event.role,
+            event.timeZoneId
+        )
     }
 
     override val accountId: AccountId

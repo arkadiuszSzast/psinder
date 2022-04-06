@@ -2,7 +2,7 @@ package com.psinder.account.commands
 
 import arrow.core.nel
 import com.psinder.account.Account
-import com.psinder.account.AccountCreatedEvent
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.queries.FindAccountByEmailQuery
 import com.psinder.auth.authority.createAccountFeature
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider

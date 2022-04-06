@@ -10,9 +10,9 @@ import com.psinder.auth.role.Role
 import com.psinder.database.RecordingEventStoreDB
 import com.psinder.mail.MailSender
 import com.psinder.mail.MailSendingError
-import com.psinder.mail.MailSendingErrorEvent
+import com.psinder.mail.events.MailSendingErrorEvent
 import com.psinder.mail.MailSentResult
-import com.psinder.mail.MailSentSuccessfullyEvent
+import com.psinder.mail.events.MailSentSuccessfullyEvent
 import com.psinder.mail.RecordingMailSender
 import com.psinder.mail.mailAggregateType
 import com.psinder.mail.mailModule

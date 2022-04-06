@@ -1,5 +1,8 @@
 package com.psinder.mail
 
+import com.psinder.mail.events.MailSendingErrorEvent
+import com.psinder.mail.events.MailSendingEvent
+import com.psinder.mail.events.MailSentSuccessfullyEvent
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.validation.Validatable
 import io.konform.validation.Validation
@@ -19,8 +22,8 @@ data class Mail(
 
     suspend fun send(mailSender: MailSender): MailSendingEvent {
         return when (val result = mailSender.send(this)) {
-            is MailSentResult.Success -> MailSentSuccessfullyEvent.create(this)
-            is MailSentResult.Error -> MailSendingErrorEvent.create(this, result.cause)
+            is MailSentResult.Success -> MailSentSuccessfullyEvent.create(this.toDto())
+            is MailSentResult.Error -> MailSendingErrorEvent.create(this.toDto(), result.cause)
         }
     }
 
