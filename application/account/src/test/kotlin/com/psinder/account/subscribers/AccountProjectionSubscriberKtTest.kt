@@ -45,7 +45,7 @@ class AccountProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModul
 
         describe("AccountProjectionSubscriber") {
 
-            it("should update projection on event") {
+            it("should create account projection on AccountCreatedEvent") {
                 withApplication {
                     runBlocking {
                         //arrange
