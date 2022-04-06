@@ -2,8 +2,8 @@ package com.psinder.account.subscribers
 
 import arrow.core.nel
 import com.psinder.account.activation.commands.GenerateAccountActivationLinkCommand
-import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.config.MailConfig
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.auth.authority.generateAccountActivationLinkFeature
 import com.psinder.auth.authority.generateAccountActivationTokenFeature
 import com.psinder.auth.authority.sendingMailsFeature

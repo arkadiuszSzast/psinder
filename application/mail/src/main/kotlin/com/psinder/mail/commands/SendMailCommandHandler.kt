@@ -7,8 +7,8 @@ import com.psinder.events.toEventData
 import com.psinder.mail.MailDto
 import com.psinder.mail.MailSender
 import com.psinder.mail.MailSendingError
-import com.psinder.mail.events.MailSendingErrorEvent
 import com.psinder.mail.MailSentResult
+import com.psinder.mail.events.MailSendingErrorEvent
 import com.psinder.mail.events.MailSentSuccessfullyEvent
 import com.psinder.mail.toDomain
 import com.trendyol.kediatr.AsyncCommandWithResultHandler

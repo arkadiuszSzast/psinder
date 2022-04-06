@@ -1,10 +1,10 @@
 package com.psinder.account.subscribers
 
 import arrow.core.nel
-import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
 import com.psinder.account.accountModule
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.database.DatabaseTest
 import com.psinder.database.recordedEvent
 import com.psinder.shared.get

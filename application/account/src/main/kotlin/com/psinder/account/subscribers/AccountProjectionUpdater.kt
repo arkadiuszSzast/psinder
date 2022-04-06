@@ -4,8 +4,8 @@ import arrow.core.Either
 import arrow.core.computations.ResultEffect.bind
 import com.eventstore.dbclient.RecordedEvent
 import com.psinder.account.Account
-import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.AccountRepository
+import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.events.getAs
 import mu.KotlinLogging
 

@@ -31,14 +31,14 @@ class GenerateAccountActivationLinkHandlerTest : DescribeSpec() {
 
             it("should generate link") {
                 withKoin(neededModules) {
-                    //arrange
+                    // arrange
                     val handler = get<GenerateAccountActivationLinkHandler>()
                     val command = GenerateAccountActivationLinkCommand(newId())
 
-                    //act
+                    // act
                     val result = handler.handleAsync(command)
 
-                    //assert
+                    // assert
                     expectThat(result) {
                         and { get { link.toString() }.startsWith("${ApplicationConfig.selfUrl}account/activate") }
                         and { get { link.parameters["token"] }.isNotNull() }
