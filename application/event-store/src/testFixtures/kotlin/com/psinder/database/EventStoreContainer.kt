@@ -3,7 +3,7 @@ package com.psinder.database
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 
-private const val EVENT_STORE_DB_PORT = 1113
+private const val EVENT_STORE_DB_PORT = 2113
 
 object EventStoreContainer {
     private val instance by lazy { startEventStoreContainer() }
@@ -17,6 +17,7 @@ object EventStoreContainer {
             addEnv("EVENTSTORE_RUN_PROJECTIONS", "All")
             addEnv("EVENTSTORE_START_STANDARD_PROJECTIONS", "true")
             addEnv("EVENTSTORE_EXT_TCP_PORT", "1113")
+            addEnv("EVENTSTORE_HTTP_PORT", "2113")
             addEnv("EVENTSTORE_INSECURE", "true")
             addEnv("EVENTSTORE_ENABLE_EXTERNAL_TCP", "true")
             addEnv("EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true")
