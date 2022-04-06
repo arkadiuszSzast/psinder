@@ -1,11 +1,14 @@
 package com.psinder.auth.principal
 
+import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.toOption
 import com.psinder.auth.AuthorityCheckException
 import com.psinder.auth.InjectedAuthorityContext
 import com.psinder.auth.authority.AccountAuthorities
 import com.psinder.auth.authority.Allow
+import com.psinder.auth.authority.AuthorityLevel
+import com.psinder.auth.authority.AuthorityScope
 import com.psinder.auth.authority.Decision
 import com.psinder.auth.authority.Deny
 import com.psinder.auth.authority.Feature
@@ -54,53 +57,13 @@ class AuthorizedAccountAbilityProviderImpl(
     override suspend fun <T : Any> canView(entity: T): Decision {
         return getAuthorities()
             .findViewScopeFor(entity.kClass)
-            .fold(
-                {
-                    val accountId = currentPrincipal().accountId
-                    logger.warn("Account with id: [$accountId] cannot view ${entity.kClassSimpleName}.")
-                    Deny(AuthorityCheckException("Account with id: [$accountId] cannot view ${entity.kClassSimpleName}."))
-                },
-                {
-                    val allPredicatesPassed = it.predicates.all { it.invoke(entity, currentPrincipal()) }
-                    if (!allPredicatesPassed) {
-                        val accountId = currentPrincipal().accountId
-                        logger.warn("Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}.")
-                        Deny(
-                            AuthorityCheckException(
-                                "Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}."
-                            )
-                        )
-                    } else {
-                        Allow(UUID.randomUUID())
-                    }
-                }
-            )
+            .check(entity, AuthorityLevel.View)
     }
 
     override suspend fun <T : Any> canUpdate(entity: T): Decision {
         return getAuthorities()
             .findUpdateScopeFor(entity.kClass)
-            .fold(
-                {
-                    val accountId = currentPrincipal().accountId
-                    logger.warn("Account with id: [$accountId] cannot update ${entity.kClassSimpleName}.")
-                    Deny(AuthorityCheckException("Account with id: [$accountId] cannot update ${entity.kClassSimpleName}."))
-                },
-                {
-                    val allPredicatesPassed = it.predicates.all { it.invoke(entity, currentPrincipal()) }
-                    if (!allPredicatesPassed) {
-                        val accountId = currentPrincipal().accountId
-                        logger.warn("Account with id: [$accountId] cannot view that instance of ${entity.kClassSimpleName}.")
-                        Deny(
-                            AuthorityCheckException(
-                                "Account with id: [$accountId] cannot update that instance of ${entity.kClassSimpleName}."
-                            )
-                        )
-                    } else {
-                        Allow(UUID.randomUUID())
-                    }
-                }
-            )
+            .check(entity, AuthorityLevel.Update)
     }
 
     override suspend fun <T : Any> filterCanView(entities: Collection<T>): Collection<T> {
@@ -114,4 +77,27 @@ class AuthorizedAccountAbilityProviderImpl(
     private suspend fun getAuthorities() = currentCoroutineContext()[InjectedAuthorityContext].toOption()
         .map { AccountAuthorities(it.authorities) }
         .getOrElse { authenticatedAccountProvider.authorities() }
+
+    private suspend fun <T : Any> Option<AuthorityScope<T>>.check(entity: T, authorityLevel: AuthorityLevel) =
+        fold(
+            {
+                val accountId = currentPrincipal().accountId
+                logger.warn("Account with id: [$accountId] cannot ${authorityLevel.code} ${entity.kClassSimpleName}.")
+                Deny(AuthorityCheckException("Account with id: [$accountId] cannot ${authorityLevel.code} ${entity.kClassSimpleName}."))
+            },
+            {
+                val allPredicatesPassed = it.predicates.all { it.invoke(entity, currentPrincipal()) }
+                if (!allPredicatesPassed) {
+                    val accountId = currentPrincipal().accountId
+                    logger.warn("Account with id: [$accountId] cannot ${authorityLevel.code} that instance of ${entity.kClassSimpleName}.")
+                    Deny(
+                        AuthorityCheckException(
+                            "Account with id: [$accountId] cannot ${authorityLevel.code} that instance of ${entity.kClassSimpleName}."
+                        )
+                    )
+                } else {
+                    Allow(UUID.randomUUID())
+                }
+            }
+        )
 }
