@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.account.activation.events.AccountActivationTokenGeneratedEvent
 import com.psinder.account.config.JwtConfig
-import com.psinder.auth.authority.generateAccountActivateTokenFeature
+import com.psinder.auth.authority.generateAccountActivationTokenFeature
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.events.streamName
 import com.psinder.events.toEventData
@@ -14,15 +14,15 @@ import io.traxter.eventstoredb.EventStoreDB
 import mu.KotlinLogging
 import java.util.Date
 
-internal class GenerateAccountActivateTokenHandler(
+internal class GenerateAccountActivationTokenHandler(
     private val jwtConfig: JwtConfig,
     private val eventStore: EventStoreDB,
     private val acl: AuthorizedAccountAbilityProvider
-) : AsyncCommandWithResultHandler<GenerateAccountActivateTokenCommand, GenerateAccountActivateTokenCommandResult> {
+) : AsyncCommandWithResultHandler<GenerateAccountActivationTokenCommand, GenerateAccountActivationTokenCommandResult> {
     private val logger = KotlinLogging.logger {}
 
-    override suspend fun handleAsync(command: GenerateAccountActivateTokenCommand): GenerateAccountActivateTokenCommandResult {
-        acl.ensure().hasAccessTo(generateAccountActivateTokenFeature)
+    override suspend fun handleAsync(command: GenerateAccountActivationTokenCommand): GenerateAccountActivationTokenCommandResult {
+        acl.ensure().hasAccessTo(generateAccountActivationTokenFeature)
         val (accountId, metadata) = command
         val (secret, issuer, expirationTime) = jwtConfig.activateAccount
 
@@ -41,6 +41,6 @@ internal class GenerateAccountActivateTokenHandler(
             event.toEventData<AccountActivationTokenGeneratedEvent>(metadata)
         )
 
-        return GenerateAccountActivateTokenCommandResult(token)
+        return GenerateAccountActivationTokenCommandResult(token)
     }
 }

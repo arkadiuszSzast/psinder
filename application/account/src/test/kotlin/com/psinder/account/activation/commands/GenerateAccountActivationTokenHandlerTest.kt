@@ -11,11 +11,11 @@ import org.litote.kmongo.newId
 import strikt.api.expectCatching
 import strikt.assertions.isSuccess
 
-class GenerateAccountActivateTokenHandlerTest : DescribeSpec() {
+class GenerateAccountActivationTokenHandlerTest : DescribeSpec() {
 
     private val eventStore = RecordingEventStoreDB()
     private val acl = CanDoAnythingAbilityProvider()
-    private val handler = GenerateAccountActivateTokenHandler(JwtConfig, eventStore, acl)
+    private val handler = GenerateAccountActivationTokenHandler(JwtConfig, eventStore, acl)
 
     init {
         describe("GenerateAccountActivateTokenHandler") {
@@ -25,7 +25,7 @@ class GenerateAccountActivateTokenHandlerTest : DescribeSpec() {
                 val accountId = newId<AccountDto>()
 
                 // act
-                val result = handler.handleAsync(GenerateAccountActivateTokenCommand(accountId))
+                val result = handler.handleAsync(GenerateAccountActivationTokenCommand(accountId))
 
                 // assert
                 expectCatching {

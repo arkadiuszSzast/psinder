@@ -48,7 +48,7 @@ class AccountProjectionUpdaterKtTest : DatabaseTest(testingModules.nel()) {
                 updater.update(recordedEvent)
 
                 // assert
-                val account = accountRepository.findById(event.accountId).get()
+                val account = accountRepository.findById(event.accountId.cast()).get()
                 expectThat(account) {
                     get { email }.isEqualTo(event.email)
                     get { personalData }.isEqualTo(event.personalData)
