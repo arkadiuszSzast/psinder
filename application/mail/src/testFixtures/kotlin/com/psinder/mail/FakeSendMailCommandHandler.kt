@@ -1,8 +1,6 @@
 package com.psinder.mail
 
 import com.psinder.events.appendToStream
-import com.psinder.events.streamName
-import com.psinder.events.toEventData
 import com.psinder.mail.commands.SendMailCommand
 import com.psinder.mail.events.MailSendingErrorEvent
 import com.psinder.mail.events.MailSentSuccessfullyEvent

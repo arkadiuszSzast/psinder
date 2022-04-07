@@ -16,7 +16,6 @@ import com.psinder.mail.events.MailSendingErrorEvent
 import com.psinder.mail.events.MailSentSuccessfullyEvent
 import com.psinder.mail.mailAggregateType
 import com.psinder.mail.mailModule
-import com.psinder.mail.toDomain
 import com.psinder.shared.EmailAddress
 import com.psinder.test.utils.faker
 import com.psinder.test.utils.withKoin

@@ -11,12 +11,10 @@ import com.psinder.mail.MailSentResult
 import com.psinder.mail.events.MailSendingErrorEvent
 import com.psinder.mail.events.MailSentSuccessfullyEvent
 import com.psinder.mail.send
-import com.psinder.mail.toDomain
 import com.trendyol.kediatr.AsyncCommandWithResultHandler
 import com.trendyol.kediatr.CommandMetadata
 import io.traxter.eventstoredb.EventStoreDB
 import mu.KotlinLogging
-import org.litote.kmongo.newId
 
 internal class SendMailCommandHandler(
     private val mailSender: MailSender,
