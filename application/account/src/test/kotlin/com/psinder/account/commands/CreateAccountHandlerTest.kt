@@ -39,7 +39,7 @@ private val testingModules = module {
     single { CanDoAnythingAbilityProvider() } bind AuthorizedAccountAbilityProvider::class
     single { RecordingEventStoreDB() } bind EventStoreDB::class
     single { AccountMongoRepository(get<CoroutineDatabase>().getCollection()) } bind AccountRepository::class
-    single { FindAccountByEmailQueryHandler(get()) }
+    single { FindAccountByEmailQueryHandler(get(), get()) }
     single { CreateAccountHandler(get(), get(), get()) }
 }.plus(kediatrTestModule)
 

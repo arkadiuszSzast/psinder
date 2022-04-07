@@ -3,6 +3,7 @@ package com.psinder.auth
 import com.psinder.account.Account
 import com.psinder.auth.authority.Authorities
 import com.psinder.auth.authority.AuthoritiesProvider
+import com.psinder.auth.authority.activatingAccountFeature
 import com.psinder.auth.authority.authoritiesFor
 import com.psinder.auth.authority.createAccountFeature
 import com.psinder.auth.role.Role
@@ -19,6 +20,7 @@ object StaticAuthorityProvider : AuthoritiesProvider {
         },
         authoritiesFor("unknown".codifiedEnum()) {
             featureAccess(createAccountFeature)
+            featureAccess(activatingAccountFeature)
         }
     )
 }

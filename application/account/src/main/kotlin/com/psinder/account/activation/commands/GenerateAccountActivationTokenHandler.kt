@@ -25,7 +25,6 @@ internal class GenerateAccountActivationTokenHandler(
         acl.ensure().hasAccessTo(generateAccountActivationTokenFeature)
         val (accountId, metadata) = command
         val (secret, issuer, expirationTime) = jwtConfig.activateAccount
-
         logger.debug { "Generating account activation token for accountId: $accountId" }
 
         val token = JWT.create()

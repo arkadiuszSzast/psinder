@@ -158,7 +158,6 @@ subprojects {
         testImplementation("io.strikt:strikt-arrow:$strikt_version")
         testImplementation("io.mockk:mockk:$mockk_version")
         testImplementation("io.insert-koin:koin-test:$koin_version")
-        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_version")
 
         implementation(platform("io.arrow-kt:arrow-stack:$arrow_version"))
     }

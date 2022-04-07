@@ -40,7 +40,7 @@ class GenerateAccountActivationLinkHandlerTest : DescribeSpec() {
 
                     // assert
                     expectThat(result) {
-                        and { get { link.toString() }.startsWith("${ApplicationConfig.selfUrl}account/activate") }
+                        and { get { link.toString() }.startsWith("${ApplicationConfig.webClientAppUrl}account/activate") }
                         and { get { link.parameters["token"] }.isNotNull() }
                     }
                 }

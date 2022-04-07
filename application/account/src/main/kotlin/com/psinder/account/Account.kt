@@ -1,5 +1,11 @@
 package com.psinder.account
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
+import com.psinder.account.activation.commands.AccountActivationError
+import com.psinder.account.activation.events.AccountActivatedEvent
+import com.psinder.account.activation.events.AccountActivationFailureEvent
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.AccountId
@@ -36,6 +42,9 @@ data class Account constructor(
     val lastLoggedInDate: LastLoggedInDate? = null
 ) : HasId<Account>, AccountContext, BelongsToAccount {
 
+    override val accountId: AccountId
+        get() = AccountId(id.toString())
+
     companion object {
         fun create(
             email: EmailAddress,
@@ -65,7 +74,22 @@ data class Account constructor(
             event.timeZoneId
         )
     }
+}
 
-    override val accountId: AccountId
-        get() = AccountId(id.toString())
+fun Account.Companion.activate(
+    accountId: Id<Account>,
+    currentAccountStatus: CodifiedEnum<AccountStatus, String>
+): Either<AccountActivationFailureEvent, AccountActivatedEvent> {
+    return when (currentAccountStatus.knownOrNull()) {
+        AccountStatus.Staged -> AccountActivatedEvent(accountId.cast()).right()
+        AccountStatus.Suspended -> AccountActivationFailureEvent(
+            accountId.cast(), AccountActivationError.AccountSuspended.codifiedEnum()
+        ).left()
+        AccountStatus.Active -> AccountActivationFailureEvent(
+            accountId.cast(), AccountActivationError.AccountActive.codifiedEnum()
+        ).left()
+        else -> AccountActivationFailureEvent(
+            accountId.cast(), AccountActivationError.AccountStatusUnknown.codifiedEnum()
+        ).left()
+    }
 }

@@ -1,5 +1,6 @@
 package com.psinder.account.koin
 
+import com.psinder.account.activation.commands.ActivateAccountCommandHandler
 import com.psinder.account.activation.commands.GenerateAccountActivationLinkHandler
 import com.psinder.account.activation.commands.GenerateAccountActivationTokenHandler
 import com.psinder.account.commands.CreateAccountHandler
@@ -13,4 +14,5 @@ val accountCommandHandlersModule = module {
     single { LoginAccountHandler() }
     single { GenerateAccountActivationTokenHandler(JwtConfig, get(), get()) }
     single { GenerateAccountActivationLinkHandler(ApplicationConfig, get(), get()) }
+    single { ActivateAccountCommandHandler(JwtConfig, get(), get(), get()) }
 }

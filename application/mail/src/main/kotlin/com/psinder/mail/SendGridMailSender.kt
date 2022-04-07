@@ -9,7 +9,7 @@ import com.sendgrid.helpers.mail.objects.Personalization
 import com.sendgrid.helpers.mail.Mail as SendGridMail
 
 internal class SendGridMailSender(private val sendGridClient: SendGrid) : MailSender {
-    override suspend fun send(mail: Mail): MailSentResult {
+    override suspend fun send(mail: MailDto): MailSentResult {
         val sendGridMail = mail.toSendgridMail()
 
         val request = Request().apply {
@@ -27,7 +27,7 @@ internal class SendGridMailSender(private val sendGridClient: SendGrid) : MailSe
         }
     }
 
-    private fun Mail.toSendgridMail(): SendGridMail {
+    private fun MailDto.toSendgridMail(): SendGridMail {
         val mail = this
         val personalization = Personalization().apply {
             addTo(Email(mail.to.value))

@@ -30,3 +30,5 @@ fun authoritiesFor(
 ): Pair<CodifiedEnum<Role, String>, List<Authority>> {
     return Pair(role, AuthoritiesListBuilder().apply(customize).build())
 }
+
+fun authorities(customize: AuthoritiesListBuilder.() -> Unit) = AuthoritiesListBuilder().apply(customize).build()

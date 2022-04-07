@@ -72,7 +72,7 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                         eventStore.readStream(StreamName("${mailAggregateType.type}-${mail.id}")).events
 
                     expectThat(result).isEqualTo(MailSentResult.Success(mail.id))
-                    expectThat(mailSender.hasBeenSentSuccessfully(mail.toDomain())).isTrue()
+                    expectThat(mailSender.hasBeenSentSuccessfully(mail)).isTrue()
                     expectThat(mailSentEvents) {
                         hasSize(1)
                         get { first().event.eventType == MailSentSuccessfullyEvent.fullEventType.get() }.isTrue()
@@ -98,7 +98,7 @@ class SendMailCommandHandlerTest : DescribeSpec() {
                             MailSendingError("Invalid mail address")
                         )
                     )
-                    expectThat(mailSender.hasNotBeenSentSuccessfully(mail.toDomain())).isTrue()
+                    expectThat(mailSender.hasNotBeenSentSuccessfully(mail)).isTrue()
                     expectThat(mailSentEvents) {
                         hasSize(1)
                         get { first().event.eventType == MailSendingErrorEvent.fullEventType.get() }.isTrue()

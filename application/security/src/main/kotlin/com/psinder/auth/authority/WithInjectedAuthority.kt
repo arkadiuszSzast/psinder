@@ -18,8 +18,15 @@ suspend fun withInjectedAuthorities(authorities: List<Authority>, block: suspend
     }
 }
 
+@JvmName("withInjectedFeaturesAuthoritiesReturning")
 suspend fun <T> withInjectedAuthoritiesReturning(features: List<Feature>, block: suspend () -> T): T {
     val authorities = features.map { FeatureAccessAuthority(it) }
+    return withContext(currentCoroutineContext() + InjectedAuthorityContext(authorities)) {
+        block()
+    }
+}
+
+suspend fun <T> withInjectedAuthoritiesReturning(authorities: List<Authority>, block: suspend () -> T): T {
     return withContext(currentCoroutineContext() + InjectedAuthorityContext(authorities)) {
         block()
     }

@@ -4,7 +4,6 @@ import arrow.core.nel
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.account.AccountDto
-import com.psinder.account.activation.AccountActivationTokens
 import com.psinder.account.activation.AccountActivationTokensMongoRepository
 import com.psinder.account.activation.AccountActivationTokensRepository
 import com.psinder.account.activation.ActivationToken
@@ -14,8 +13,6 @@ import com.psinder.auth.account.AccountId
 import com.psinder.events.streamName
 import com.psinder.events.toEventData
 import com.psinder.shared.jwt.JwtToken
-import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.ktor.server.testing.withApplication
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,12 +46,12 @@ class AccountActivationTokensProjectionSubscriberKtTest : DatabaseAndEventStoreT
                 withApplication {
                     val application = this.application
                     launch {
-                        //arrange
+                        // arrange
                         val accountId = newId<AccountDto>()
                         val token = JWT.create().sign(Algorithm.HMAC256("secret")).let { JwtToken.createOrThrow(it) }
                         val tokenGeneratedEvent = AccountActivationTokenGeneratedEvent(accountId, token)
 
-                        //act
+                        // act
                         application.accountActivationTokensProjectionSubscriber(eventStoreDb, projectionUpdater)
                         eventStoreDb.appendToStream(
                             tokenGeneratedEvent.streamName,
@@ -62,7 +59,7 @@ class AccountActivationTokensProjectionSubscriberKtTest : DatabaseAndEventStoreT
                         )
                         delay(600)
 
-                        //assert
+                        // assert
                         val result = activationTokensRepository.findOneByAccountId(AccountId(accountId.toString()))
                         expectThat(result).isSome().get { value }
                             .and { get { this.accountId }.isEqualTo(AccountId(accountId.toString())) }

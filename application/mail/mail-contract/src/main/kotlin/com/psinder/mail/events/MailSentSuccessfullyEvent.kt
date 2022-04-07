@@ -32,7 +32,7 @@ data class MailSentSuccessfullyEvent(
     @Contextual
     override val aggregateId = mailId
 
-    override val eventName = Companion.eventName
+    override val eventName = MailSentSuccessfullyEvent.eventName
 
     override val aggregateType: AggregateType = mailAggregateType
 

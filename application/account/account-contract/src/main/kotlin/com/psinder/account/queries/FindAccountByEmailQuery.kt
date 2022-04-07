@@ -7,4 +7,4 @@ import com.trendyol.kediatr.Query
 
 data class FindAccountByEmailQuery(val email: EmailAddress) : Query<FindAccountByEmailQueryResult>
 
-data class FindAccountByEmailQueryResult(val accountDto: Option<AccountDto>)
+data class FindAccountByEmailQueryResult(val account: Option<AccountDto>)

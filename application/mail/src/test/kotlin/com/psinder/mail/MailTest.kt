@@ -31,7 +31,7 @@ class MailTest : DescribeSpec() {
                 val mail = faker.mailModule.mail()
 
                 // act
-                val result = mail.send(mailSender)
+                val result = Mail.send(mailSender, mail.toDto())
 
                 // assert
                 expectThat(result) {
@@ -42,7 +42,7 @@ class MailTest : DescribeSpec() {
             it("should return mail MailSendingErrorEvent") {
                 val mail = faker.mailModule.mail().copy(to = EmailAddress.create("invalid@mail.com"))
 
-                val result = mail.send(mailSender)
+                val result = Mail.send(mailSender, mail.toDto())
 
                 expectThat(result) {
                     isA<MailSendingErrorEvent>()

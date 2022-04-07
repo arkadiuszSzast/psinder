@@ -28,8 +28,8 @@ internal class GenerateAccountActivationLinkHandler(
     }
 
     private fun buildActivateUrl(token: JwtToken): Url {
-        val appSelfUrl = appConfig.selfUrl
-        return URLBuilder(appSelfUrl).path("account", "activate").apply {
+        val webClientAppUrl = appConfig.webClientAppUrl
+        return URLBuilder(webClientAppUrl).path("account", "activate").apply {
             parameters.append("token", token.token)
         }.build()
     }

@@ -1,5 +1,6 @@
 package com.psinder.shared.validation.rules
 
+import com.auth0.jwt.JWT
 import com.psinder.shared.validation.allowedSpecialCharacters
 import io.konform.validation.Constraint
 import io.konform.validation.ValidationBuilder
@@ -38,4 +39,10 @@ fun ValidationBuilder<String>.cannotHaveWhitespaces(): Constraint<String> = addC
 ) {
     val whitespacesPattern = """\s"""
     whitespacesPattern.toRegex().containsMatchIn(it).not()
+}
+
+fun ValidationBuilder<String>.isValidJwt(): Constraint<String> = addConstraint(
+    "not a valid JWT token"
+) {
+    runCatching { JWT.decode(it) }.isSuccess
 }

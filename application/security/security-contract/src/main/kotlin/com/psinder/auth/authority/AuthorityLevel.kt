@@ -6,9 +6,9 @@ import pl.brightinventions.codified.enums.CodifiedEnum
 import pl.brightinventions.codified.enums.serializer.codifiedEnumSerializer
 
 enum class AuthorityLevel(override val code: String) : Codified<String> {
-    View("View"),
-    Create("Create"),
-    Update("Update");
+    View("view"),
+    Create("create"),
+    Update("update");
 
     object CodifiedSerializer : KSerializer<CodifiedEnum<AuthorityLevel, String>> by codifiedEnumSerializer()
 }

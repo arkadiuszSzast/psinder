@@ -34,7 +34,7 @@ data class MailSendingErrorEvent(
     @Contextual
     override val aggregateId = mailId
 
-    override val eventName = Companion.eventName
+    override val eventName = MailSendingErrorEvent.eventName
 
     override val aggregateType: AggregateType = mailAggregateType
 

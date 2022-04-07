@@ -31,7 +31,7 @@ internal class CreateAccountHandler(
 
         logger.debug { "Starting creating account" }
 
-        val alreadyRegisteredAccount = commandBus.executeQueryAsync(FindAccountByEmailQuery(email)).accountDto
+        val alreadyRegisteredAccount = commandBus.executeQueryAsync(FindAccountByEmailQuery(email)).account
         alreadyRegisteredAccount.tap {
             logger.error { "Cannot create account. Email [${it.email}] is already taken" }
             throw ValidationException(

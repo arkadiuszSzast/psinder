@@ -20,13 +20,6 @@ data class Mail(
     val variables: MailVariables
 ) : Validatable<Mail> {
 
-    suspend fun send(mailSender: MailSender): MailSendingEvent {
-        return when (val result = mailSender.send(this)) {
-            is MailSentResult.Success -> MailSentSuccessfullyEvent.create(this.toDto())
-            is MailSentResult.Error -> MailSendingErrorEvent.create(this.toDto(), result.cause)
-        }
-    }
-
     companion object {
         val validator = Validation<Mail> {
             Mail::from {
@@ -41,3 +34,9 @@ data class Mail(
     override val validator: Validation<Mail>
         get() = Mail.validator
 }
+
+suspend fun Mail.Companion.send(mailSender: MailSender, mailDto: MailDto): MailSendingEvent =
+    when (val result = mailSender.send(mailDto)) {
+        is MailSentResult.Success -> MailSentSuccessfullyEvent.create(mailDto)
+        is MailSentResult.Error -> MailSendingErrorEvent.create(mailDto, result.cause)
+    }
