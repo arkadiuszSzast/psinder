@@ -25,9 +25,9 @@ private suspend inline fun <T> sentryWrap(requestPath: String, crossinline fn: (
                 throw t
             } finally {
                 transaction.finish()
+            }
         }
     }
-}
 
 class SentryFeature private constructor() {
 
