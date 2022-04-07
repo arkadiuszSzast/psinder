@@ -21,6 +21,7 @@ object EventStoreContainer {
             addEnv("EVENTSTORE_INSECURE", "true")
             addEnv("EVENTSTORE_ENABLE_EXTERNAL_TCP", "true")
             addEnv("EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true")
+            addEnv("EVENTSTORE_MEM_DB", "true")
             setWaitStrategy(Wait.forListeningPort())
             start()
         }

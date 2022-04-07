@@ -16,4 +16,5 @@ dependencies {
     testImplementation(testFixtures(project(":application:test-utils")))
     testImplementation(testFixtures(project(":application:mediator")))
     testImplementation(testFixtures(project(":application:security")))
+    testImplementation(testFixtures(project(":application:mail")))
 }

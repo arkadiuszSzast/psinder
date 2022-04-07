@@ -5,23 +5,15 @@ import com.psinder.account.Account
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
 import com.psinder.account.AccountStatus
-import com.psinder.account.accountAggregateType
 import com.psinder.account.accountModule
-import com.psinder.account.activation.subscribers.accountActivationTokensProjectionSubscriber
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.support.DatabaseAndEventStoreTest
-import com.psinder.database.EventStoreTest
 import com.psinder.events.streamName
 import com.psinder.events.toEventData
 import com.psinder.test.utils.faker
-import io.kotest.common.runBlocking
-import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
-import io.ktor.server.testing.withApplication
-import io.traxter.eventstoredb.StreamGroup
-import io.traxter.eventstoredb.StreamName
-import kotlinx.coroutines.awaitAll
+import io.ktor.server.testing.withTestApplication
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.core.component.get
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -31,7 +23,6 @@ import strikt.api.expectThat
 import strikt.arrow.isSome
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
-import java.util.concurrent.CountDownLatch
 
 private val testingModules = module {
     single { AccountMongoRepository(get<CoroutineDatabase>().getCollection()) } bind AccountRepository::class
@@ -46,9 +37,10 @@ class AccountProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModul
         describe("AccountProjectionSubscriber") {
 
             it("should create account projection on AccountCreatedEvent") {
-                withApplication {
-                    runBlocking {
-                        //arrange
+                withTestApplication {
+                    val application = this.application
+                    launch {
+                        // arrange
                         val accountCreatedEvent = Account.create(
                             faker.accountModule.emailAddress(),
                             faker.accountModule.personalData(),
@@ -57,15 +49,15 @@ class AccountProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModul
                             faker.accountModule.timeZone()
                         )
 
-                        //act
-                        this.application.accountProjectionUpdater(eventStoreDb, get())
+                        // act
+                        application.accountProjectionUpdater(eventStoreDb, get())
                         eventStoreDb.appendToStream(
                             accountCreatedEvent.streamName,
                             accountCreatedEvent.toEventData<AccountCreatedEvent>(),
                         )
-                        delay(400)
+                        delay(600)
 
-                        //assert
+                        // assert
                         val accountProjection = accountRepository.findById(accountCreatedEvent.accountId.cast())
                         expectThat(accountProjection) {
                             isSome()

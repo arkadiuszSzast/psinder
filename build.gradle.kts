@@ -2,6 +2,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 val ktor_version: String by project
+val kotlin_version: String by project
 val koin_version: String by project
 val kmongo_version: String by project
 val logback_version: String by project
@@ -157,6 +158,7 @@ subprojects {
         testImplementation("io.strikt:strikt-arrow:$strikt_version")
         testImplementation("io.mockk:mockk:$mockk_version")
         testImplementation("io.insert-koin:koin-test:$koin_version")
+        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_version")
 
         implementation(platform("io.arrow-kt:arrow-stack:$arrow_version"))
     }

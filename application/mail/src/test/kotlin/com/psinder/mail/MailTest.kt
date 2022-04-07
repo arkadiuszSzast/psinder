@@ -8,9 +8,9 @@ import io.kotest.core.spec.style.DescribeSpec
 import strikt.api.expectThat
 import strikt.assertions.isA
 
-class MailTest : DescribeSpec({
+class MailTest : DescribeSpec() {
 
-    val mailSender = RecordingMailSender {
+    private val mailSender = RecordingMailSender {
         when (it.to) {
             EmailAddress.create("invalid@mail.com") ->
                 MailSentResult.Error(it.id.cast(), MailSendingError("Invalid mail address"))
@@ -18,29 +18,36 @@ class MailTest : DescribeSpec({
         }
     }
 
-    describe("send mail") {
+    init {
 
-        it("should return mail MailSentSuccessfullyEvent") {
-            // arrange
-            val mail = faker.mailModule.mail()
-
-            // act
-            val result = mail.send(mailSender)
-
-            // assert
-            expectThat(result) {
-                isA<MailSentSuccessfullyEvent>()
-            }
+        beforeEach {
+            mailSender.clear()
         }
 
-        it("should return mail MailSendingErrorEvent") {
-            val mail = faker.mailModule.mail().copy(to = EmailAddress.create("invalid@mail.com"))
+        describe("send mail") {
 
-            val result = mail.send(mailSender)
+            it("should return mail MailSentSuccessfullyEvent") {
+                // arrange
+                val mail = faker.mailModule.mail()
 
-            expectThat(result) {
-                isA<MailSendingErrorEvent>()
+                // act
+                val result = mail.send(mailSender)
+
+                // assert
+                expectThat(result) {
+                    isA<MailSentSuccessfullyEvent>()
+                }
+            }
+
+            it("should return mail MailSendingErrorEvent") {
+                val mail = faker.mailModule.mail().copy(to = EmailAddress.create("invalid@mail.com"))
+
+                val result = mail.send(mailSender)
+
+                expectThat(result) {
+                    isA<MailSendingErrorEvent>()
+                }
             }
         }
     }
-})
+}
