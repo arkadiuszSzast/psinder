@@ -50,7 +50,6 @@ internal class SendMailCommandHandler(
         val mailSendingErrorEvent = mailDto.toMailSendingErrorEvent(
             MailSendingError("Mail send failed because of lack of permissions")
         )
-
         eventStore.appendToStream(mailSendingErrorEvent, metadata)
 
         return MailSentResult.Error(mailSendingErrorEvent.mailId.cast(), mailSendingErrorEvent.error)

@@ -1,10 +1,8 @@
 package com.psinder.account
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
 import com.psinder.account.activation.commands.AccountActivationError
 import com.psinder.account.activation.events.AccountActivatedEvent
+import com.psinder.account.activation.events.AccountActivationEvent
 import com.psinder.account.activation.events.AccountActivationFailureEvent
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.auth.account.AccountContext
@@ -79,17 +77,17 @@ data class Account constructor(
 fun Account.Companion.activate(
     accountId: Id<Account>,
     currentAccountStatus: CodifiedEnum<AccountStatus, String>
-): Either<AccountActivationFailureEvent, AccountActivatedEvent> {
+): AccountActivationEvent {
     return when (currentAccountStatus.knownOrNull()) {
-        AccountStatus.Staged -> AccountActivatedEvent(accountId.cast()).right()
+        AccountStatus.Staged -> AccountActivatedEvent(accountId.cast())
         AccountStatus.Suspended -> AccountActivationFailureEvent(
             accountId.cast(), AccountActivationError.AccountSuspended.codifiedEnum()
-        ).left()
+        )
         AccountStatus.Active -> AccountActivationFailureEvent(
             accountId.cast(), AccountActivationError.AccountActive.codifiedEnum()
-        ).left()
+        )
         else -> AccountActivationFailureEvent(
             accountId.cast(), AccountActivationError.AccountStatusUnknown.codifiedEnum()
-        ).left()
+        )
     }
 }

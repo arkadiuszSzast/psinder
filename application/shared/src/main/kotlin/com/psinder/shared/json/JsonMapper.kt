@@ -5,7 +5,7 @@ import org.litote.kmongo.id.serialization.IdKotlinXSerializationModule
 
 object JsonMapper {
     val defaultMapper = Json {
-        useArrayPolymorphism = true
+        useArrayPolymorphism = false
         encodeDefaults = true
         isLenient = true
         allowSpecialFloatingPointValues = true

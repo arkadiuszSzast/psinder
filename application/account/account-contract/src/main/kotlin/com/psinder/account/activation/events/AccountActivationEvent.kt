@@ -13,6 +13,7 @@ import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
 import java.util.UUID
 
+@Serializable
 sealed class AccountActivationEvent : DomainEvent
 
 @Serializable

@@ -26,7 +26,6 @@ import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.litote.kmongo.Id
 import org.litote.kmongo.id.toId
-import org.litote.kmongo.toId
 import pl.brightinventions.codified.enums.CodifiedEnum
 import pl.brightinventions.codified.enums.codifiedEnum
 
@@ -47,10 +46,7 @@ internal class ActivateAccountCommandHandler(
 
         acl.hasAccessTo(activatingAccountFeature).onDeny {
             val error = AccountActivationError.MissingPermissions.codifiedEnum()
-            val event = AccountActivationFailureEvent(subjectAsAccountId, error)
-            eventStore.appendToStream(event, metadata)
-            logger.debug { "Account with id $subjectAsAccountId has not been activated because of $error" }
-            return event.toCommandResult()
+            return handleActivationFailed(subjectAsAccountId, error, metadata)
         }
 
         return when (val decodedJwt = token.verify(Algorithm.HMAC256(activateAccountJwtProperties.secret.value))) {
@@ -80,32 +76,11 @@ internal class ActivateAccountCommandHandler(
                 commandMetadata
             )
             else -> {
-                Account.activate(accountId.cast(), account.status)
-                    .fold(
-                        {
-                            eventStore.appendToStream(it, commandMetadata)
-                            logger.debug { "Account with id $accountId has not been activated because of ${it.error}" }
-                            it.toCommandResult()
-                        },
-                        {
-                            eventStore.appendToStream(it, commandMetadata)
-                            logger.debug { "Account with id $accountId has been activated" }
-                            it.toCommandResult()
-                        }
-                    )
+                val event = Account.activate(accountId.cast(), account.status)
+                eventStore.appendToStream(event, commandMetadata)
+                event.toCommandResult()
             }
         }
-    }
-
-    private suspend fun handleActivationFailed(
-        accountId: Id<AccountDto>,
-        reason: CodifiedEnum<AccountActivationError, String>,
-        commandMetadata: CommandMetadata?
-    ): ActivateAccountCommandResult {
-        val event = AccountActivationFailureEvent(accountId, reason)
-        eventStore.appendToStream(event, commandMetadata)
-        logger.debug { "Account with id $accountId has not been activated because of $reason" }
-        return event.toCommandResult()
     }
 
     private suspend fun handleInvalidJwt(
@@ -117,10 +92,17 @@ internal class ActivateAccountCommandHandler(
             JwtValidationError.Expired -> AccountActivationError.TokenExpired
             else -> AccountActivationError.TokenInvalid
         }
+        return handleActivationFailed(accountId, reason.codifiedEnum(), commandMetadata)
+    }
 
-        val event = AccountActivationFailureEvent(accountId, reason.codifiedEnum())
+    private suspend fun handleActivationFailed(
+        accountId: Id<AccountDto>,
+        reason: CodifiedEnum<AccountActivationError, String>,
+        commandMetadata: CommandMetadata?
+    ): ActivateAccountCommandResult {
+        val event = AccountActivationFailureEvent(accountId, reason)
         eventStore.appendToStream(event, commandMetadata)
-        logger.debug { "Account with id $accountId has not been activated because of ${reason.codifiedEnum()}" }
+        logger.debug { "Account with id $accountId has not been activated because of $reason" }
         return event.toCommandResult()
     }
 
