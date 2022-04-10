@@ -1,11 +1,12 @@
 package com.psinder.account.subscribers
 
 import arrow.core.nel
-import com.psinder.account.Account
+import com.psinder.account.AccountAggregate
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
 import com.psinder.account.AccountStatus
 import com.psinder.account.accountModule
+import com.psinder.account.create
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.support.DatabaseAndEventStoreTest
 import com.psinder.events.streamName
@@ -41,7 +42,7 @@ class AccountProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModul
                     val application = this.application
                     launch {
                         // arrange
-                        val accountCreatedEvent = Account.create(
+                        val accountAggregateCreatedEvent = AccountAggregate.Events.create(
                             faker.accountModule.emailAddress(),
                             faker.accountModule.personalData(),
                             faker.accountModule.role().codifiedEnum(),
@@ -52,23 +53,24 @@ class AccountProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModul
                         // act
                         application.accountProjectionUpdater(eventStoreDb, get())
                         eventStoreDb.appendToStream(
-                            accountCreatedEvent.streamName,
-                            accountCreatedEvent.toEventData<AccountCreatedEvent>(),
+                            accountAggregateCreatedEvent.streamName,
+                            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(),
                         )
                         delay(600)
 
                         // assert
-                        val accountProjection = accountRepository.findById(accountCreatedEvent.accountId.cast())
+                        val accountProjection =
+                            accountRepository.findById(accountAggregateCreatedEvent.accountId.cast())
                         expectThat(accountProjection) {
                             isSome()
                                 .get { value }
-                                .and { get { email }.isEqualTo(accountCreatedEvent.email) }
-                                .and { get { personalData }.isEqualTo(accountCreatedEvent.personalData) }
-                                .and { get { role }.isEqualTo(accountCreatedEvent.role) }
-                                .and { get { password }.isEqualTo(accountCreatedEvent.password) }
-                                .and { get { timeZoneId }.isEqualTo(accountCreatedEvent.timeZoneId) }
+                                .and { get { email }.isEqualTo(accountAggregateCreatedEvent.email) }
+                                .and { get { personalData }.isEqualTo(accountAggregateCreatedEvent.personalData) }
+                                .and { get { role }.isEqualTo(accountAggregateCreatedEvent.role) }
+                                .and { get { password }.isEqualTo(accountAggregateCreatedEvent.password) }
+                                .and { get { timeZoneId }.isEqualTo(accountAggregateCreatedEvent.timeZoneId) }
                                 .and { get { status }.isEqualTo(AccountStatus.Staged.codifiedEnum()) }
-                                .and { get { created }.isEqualTo(accountCreatedEvent.created) }
+                                .and { get { created }.isEqualTo(accountAggregateCreatedEvent.created) }
                                 .and { get { lastLoggedInDate }.isNull() }
                         }
                     }

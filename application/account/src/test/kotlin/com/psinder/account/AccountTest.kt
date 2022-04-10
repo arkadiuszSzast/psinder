@@ -12,7 +12,7 @@ internal class AccountTest : DescribeSpec({
 
         it("should have staged status") {
             // arrange && act
-            val account = Account.create(
+            val accountAggregate = AccountAggregate.create(
                 faker.accountModule.emailAddress(),
                 faker.accountModule.personalData(),
                 faker.accountModule.role().codifiedEnum(),
@@ -21,7 +21,7 @@ internal class AccountTest : DescribeSpec({
             )
 
             // assert
-            expectThat(account)
+            expectThat(accountAggregate)
                 .get { status.knownOrNull() }
                 .isEqualTo(AccountStatus.Staged)
         }

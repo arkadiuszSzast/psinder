@@ -1,13 +1,13 @@
 package com.psinder.account
 
-internal fun AccountDto.Companion.fromAccount(account: Account): AccountDto {
+internal fun AccountDto.Companion.fromAccount(accountAggregate: AccountProjection): AccountDto {
     return AccountDto(
-        account.id.cast(),
-        account.email,
-        account.personalData,
-        account.created,
-        account.status,
-        account.timeZoneId,
-        account.lastLoggedInDate
+        accountAggregate.id.cast(),
+        accountAggregate.email,
+        accountAggregate.personalData,
+        accountAggregate.created,
+        accountAggregate.status,
+        accountAggregate.timeZoneId,
+        accountAggregate.lastLoggedInDate
     )
 }

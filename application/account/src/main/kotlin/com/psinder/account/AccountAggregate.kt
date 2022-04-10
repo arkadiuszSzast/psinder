@@ -26,8 +26,8 @@ import java.time.LocalDateTime.now
 import java.time.ZoneId
 
 @Serializable
-data class Account constructor(
-    @SerialName("_id") @Contextual override val id: Id<Account>,
+data class AccountAggregate constructor(
+    @SerialName("_id") @Contextual override val id: Id<AccountAggregate>,
     val email: EmailAddress,
     val personalData: PersonalData,
     val password: HashedPassword,
@@ -38,56 +38,45 @@ data class Account constructor(
     override var role: CodifiedEnum<Role, String>,
     val timeZoneId: TimeZone,
     val lastLoggedInDate: LastLoggedInDate? = null
-) : HasId<Account>, AccountContext, BelongsToAccount {
+) : HasId<AccountAggregate>, AccountContext, BelongsToAccount {
 
     override val accountId: AccountId
         get() = AccountId(id.toString())
 
-    companion object {
-        fun create(
-            email: EmailAddress,
-            personalData: PersonalData,
-            role: CodifiedEnum<Role, String>,
-            password: HashedPassword,
-            timeZoneId: TimeZone,
-        ) = AccountCreatedEvent(
-            newId(),
-            email,
-            personalData,
-            password,
-            CreatedDate(now(ZoneId.of("UTC")).toKotlinLocalDateTime()),
-            AccountStatus.Staged.codifiedEnum(),
-            role,
-            timeZoneId
-        )
-
-        fun applyCreatedEvent(event: AccountCreatedEvent) = Account(
-            event.accountId.cast(),
-            event.email,
-            event.personalData,
-            event.password,
-            event.created,
-            event.status,
-            event.role,
-            event.timeZoneId
-        )
-    }
+    companion object Events
 }
 
-fun Account.Companion.activate(
-    accountId: Id<Account>,
+fun AccountAggregate.Events.create(
+    email: EmailAddress,
+    personalData: PersonalData,
+    role: CodifiedEnum<Role, String>,
+    password: HashedPassword,
+    timeZoneId: TimeZone,
+) = AccountCreatedEvent(
+    newId(),
+    email,
+    personalData,
+    password,
+    CreatedDate(now(ZoneId.of("UTC")).toKotlinLocalDateTime()),
+    AccountStatus.Staged.codifiedEnum(),
+    role,
+    timeZoneId
+)
+
+fun AccountAggregate.Events.activate(
+    accountAggregateId: Id<AccountAggregate>,
     currentAccountStatus: CodifiedEnum<AccountStatus, String>
 ): AccountActivationEvent {
     return when (currentAccountStatus.knownOrNull()) {
-        AccountStatus.Staged -> AccountActivatedEvent(accountId.cast())
+        AccountStatus.Staged -> AccountActivatedEvent(accountAggregateId.cast())
         AccountStatus.Suspended -> AccountActivationFailureEvent(
-            accountId.cast(), AccountActivationError.AccountSuspended.codifiedEnum()
+            accountAggregateId.cast(), AccountActivationError.AccountSuspended.codifiedEnum()
         )
         AccountStatus.Active -> AccountActivationFailureEvent(
-            accountId.cast(), AccountActivationError.AccountActive.codifiedEnum()
+            accountAggregateId.cast(), AccountActivationError.AccountActive.codifiedEnum()
         )
         else -> AccountActivationFailureEvent(
-            accountId.cast(), AccountActivationError.AccountStatusUnknown.codifiedEnum()
+            accountAggregateId.cast(), AccountActivationError.AccountStatusUnknown.codifiedEnum()
         )
     }
 }

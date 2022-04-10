@@ -3,7 +3,7 @@ package com.psinder.account.activation.commands
 import arrow.core.Validated
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
-import com.psinder.account.Account
+import com.psinder.account.AccountAggregate
 import com.psinder.account.AccountDto
 import com.psinder.account.activate
 import com.psinder.account.activation.events.AccountActivatedEvent
@@ -61,8 +61,8 @@ internal class ActivateAccountCommandHandler(
     ): ActivateAccountCommandResult {
         val accountId = token.subject?.let { ObjectId(it) }?.toId<AccountDto>() ?: throw TokenMissingSubjectException()
         val authoritiesToInject = authorities {
-            entityAccess(Account::class) {
-                viewScope { account, _ -> account.id == accountId.cast<Account>() }
+            entityAccess(AccountAggregate::class) {
+                viewScope { account, _ -> account.id == accountId.cast<AccountAggregate>() }
             }
         }
         val account = withInjectedAuthoritiesReturning(authoritiesToInject) {
@@ -76,7 +76,7 @@ internal class ActivateAccountCommandHandler(
                 commandMetadata
             )
             else -> {
-                val event = Account.activate(accountId.cast(), account.status)
+                val event = AccountAggregate.activate(accountId.cast(), account.status)
                 eventStore.appendToStream(event, commandMetadata)
                 event.toCommandResult()
             }

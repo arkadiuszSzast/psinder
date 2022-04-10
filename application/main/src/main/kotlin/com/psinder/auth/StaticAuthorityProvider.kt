@@ -1,6 +1,6 @@
 package com.psinder.auth
 
-import com.psinder.account.Account
+import com.psinder.account.AccountAggregate
 import com.psinder.auth.authority.Authorities
 import com.psinder.auth.authority.AuthoritiesProvider
 import com.psinder.auth.authority.activatingAccountFeature
@@ -14,7 +14,7 @@ import pl.brightinventions.codified.enums.codifiedEnum
 object StaticAuthorityProvider : AuthoritiesProvider {
     override val authorities: Authorities = Authorities.create(
         authoritiesFor(Role.Admin) {
-            entityAccess(Account::class) {
+            entityAccess(AccountAggregate::class) {
                 allScopes()
             }
         },

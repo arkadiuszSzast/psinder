@@ -4,9 +4,9 @@ import com.psinder.database.MongoRepository
 import com.psinder.shared.EmailAddress
 import org.litote.kmongo.eq
 
-internal interface AccountRepository : MongoRepository<Account> {
+internal interface AccountRepository : MongoRepository<AccountProjection> {
 
-    suspend fun findOneByEmail(email: EmailAddress): Account? {
-        return collection.findOne(Account::email eq email)
+    suspend fun findOneByEmail(email: EmailAddress): AccountProjection? {
+        return collection.findOne(AccountProjection::email eq email)
     }
 }

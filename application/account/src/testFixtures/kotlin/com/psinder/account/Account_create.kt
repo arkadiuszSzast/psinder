@@ -12,9 +12,9 @@ import org.litote.kmongo.newId
 import pl.brightinventions.codified.enums.CodifiedEnum
 import pl.brightinventions.codified.enums.codifiedEnum
 
-suspend fun HasDatabaseAndTransactionally.createRandomAccount(customize: Account.() -> Unit = {}): Account {
-    val account = faker.randomProvider.randomClassInstance<Account> {
-        typeGenerator { newId<Account>() }
+suspend fun HasDatabaseAndTransactionally.createRandomAccount(customize: AccountProjection.() -> Unit = {}): AccountProjection {
+    val accountAggregate = faker.randomProvider.randomClassInstance<AccountProjection> {
+        typeGenerator { newId<AccountProjection>() }
         typeGenerator { faker.accountModule.emailAddress() }
         typeGenerator { faker.accountModule.name() }
         typeGenerator { faker.accountModule.surname() }
@@ -26,12 +26,12 @@ suspend fun HasDatabaseAndTransactionally.createRandomAccount(customize: Account
         typeGenerator { faker.accountModule.lastLoggedInDate() }
         typeGenerator { faker.accountModule.created() }
     }.apply(customize)
-    db.getCollection<Account>().insertOne(account)
-    return account
+    db.getCollection<AccountProjection>().insertOne(accountAggregate)
+    return accountAggregate
 }
 
 suspend fun HasDatabaseAndTransactionally.createAccount(
-    id: Id<Account> = newId(),
+    id: Id<AccountProjection> = newId(),
     email: EmailAddress = faker.accountModule.emailAddress(),
     name: Name = faker.accountModule.name(),
     surname: Surname = faker.accountModule.surname(),
@@ -42,10 +42,10 @@ suspend fun HasDatabaseAndTransactionally.createAccount(
     status: CodifiedEnum<AccountStatus, String> = faker.accountModule.accountStatus().codifiedEnum(),
     role: CodifiedEnum<Role, String> = faker.accountModule.role().codifiedEnum(),
     timeZone: TimeZone = faker.accountModule.timeZone(),
-    customize: Account.() -> Unit = {}
-): Account {
-    val account =
-        Account(
+    customize: AccountProjection.() -> Unit = {}
+): AccountProjection {
+    val accountAggregate =
+        AccountProjection(
             id,
             email,
             PersonalData(name, surname, AddressData(city, streetName)),
@@ -55,6 +55,6 @@ suspend fun HasDatabaseAndTransactionally.createAccount(
             role,
             timeZone
         ).apply(customize)
-    db.getCollection<Account>().insertOne(account)
-    return account
+    db.getCollection<AccountProjection>().insertOne(accountAggregate)
+    return accountAggregate
 }

@@ -1,12 +1,13 @@
 package com.psinder.account.subscribers
 
 import com.eventstore.dbclient.ReadStreamOptions
-import com.psinder.account.Account
+import com.psinder.account.AccountAggregate
 import com.psinder.account.accountModule
 import com.psinder.account.activation.commands.GenerateAccountActivationLinkHandler
 import com.psinder.account.activation.commands.GenerateAccountActivationTokenHandler
 import com.psinder.account.config.JwtConfig
 import com.psinder.account.config.MailConfig
+import com.psinder.account.create
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.support.DatabaseAndEventStoreTest
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
@@ -74,7 +75,7 @@ class ActivationMailSenderSubscriberKtTest : DatabaseAndEventStoreTest(testingMo
                     val application = this.application
                     launch {
                         // arrange
-                        val accountCreatedEvent = Account.create(
+                        val accountAggregateCreatedEvent = AccountAggregate.Events.create(
                             faker.accountModule.emailAddress(),
                             faker.accountModule.personalData(),
                             faker.accountModule.role().codifiedEnum(),
@@ -85,8 +86,8 @@ class ActivationMailSenderSubscriberKtTest : DatabaseAndEventStoreTest(testingMo
                         // act
                         application.activationMailSenderSubscriber(eventStoreDb, commandBus, MailConfig)
                         eventStoreDb.appendToStream(
-                            accountCreatedEvent.streamName,
-                            accountCreatedEvent.toEventData<AccountCreatedEvent>(),
+                            accountAggregateCreatedEvent.streamName,
+                            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(),
                         )
                         delay(600)
 
@@ -114,7 +115,7 @@ class ActivationMailSenderSubscriberKtTest : DatabaseAndEventStoreTest(testingMo
                     val application = this.application
                     launch {
                         // arrange
-                        val accountCreatedEvent = Account.create(
+                        val accountAggregateCreatedEvent = AccountAggregate.Events.create(
                             EmailAddress.create("invalid@mail.com"),
                             faker.accountModule.personalData(),
                             faker.accountModule.role().codifiedEnum(),
@@ -125,8 +126,8 @@ class ActivationMailSenderSubscriberKtTest : DatabaseAndEventStoreTest(testingMo
                         // act
                         application.activationMailSenderSubscriber(eventStoreDb, commandBus, MailConfig)
                         eventStoreDb.appendToStream(
-                            accountCreatedEvent.streamName,
-                            accountCreatedEvent.toEventData<AccountCreatedEvent>(),
+                            accountAggregateCreatedEvent.streamName,
+                            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(),
                         )
                         delay(600)
 

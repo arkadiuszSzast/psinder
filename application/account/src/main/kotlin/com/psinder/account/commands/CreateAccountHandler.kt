@@ -1,7 +1,8 @@
 package com.psinder.account.commands
 
 import arrow.core.nel
-import com.psinder.account.Account
+import com.psinder.account.AccountAggregate
+import com.psinder.account.create
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.queries.FindAccountByEmailQuery
 import com.psinder.auth.authority.createAccountFeature
@@ -41,15 +42,21 @@ internal class CreateAccountHandler(
                 ).nel()
             )
         }
-        val accountCreatedEvent =
-            Account.create(email, personalData, Role.User.codifiedEnum(), rawPassword.hashpw(), timeZoneId)
+        val accountAggregateCreatedEvent =
+            AccountAggregate.Events.create(
+                email,
+                personalData,
+                Role.User.codifiedEnum(),
+                rawPassword.hashpw(),
+                timeZoneId
+            )
 
-        logger.debug { "Account created. Sending event: $accountCreatedEvent" }
+        logger.debug { "Account created. Sending event: $accountAggregateCreatedEvent" }
         eventStore.appendToStream(
-            accountCreatedEvent.streamName,
-            accountCreatedEvent.toEventData<AccountCreatedEvent>(metadata),
+            accountAggregateCreatedEvent.streamName,
+            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(metadata),
         )
 
-        return CreateAccountCommandResult(accountCreatedEvent.accountId.cast())
+        return CreateAccountCommandResult(accountAggregateCreatedEvent.accountId.cast())
     }
 }
