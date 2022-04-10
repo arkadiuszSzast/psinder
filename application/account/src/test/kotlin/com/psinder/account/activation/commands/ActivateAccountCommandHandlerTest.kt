@@ -3,11 +3,12 @@ package com.psinder.account.activation.commands
 import com.psinder.account.AccountDto
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
+import com.psinder.account.AccountStatus
 import com.psinder.account.accountAggregateType
 import com.psinder.account.activation.events.AccountActivatedEvent
 import com.psinder.account.activation.events.AccountActivationFailureEvent
 import com.psinder.account.config.JwtConfig
-import com.psinder.account.createRandomAccount
+import com.psinder.account.createAccount
 import com.psinder.account.queries.FindAccountByIdQueryHandler
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.auth.principal.CanDoAnythingAbilityProvider
@@ -180,9 +181,37 @@ class ActivateAccountCommandHandlerTest : DatabaseTest(testingModules) {
                     .and { get { this.error }.isEqualTo(AccountActivationError.AccountNotFound.codifiedEnum()) }
             }
 
+            it("save activation failed event when account is in suspended status") {
+                // arrange
+                val account = createAccount(status = AccountStatus.Suspended.codifiedEnum())
+                val accountId = account.id
+                val token = jwtToken {
+                    subject = accountId.toString()
+                    expirationDate = Instant.now().plusSeconds(10)
+                    secret = JwtConfig.activateAccount.secret.value
+                }
+                val command = ActivateAccountCommand(token)
+
+                // act
+                val result = allowingHandler.handleAsync(command)
+
+                // assert
+                val events = eventStore.readStream(StreamName("${accountAggregateType.type}-$accountId")).events
+                expectThat(result)
+                    .isA<ActivateAccountCommandFailure>()
+                    .get { errorCode }.isEqualTo(AccountActivationError.AccountSuspended.codifiedEnum())
+
+                expectThat(events)
+                    .hasSize(1)
+                    .get { first().originalEvent.getAs<AccountActivationFailureEvent>() }
+                    .isRight()
+                    .get { value }
+                    .and { get { this.error }.isEqualTo(AccountActivationError.AccountSuspended.codifiedEnum()) }
+            }
+
             it("activate account") {
                 // arrange
-                val account = createRandomAccount()
+                val account = createAccount(status = AccountStatus.Staged.codifiedEnum())
                 val accountId = account.id
                 val token = jwtToken {
                     subject = accountId.toString()
