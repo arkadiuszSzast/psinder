@@ -1,5 +1,7 @@
 package com.psinder.account
 
+import arrow.optics.optics
+import com.psinder.account.activation.events.AccountActivatedEvent
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.AccountId
@@ -15,7 +17,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
+import pl.brightinventions.codified.enums.codifiedEnum
 
+@optics
 @Serializable
 data class AccountProjection constructor(
     @SerialName("_id") @Contextual override val id: Id<AccountProjection>,
@@ -35,7 +39,6 @@ data class AccountProjection constructor(
         get() = AccountId(id.toString())
 
     companion object {
-
         fun applyCreatedEvent(event: AccountCreatedEvent) = AccountProjection(
             event.accountId.cast(),
             event.email,
@@ -46,5 +49,8 @@ data class AccountProjection constructor(
             event.role,
             event.timeZoneId
         )
+
+        fun applyActivatedEvent(source: AccountProjection, event: AccountActivatedEvent) =
+            AccountProjection.status.modify(source) { AccountStatus.Active.codifiedEnum() }
     }
 }

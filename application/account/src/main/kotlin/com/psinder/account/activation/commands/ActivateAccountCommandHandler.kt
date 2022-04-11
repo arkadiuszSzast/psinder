@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.psinder.account.AccountAggregate
 import com.psinder.account.AccountDto
+import com.psinder.account.AccountProjection
 import com.psinder.account.activate
 import com.psinder.account.activation.events.AccountActivatedEvent
 import com.psinder.account.activation.events.AccountActivationEvent
@@ -61,7 +62,7 @@ internal class ActivateAccountCommandHandler(
     ): ActivateAccountCommandResult {
         val accountId = token.subject?.let { ObjectId(it) }?.toId<AccountDto>() ?: throw TokenMissingSubjectException()
         val authoritiesToInject = authorities {
-            entityAccess(AccountAggregate::class) {
+            entityAccess(AccountProjection::class) {
                 viewScope { account, _ -> account.id == accountId.cast<AccountAggregate>() }
             }
         }
