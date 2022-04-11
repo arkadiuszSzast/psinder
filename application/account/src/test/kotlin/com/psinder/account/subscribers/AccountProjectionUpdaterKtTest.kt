@@ -3,7 +3,10 @@ package com.psinder.account.subscribers
 import arrow.core.nel
 import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
+import com.psinder.account.AccountStatus
 import com.psinder.account.accountModule
+import com.psinder.account.activation.events.AccountActivatedEvent
+import com.psinder.account.createAccount
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.database.DatabaseTest
 import com.psinder.database.recordedEvent
@@ -56,6 +59,22 @@ class AccountProjectionUpdaterKtTest : DatabaseTest(testingModules.nel()) {
                     get { status }.isEqualTo(event.status)
                     get { role }.isEqualTo(event.role)
                     get { timeZoneId }.isEqualTo(event.timeZoneId)
+                }
+            }
+
+            it("change status to activated on account-activated event") {
+                // arrange
+                val accountProjection = createAccount(status = AccountStatus.Staged.codifiedEnum())
+                val event = AccountActivatedEvent(accountProjection.id.cast())
+                val recordedEvent = event.recordedEvent<AccountActivatedEvent>()
+
+                // act
+                updater.update(recordedEvent)
+
+                // assert
+                val account = accountRepository.findById(event.accountId.cast()).get()
+                expectThat(account) {
+                    get { status }.isEqualTo(event.accountStatus)
                 }
             }
         }

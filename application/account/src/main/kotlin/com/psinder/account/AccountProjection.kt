@@ -51,6 +51,6 @@ data class AccountProjection constructor(
         )
 
         fun applyActivatedEvent(source: AccountProjection, event: AccountActivatedEvent) =
-            AccountProjection.status.modify(source) { AccountStatus.Active.codifiedEnum() }
+            AccountProjection.status.modify(source) { event.accountStatus }
     }
 }
