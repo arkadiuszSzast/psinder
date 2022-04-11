@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.account.AccountDto
 import com.psinder.account.config.JwtConfig
 import com.psinder.auth.principal.CanDoAnythingAbilityProvider
-import com.psinder.database.RecordingEventStoreDB
 import io.kotest.core.spec.style.DescribeSpec
 import org.litote.kmongo.newId
 import strikt.api.expectCatching
@@ -13,9 +12,8 @@ import strikt.assertions.isSuccess
 
 class GenerateAccountActivationTokenHandlerTest : DescribeSpec() {
 
-    private val eventStore = RecordingEventStoreDB()
     private val acl = CanDoAnythingAbilityProvider()
-    private val handler = GenerateAccountActivationTokenHandler(JwtConfig, eventStore, acl)
+    private val handler = GenerateAccountActivationTokenHandler(JwtConfig, acl)
 
     init {
         describe("GenerateAccountActivateTokenHandler") {

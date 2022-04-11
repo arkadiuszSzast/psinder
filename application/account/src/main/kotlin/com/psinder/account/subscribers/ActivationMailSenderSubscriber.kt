@@ -2,18 +2,20 @@ package com.psinder.account.subscribers
 
 import arrow.core.nel
 import com.psinder.account.activation.commands.GenerateAccountActivationLinkCommand
+import com.psinder.account.activation.events.AccountActivationMailSentEvent
 import com.psinder.account.config.MailConfig
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.auth.authority.generateAccountActivationLinkFeature
 import com.psinder.auth.authority.generateAccountActivationTokenFeature
 import com.psinder.auth.authority.sendingMailsFeature
-import com.psinder.auth.authority.withInjectedAuthorities
 import com.psinder.auth.authority.withInjectedAuthoritiesReturning
+import com.psinder.events.appendToStream
 import com.psinder.events.getAs
 import com.psinder.events.getMetadata
 import com.psinder.events.toCommandMetadata
 import com.psinder.mail.MailDto
 import com.psinder.mail.MailProperties
+import com.psinder.mail.MailSentResult
 import com.psinder.mail.MailVariables
 import com.psinder.mail.commands.SendMailCommand
 import com.trendyol.kediatr.CommandBus
@@ -49,8 +51,13 @@ internal fun Application.activationMailSenderSubscriber(
 
                 val mailDto = toMailDto(mailConfig.activateAccount, it, link)
 
-                withInjectedAuthorities(sendingMailsFeature.nel()) {
+                val sendingResult = withInjectedAuthoritiesReturning(sendingMailsFeature.nel()) {
                     commandBus.executeCommandAsync(SendMailCommand(mailDto, eventMetadata?.toCommandMetadata()))
+                }
+
+                if (sendingResult is MailSentResult.Success) {
+                    val activationMailSent = AccountActivationMailSentEvent(it.accountId, link.toString())
+                    eventStoreDb.appendToStream(activationMailSent, eventMetadata?.toCommandMetadata())
                 }
             }
     }

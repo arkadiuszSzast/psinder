@@ -12,7 +12,7 @@ import org.koin.dsl.module
 val accountCommandHandlersModule = module {
     single { CreateAccountHandler(get(), get(), get()) }
     single { LoginAccountHandler() }
-    single { GenerateAccountActivationTokenHandler(JwtConfig, get(), get()) }
+    single { GenerateAccountActivationTokenHandler(JwtConfig, get()) }
     single { GenerateAccountActivationLinkHandler(ApplicationConfig, get(), get()) }
     single { ActivateAccountCommandHandler(JwtConfig, get(), get(), get()) }
 }

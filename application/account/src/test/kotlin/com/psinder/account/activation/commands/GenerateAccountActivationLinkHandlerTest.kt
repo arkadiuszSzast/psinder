@@ -22,7 +22,7 @@ class GenerateAccountActivationLinkHandlerTest : DescribeSpec() {
         single { CanDoAnythingAbilityProvider() } bind AuthorizedAccountAbilityProvider::class
         single { RecordingEventStoreDB() } bind EventStoreDB::class
         single { GenerateAccountActivationLinkHandler(ApplicationConfig, get(), get()) }
-        single { GenerateAccountActivationTokenHandler(JwtConfig, get(), get()) }
+        single { GenerateAccountActivationTokenHandler(JwtConfig, get()) }
     }.plus(kediatrTestModule)
 
     init {

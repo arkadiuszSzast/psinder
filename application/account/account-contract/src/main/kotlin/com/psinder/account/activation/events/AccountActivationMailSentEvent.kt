@@ -13,9 +13,9 @@ import org.litote.kmongo.Id
 import java.util.UUID
 
 @Serializable
-data class AccountActivationTokenGeneratedEvent(
+data class AccountActivationMailSentEvent(
     @Contextual val accountId: Id<AccountDto>,
-    val token: JwtToken
+    val activationLink: String
 ) : DomainEvent {
     @Serializable(with = UUIDSerializer::class)
     override val eventId: UUID = UUID.randomUUID()
@@ -23,12 +23,12 @@ data class AccountActivationTokenGeneratedEvent(
     @Contextual
     override val aggregateId = accountId
 
-    override val eventName = AccountActivationTokenGeneratedEvent.eventName
+    override val eventName = AccountActivationMailSentEvent.eventName
 
     override val aggregateType = accountAggregateType
 
     companion object {
-        val eventName: EventName = EventName("activate-token-generated")
+        val eventName: EventName = EventName("activation-mail-sent")
         val fullEventType = FullEventType(accountAggregateType, eventName)
     }
 }

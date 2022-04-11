@@ -53,7 +53,7 @@ private val testingModules = module {
         }
     } bind MailSender::class
     single { GenerateAccountActivationLinkHandler(ApplicationConfig, get(), get()) }
-    single { GenerateAccountActivationTokenHandler(JwtConfig, get(), get()) }
+    single { GenerateAccountActivationTokenHandler(JwtConfig, get()) }
     single { FakeSendMailCommandHandler(get(), get()) }
 }.plus(kediatrTestModule)
 

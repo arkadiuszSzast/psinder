@@ -2,7 +2,6 @@ package com.psinder.account.activation.commands
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.psinder.account.activation.events.AccountActivationTokenGeneratedEvent
 import com.psinder.account.config.JwtConfig
 import com.psinder.auth.authority.generateAccountActivationTokenFeature
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
@@ -16,7 +15,6 @@ import java.util.Date
 
 internal class GenerateAccountActivationTokenHandler(
     private val jwtConfig: JwtConfig,
-    private val eventStore: EventStoreDB,
     private val acl: AuthorizedAccountAbilityProvider
 ) : AsyncCommandWithResultHandler<GenerateAccountActivationTokenCommand, GenerateAccountActivationTokenCommandResult> {
     private val logger = KotlinLogging.logger {}
@@ -33,12 +31,6 @@ internal class GenerateAccountActivationTokenHandler(
             .withExpiresAt(Date(System.currentTimeMillis() + expirationTime.millis))
             .sign(Algorithm.HMAC256(secret.value))
             .let { JwtToken.createOrThrow(it) }
-
-        val event = AccountActivationTokenGeneratedEvent(accountId, token)
-        eventStore.appendToStream(
-            event.streamName,
-            event.toEventData<AccountActivationTokenGeneratedEvent>(metadata)
-        )
 
         return GenerateAccountActivationTokenCommandResult(token)
     }
