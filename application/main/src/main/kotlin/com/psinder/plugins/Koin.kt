@@ -8,6 +8,8 @@ import com.psinder.auth.authModule
 import com.psinder.auth.authorityProviderModule
 import com.psinder.database.kmongoModule
 import com.psinder.events.plugins.eventStoreDbKoinModule
+import com.psinder.feature.toggle.configCatModule
+import com.psinder.feature.toggle.koin.featureTogglesQueryHandlersModule
 import com.psinder.json.jsonModule
 import com.psinder.kediatr.kediatrModule
 import com.psinder.mail.koin.mailCommandHandlersModule
@@ -33,5 +35,7 @@ internal fun Application.configureKoin() {
         authorityProviderModule,
         eventStoreDbKoinModule,
         kediatrMonitoringMiddlewaresModule,
+        configCatModule,
+        featureTogglesQueryHandlersModule
     )
 }

@@ -17,7 +17,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
-import pl.brightinventions.codified.enums.codifiedEnum
 
 @optics
 @Serializable

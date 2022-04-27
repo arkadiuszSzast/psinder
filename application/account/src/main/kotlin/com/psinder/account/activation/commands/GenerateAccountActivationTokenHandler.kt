@@ -5,11 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.psinder.account.config.JwtConfig
 import com.psinder.auth.authority.generateAccountActivationTokenFeature
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
-import com.psinder.events.streamName
-import com.psinder.events.toEventData
 import com.psinder.shared.jwt.JwtToken
 import com.trendyol.kediatr.AsyncCommandWithResultHandler
-import io.traxter.eventstoredb.EventStoreDB
 import mu.KotlinLogging
 import java.util.Date
 

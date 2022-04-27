@@ -28,7 +28,10 @@ internal class AccountProjectionUpdater(private val accountRepository: AccountRe
                     .map { AccountProjection.applyActivatedEvent(it, event) }
                     .map { accountRepository.updateById(it.id, it) }
                     .tap {
-                        log.debug("Stream group: account-projection-updater applied account-activated event for aggregate ${event.accountId}")
+                        log.debug(
+                            "Stream group: account-projection-updater applied account-activated event " +
+                                "for aggregate ${event.accountId}"
+                        )
                     }
             }
             .bind()

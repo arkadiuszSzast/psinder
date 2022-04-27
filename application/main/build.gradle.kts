@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":application:mail"))
     implementation(project(":application:account"))
     implementation(project(":application:account:account-contract"))
+    implementation(project(":application:feature-toggle"))
 
     testImplementation(testFixtures(project(":application:test-utils")))
 }

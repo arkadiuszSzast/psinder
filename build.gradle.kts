@@ -133,6 +133,7 @@ subprojects {
 
     dependencies {
         kapt("io.arrow-kt:arrow-meta:1.0.1")
+
         implementation("io.ktor:ktor-auth-jwt:$ktor_version")
         implementation("io.ktor:ktor-serialization:$ktor_version")
         implementation("io.insert-koin:koin-ktor:$koin_version")

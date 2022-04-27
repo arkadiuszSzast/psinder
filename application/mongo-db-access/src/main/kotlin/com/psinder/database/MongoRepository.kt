@@ -3,7 +3,6 @@ package com.psinder.database
 import arrow.core.Option
 import arrow.core.toOption
 import com.mongodb.client.result.UpdateResult
-import org.bson.conversions.Bson
 import org.litote.kmongo.Id
 import org.litote.kmongo.coroutine.CoroutineCollection
 

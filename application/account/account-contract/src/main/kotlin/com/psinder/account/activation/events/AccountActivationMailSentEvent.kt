@@ -6,7 +6,6 @@ import com.psinder.events.DomainEvent
 import com.psinder.events.EventName
 import com.psinder.events.FullEventType
 import com.psinder.shared.UUIDSerializer
-import com.psinder.shared.jwt.JwtToken
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
