@@ -6,6 +6,7 @@ import com.psinder.auth.authority.AuthoritiesProvider
 import com.psinder.auth.authority.activatingAccountFeature
 import com.psinder.auth.authority.authoritiesFor
 import com.psinder.auth.authority.createAccountFeature
+import com.psinder.auth.authority.setUserFeatureToggleFeature
 import com.psinder.auth.role.Role
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -17,6 +18,7 @@ object StaticAuthorityProvider : AuthoritiesProvider {
             entityAccess(AccountProjection::class) {
                 allScopes()
             }
+            featureAccess(setUserFeatureToggleFeature)
         },
         authoritiesFor("unknown".codifiedEnum()) {
             featureAccess(createAccountFeature)

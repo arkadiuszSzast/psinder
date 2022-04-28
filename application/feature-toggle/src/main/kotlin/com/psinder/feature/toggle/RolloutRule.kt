@@ -1,6 +1,7 @@
 package com.psinder.feature.toggle
 
 import kotlinx.serialization.Serializable
+import mu.KotlinLogging
 import pl.brightinventions.codified.enums.CodifiedEnum
 import pl.brightinventions.codified.enums.codifiedEnum
 
@@ -17,23 +18,18 @@ data class RolloutRule<T>(
     val segmentId: String?
 ) {
     companion object {
-        fun emptyEnabled(
-            comparisonAttribute: CodifiedEnum<ComparisonAttribute, String>,
-            comparator: CodifiedEnum<Comparator, String>
-        ) = RolloutRule(
-            comparisonAttribute = comparisonAttribute,
-            comparator = comparator,
-            comparisonValue = "",
-            value = true,
-            segmentComparator = null,
-            segmentId = null
-        )
-    }
+        private val logger = KotlinLogging.logger {}
 
-    fun withAddedComparisonValue(rule: RolloutRule<T>, value: String): RolloutRule<T> {
-        val values = rule.comparisonValue.split(",").filter { it.isNotBlank() }
-        val updatedValues = (values + value).distinct()
-        return rule.copy(comparisonValue = updatedValues.joinToString(","))
+        fun <T> withAddedComparisonValue(rule: RolloutRule<T>, value: String): RolloutRule<T> {
+            if (value.isBlank()) {
+                logger.warn { "Comparison value is blank, returning original rule" }
+                return rule
+            }
+
+            val values = rule.comparisonValue.split(",").filter { it.isNotBlank() }
+            val updatedValues = (values + value.trim()).distinct()
+            return rule.copy(comparisonValue = updatedValues.joinToString(","))
+        }
     }
 }
 

@@ -11,6 +11,8 @@ import com.psinder.account.commands.LoginAccountCommand
 import com.psinder.account.requests.CreateAccountRequest
 import com.psinder.account.requests.LoginAccountRequest
 import com.psinder.account.responses.LoginAccountResponse
+import com.psinder.feature.toggle.FeatureToggleKey
+import com.psinder.feature.toggle.GetBooleanToggleQuery
 import com.psinder.shared.validation.validateEagerly
 import com.trendyol.kediatr.CommandBus
 import io.ktor.application.Application
@@ -50,6 +52,12 @@ fun Application.configureAccountRouting() {
             val request = call.receive<LoginAccountRequest>().validateEagerly()
             val loginCommandResult = commandBus.executeCommandAsync(LoginAccountCommand(request))
             call.respond(LoginAccountResponse(loginCommandResult.token))
+        }
+
+        get("/test") {
+            val loginCommandResult = commandBus.executeQueryAsync(GetBooleanToggleQuery(FeatureToggleKey("qwe")))
+            println(loginCommandResult)
+            call.respond("aa")
         }
 
         authenticate {

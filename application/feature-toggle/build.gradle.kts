@@ -11,4 +11,7 @@ dependencies {
     api(project(":application:feature-toggle:feature-toggle-contract"))
     implementation(project(":application:shared"))
     implementation(project(":application:mediator"))
+    implementation(project(":application:security:security-contract"))
+
+    testImplementation(testFixtures(project(":application:security")))
 }

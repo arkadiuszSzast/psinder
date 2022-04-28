@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":application:event-store"))
     implementation(project(":application:mediator"))
     implementation(project(":application:mail:mail-contract"))
+    implementation(project(":application:feature-toggle"))
 
     testFixturesImplementation(testFixtures(project(":application:mongo-db-access")))
     testFixturesImplementation(testFixtures(project(":application:test-utils")))

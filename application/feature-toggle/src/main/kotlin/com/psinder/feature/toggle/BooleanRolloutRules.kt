@@ -12,14 +12,14 @@ interface BooleanRolloutRules : List<RolloutRule<Boolean>> {
     fun enableForUser(userIdentifier: FeatureToggleUserIdentifier): BooleanRolloutRules =
         when (val rule = findEnabledForUsersRole()) {
             is Some -> {
-                val updatedRule = rule.value.withAddedComparisonValue(rule.value, userIdentifier.userId)
+                val updatedRule = RolloutRule.withAddedComparisonValue(rule.value, userIdentifier.userId)
                 Simple(this.filter { it != rule.value } + updatedRule)
             }
             is None -> {
                 val emptyRule = rolloutRule<Boolean> {
                     value = true
                 }
-                val updatedRule = emptyRule.withAddedComparisonValue(emptyRule, userIdentifier.userId)
+                val updatedRule = RolloutRule.withAddedComparisonValue(emptyRule, userIdentifier.userId)
                 Simple(this + updatedRule)
             }
         }
