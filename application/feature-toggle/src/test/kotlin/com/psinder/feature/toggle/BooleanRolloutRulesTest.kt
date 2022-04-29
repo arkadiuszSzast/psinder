@@ -14,13 +14,13 @@ class BooleanRolloutRulesTest : DescribeSpec() {
         describe("BooleanRolloutRules") {
 
             it("should enable for user when rollout rules list is empty") {
-                //arrange
+                // arrange
                 val rules = BooleanRolloutRules.create(emptyList())
 
-                //act
+                // act
                 val result = rules.enableForUser(FeatureToggleUserIdentifier("user-id-1"))
 
-                //assert
+                // assert
                 expectThat(result) {
                     hasSize(1)
                     first().get { comparisonValue }.isEqualTo("user-id-1")
@@ -28,11 +28,11 @@ class BooleanRolloutRulesTest : DescribeSpec() {
             }
 
             it("should enable for user when no user specific enabled rule is present") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> { value = false }
                 val rules = BooleanRolloutRules.create(rule.nel())
 
-                //act
+                // act
                 val result = rules.enableForUser(FeatureToggleUserIdentifier("user-id-1"))
                 expectThat(result) {
                     hasSize(2)
@@ -41,11 +41,11 @@ class BooleanRolloutRulesTest : DescribeSpec() {
             }
 
             it("should add new value to the list") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> { value = true; comparisonValue = "user-id-1" }
                 val rules = BooleanRolloutRules.create(rule.nel())
 
-                //act
+                // act
                 val result = rules.enableForUser(FeatureToggleUserIdentifier("user-id-2"))
                 expectThat(result) {
                     hasSize(1)

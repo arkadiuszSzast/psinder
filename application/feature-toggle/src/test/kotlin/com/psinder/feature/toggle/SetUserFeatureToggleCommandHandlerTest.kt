@@ -3,7 +3,6 @@ package com.psinder.feature.toggle
 import com.psinder.auth.principal.CanDoAnythingAbilityProvider
 import com.psinder.feature.toggle.client.ConfigCatSetToggleClient
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 
 class SetUserFeatureToggleCommandHandlerTest : DescribeSpec() {

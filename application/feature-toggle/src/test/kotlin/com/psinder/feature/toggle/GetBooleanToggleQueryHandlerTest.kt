@@ -17,17 +17,17 @@ class GetBooleanToggleQueryHandlerTest : DescribeSpec() {
         describe("GetBooleanToggleQueryHandler") {
 
             it("should return true when toggle is enabled") {
-                //arrange
+                // arrange
                 val featureToggleKey = FeatureToggleKey("feature_a")
                 val query = GetBooleanToggleQuery(featureToggleKey)
 
                 every { configCatClient.getValue(Boolean::class.java, featureToggleKey.key, false) } returns true
                 every { configCatClient.allKeys } returns listOf(featureToggleKey.key)
 
-                //act
+                // act
                 val result = handler.handleAsync(query)
 
-                //assert
+                // assert
                 expectThat(result)
                     .isA<GetBooleanToggleResult.Found>()
                     .and { get { key }.isEqualTo(featureToggleKey) }
@@ -35,17 +35,17 @@ class GetBooleanToggleQueryHandlerTest : DescribeSpec() {
             }
 
             it("should return false when toggle is disabled") {
-                //arrange
+                // arrange
                 val featureToggleKey = FeatureToggleKey("feature_a")
                 val query = GetBooleanToggleQuery(featureToggleKey)
 
                 every { configCatClient.getValue(Boolean::class.java, featureToggleKey.key, false) } returns false
                 every { configCatClient.allKeys } returns listOf(featureToggleKey.key)
 
-                //act
+                // act
                 val result = handler.handleAsync(query)
 
-                //assert
+                // assert
                 expectThat(result)
                     .isA<GetBooleanToggleResult.Found>()
                     .and { get { key }.isEqualTo(featureToggleKey) }
@@ -53,17 +53,17 @@ class GetBooleanToggleQueryHandlerTest : DescribeSpec() {
             }
 
             it("should return not found when toggle does not exist") {
-                //arrange
+                // arrange
                 val featureToggleKey = FeatureToggleKey("not_existing_toggle")
                 val query = GetBooleanToggleQuery(featureToggleKey)
 
                 every { configCatClient.getValue(Boolean::class.java, featureToggleKey.key, false) } returns false
                 every { configCatClient.allKeys } returns listOf("feature_a")
 
-                //act
+                // act
                 val result = handler.handleAsync(query)
 
-                //assert
+                // assert
                 expectThat(result)
                     .isA<GetBooleanToggleResult.NotFound>()
                     .and { get { key }.isEqualTo(featureToggleKey) }

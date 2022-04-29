@@ -11,16 +11,16 @@ class RolloutRuleTest : DescribeSpec() {
         describe("RolloutRule") {
 
             it("should add comparison value when current list is empty") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> {
                     value = true
                     comparisonValue = ""
                 }
 
-                //act
+                // act
                 val result = RolloutRule.withAddedComparisonValue(rule, "123")
 
-                //assert
+                // assert
                 expectThat(result) {
                     get { value }.isEqualTo(true)
                     get { comparisonValue }.isEqualTo("123")
@@ -28,16 +28,16 @@ class RolloutRuleTest : DescribeSpec() {
             }
 
             it("should append comparison value when current list is not empty") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> {
                     value = true
                     comparisonValue = "1,2,3"
                 }
 
-                //act
+                // act
                 val result = RolloutRule.withAddedComparisonValue(rule, "123")
 
-                //assert
+                // assert
                 expectThat(result) {
                     get { value }.isEqualTo(true)
                     get { comparisonValue }.isEqualTo("1,2,3,123")
@@ -45,16 +45,16 @@ class RolloutRuleTest : DescribeSpec() {
             }
 
             it("should not add new value when already present") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> {
                     value = true
                     comparisonValue = "1,2,3"
                 }
 
-                //act
+                // act
                 val result = RolloutRule.withAddedComparisonValue(rule, "2")
 
-                //assert
+                // assert
                 expectThat(result) {
                     get { value }.isEqualTo(true)
                     get { comparisonValue }.isEqualTo("1,2,3")
@@ -62,16 +62,16 @@ class RolloutRuleTest : DescribeSpec() {
             }
 
             it("should trim the value") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> {
                     value = true
                     comparisonValue = "1,2,3"
                 }
 
-                //act
+                // act
                 val result = RolloutRule.withAddedComparisonValue(rule, " 4 ")
 
-                //assert
+                // assert
                 expectThat(result) {
                     get { value }.isEqualTo(true)
                     get { comparisonValue }.isEqualTo("1,2,3,4")
@@ -79,16 +79,16 @@ class RolloutRuleTest : DescribeSpec() {
             }
 
             it("when given value is empty return original rule") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> {
                     value = true
                     comparisonValue = "1,2,3"
                 }
 
-                //act
+                // act
                 val result = RolloutRule.withAddedComparisonValue(rule, "")
 
-                //assert
+                // assert
                 expectThat(result) {
                     get { value }.isEqualTo(true)
                     get { comparisonValue }.isEqualTo("1,2,3")
@@ -96,16 +96,16 @@ class RolloutRuleTest : DescribeSpec() {
             }
 
             it("when given value contains only whitespace return original rule") {
-                //arrange
+                // arrange
                 val rule = rolloutRule<Boolean> {
                     value = true
                     comparisonValue = "1,2,3"
                 }
 
-                //act
+                // act
                 val result = RolloutRule.withAddedComparisonValue(rule, "  ")
 
-                //assert
+                // assert
                 expectThat(result) {
                     get { value }.isEqualTo(true)
                     get { comparisonValue }.isEqualTo("1,2,3")

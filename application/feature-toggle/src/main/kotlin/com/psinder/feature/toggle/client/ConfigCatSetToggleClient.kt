@@ -1,8 +1,6 @@
 package com.psinder.feature.toggle.client
 
 import arrow.core.nel
-import com.psinder.feature.toggle.FeatureToggleKey
-import com.psinder.feature.toggle.FeatureToggleUserIdentifier
 import com.psinder.feature.toggle.config.ConfigCatApi
 import com.psinder.feature.toggle.config.ConfigCatConfig
 import com.psinder.shared.json.JsonMapper

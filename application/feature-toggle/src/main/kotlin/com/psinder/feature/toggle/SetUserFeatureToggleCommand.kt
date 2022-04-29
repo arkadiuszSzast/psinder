@@ -9,4 +9,3 @@ data class SetUserFeatureToggleCommand(
     val value: Boolean,
     override val metadata: CommandMetadata?
 ) : Command
-
