@@ -37,6 +37,8 @@ dependencies {
     implementation(project(":application:account"))
     implementation(project(":application:account:account-contract"))
     implementation(project(":application:feature-toggle"))
+    implementation(project(":application:dog"))
+    implementation(project(":application:aws"))
 
     testImplementation(testFixtures(project(":application:test-utils")))
 }

@@ -47,6 +47,9 @@ export function psinderTemplate(vpc: ec2.IVpc, cluster: ecs.ICluster, stackProps
             KEYSTORE_PASSWORD: '/psinder/keystore/password',
             KEYSTORE_KEY_PASSWORD: '/psinder/keystore/key-password',
             SENTRY_DSN: '/psinder/sentry/dsn',
+            SENDGRID_API_KEY: '/psinder/sendgrid/apiKey',
+            AWS_ACCESS_KEY_ID: '/psinder/aws/accessKey',
+            AWS_SECRET_ACCESS_KEY: '/psinder/aws/secretKey',
         },
         environment: {
             'DEPLOY_ENV': deployEnv(),
