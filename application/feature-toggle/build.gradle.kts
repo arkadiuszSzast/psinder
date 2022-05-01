@@ -14,4 +14,6 @@ dependencies {
     implementation(project(":application:security:security-contract"))
 
     testImplementation(testFixtures(project(":application:security")))
+    testImplementation(testFixtures(project(":application:test-utils")))
+    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
 }

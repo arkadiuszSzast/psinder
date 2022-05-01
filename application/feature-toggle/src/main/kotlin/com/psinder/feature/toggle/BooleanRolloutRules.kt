@@ -10,7 +10,7 @@ interface BooleanRolloutRules : List<RolloutRule<Boolean>> {
     }
 
     fun enableForUser(userIdentifier: FeatureToggleUserIdentifier): BooleanRolloutRules =
-        when (val rule = findEnabledForUsersRole()) {
+        when (val rule = findEnabledForUsersRule()) {
             is Some -> {
                 val updatedRule = RolloutRule.withAddedComparisonValue(rule.value, userIdentifier.userId)
                 Simple(this.filter { it != rule.value } + updatedRule)
@@ -24,9 +24,28 @@ interface BooleanRolloutRules : List<RolloutRule<Boolean>> {
             }
         }
 
-    private fun findEnabledForUsersRole() =
+    fun disableForUser(userIdentifier: FeatureToggleUserIdentifier): BooleanRolloutRules =
+        when (val rule = findDisabledForUsersRule()) {
+            is Some -> {
+                val updatedRule = RolloutRule.withAddedComparisonValue(rule.value, userIdentifier.userId)
+                Simple(this.filter { it != rule.value } + updatedRule)
+            }
+            is None -> {
+                val emptyRule = rolloutRule<Boolean> {
+                    value = false
+                }
+                val updatedRule = RolloutRule.withAddedComparisonValue(emptyRule, userIdentifier.userId)
+                Simple(this + updatedRule)
+            }
+        }
+
+    private fun findEnabledForUsersRule() = findBooleanUserRule(true)
+
+    private fun findDisabledForUsersRule() = findBooleanUserRule(false)
+
+    private fun findBooleanUserRule(enabled: Boolean) =
         this.filterIsInstance<RolloutRule<Boolean>>().find {
-            it.value == true &&
+            it.value == enabled &&
                 it.comparator.code() == Comparator.SensitiveIsOneOf.code &&
                 it.comparisonAttribute.code() == ComparisonAttribute.Identifier.code
         }.toOption()

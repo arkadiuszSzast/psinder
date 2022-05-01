@@ -7,5 +7,5 @@ data class SetUserFeatureToggleCommand(
     val userId: FeatureToggleUserIdentifier,
     val toggle: FeatureToggleKey,
     val value: Boolean,
-    override val metadata: CommandMetadata?
+    override val metadata: CommandMetadata? = null
 ) : Command

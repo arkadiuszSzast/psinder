@@ -5,8 +5,7 @@ import com.psinder.auth.authority.Deny
 import com.psinder.auth.authority.Feature
 import kotlin.reflect.KClass
 
-class DenyAllAbilityProvider :
-    AuthorizedAccountAbilityProvider {
+class DenyAllAbilityProvider : AuthorizedAccountAbilityProvider {
 
     override suspend fun hasAccessTo(feature: Feature) = Deny(AuthorityCheckException("DenyAllAbilityProvider"))
 
