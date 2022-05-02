@@ -32,6 +32,8 @@ export function psinderTemplate(vpc: ec2.IVpc, cluster: ecs.ICluster, stackProps
         }
     }
 
+    const s3Buckets = ['dog-profile-images']
+
     return {
         vpc: vpc,
         cluster: cluster,
@@ -42,14 +44,17 @@ export function psinderTemplate(vpc: ec2.IVpc, cluster: ecs.ICluster, stackProps
         stackProps: stackProps,
         assignPublicIp: false,
         securityGroups: [securityGroup, httpsSecurityGroup],
+        s3Buckets: s3Buckets,
         secrets: {
             DB_CONNECTION_STRING: '/psinder/db-connection-string',
+            EVENT_STORE_CONNECTION_STRING: '/psinder/event-store-connection-string',
             KEYSTORE_PASSWORD: '/psinder/keystore/password',
             KEYSTORE_KEY_PASSWORD: '/psinder/keystore/key-password',
             SENTRY_DSN: '/psinder/sentry/dsn',
             SENDGRID_API_KEY: '/psinder/sendgrid/apiKey',
             AWS_ACCESS_KEY_ID: '/psinder/aws/accessKey',
             AWS_SECRET_ACCESS_KEY: '/psinder/aws/secretKey',
+            AWS_REGION: '/psinder/aws/region',
         },
         environment: {
             'DEPLOY_ENV': deployEnv(),

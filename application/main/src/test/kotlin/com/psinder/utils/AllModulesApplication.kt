@@ -1,6 +1,7 @@
 package com.psinder.utils
 
 import com.psinder.account.accountModule
+import com.psinder.dog.dogModule
 import com.psinder.events.eventStoreModule
 import com.psinder.main
 import com.psinder.monitoring.monitoringModule
@@ -11,4 +12,5 @@ internal fun Application.allModules() {
     monitoringModule()
     eventStoreModule()
     accountModule()
+    dogModule()
 }

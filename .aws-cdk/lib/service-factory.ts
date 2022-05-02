@@ -1,7 +1,9 @@
 import * as cdk from '@aws-cdk/core';
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
+import {Secret} from "@aws-cdk/aws-ecs";
 import * as ecr from "@aws-cdk/aws-ecr";
+import * as s3 from '@aws-cdk/aws-s3';
 import {ApplicationLoadBalancedFargateService} from "@aws-cdk/aws-ecs-patterns";
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as route53 from "@aws-cdk/aws-route53";
@@ -12,7 +14,7 @@ import {headerCase} from "header-case";
 import {addDataDogContainer, defaultDatadogServiceEnv} from "./data-dog-container";
 import {RetentionDays} from "@aws-cdk/aws-logs";
 import {ApplicationProtocol, ApplicationProtocolVersion, SslPolicy} from "@aws-cdk/aws-elasticloadbalancingv2";
-import {Secret} from "@aws-cdk/aws-ecs";
+import {addEventStoreContainer} from "./event-store-container";
 
 export class Service extends cdk.Stack {
 
@@ -57,6 +59,8 @@ export class Service extends cdk.Stack {
             addDataDogContainer(taskDefinition)
         }
 
+        addEventStoreContainer(taskDefinition) //temp solution because cloud version isn't so cheap for testing purposes
+
         const service = new ApplicationLoadBalancedFargateService(stack, headerCase(`${template.name}-service`), {
             cluster: template.cluster,
             taskDefinition: taskDefinition,
@@ -74,6 +78,14 @@ export class Service extends cdk.Stack {
             sslPolicy: SslPolicy.RECOMMENDED,
             protocolVersion: ApplicationProtocolVersion.HTTP2,
             publicLoadBalancer: true
+        })
+
+        template.s3Buckets?.map((bucketName) => {
+            const bucketEnvSpecificName = envSpecificName(bucketName)
+
+            const bucket = s3.Bucket.fromBucketName(stack, `${bucketEnvSpecificName}-bucket`, bucketEnvSpecificName)
+
+            bucket.grantReadWrite(service.taskDefinition.taskRole)
         })
 
         return stack
@@ -99,6 +111,7 @@ export interface ServiceTemplate {
     readonly configureDatadog: boolean,
     readonly assignPublicIp?: boolean,
     readonly stackProps: cdk.StackProps,
+    readonly s3Buckets?: string[]
 }
 
 export interface SecurityGroupIdAndProps {

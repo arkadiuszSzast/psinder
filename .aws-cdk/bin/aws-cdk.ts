@@ -6,6 +6,7 @@ import {psinderTemplate} from "../lib/service-template";
 import {NetworkStack} from "../lib/network-stack";
 import {ClusterStack} from "../lib/cluster-stack";
 import {Service} from "../lib/service-factory";
+import {S3BucketsStack} from "../lib/s3-bucket-stack";
 
 const cdkEnv: cdk.Environment = {
     account: process.env.AWS_ACCOUNT_ID,
@@ -19,6 +20,10 @@ const networkStack = new NetworkStack(app, {
 })
 
 const clusterStack = new ClusterStack(app, networkStack.vpc, {
+    env: cdkEnv
+})
+
+const s3BucketsStack = new S3BucketsStack(app, {
     env: cdkEnv
 })
 

@@ -32,6 +32,35 @@ services:
         source: eventstore-volume-logs
         target: /var/log/eventstore
 
+  localstack:
+    image: localstack/localstack:0.12.16
+    container_name: localstack
+    environment:
+      - SERVICES=sqs,sns,sts,cloudformation,ec2,iam,s3
+      - DEFAULT_REGION=eu-north-1
+      - HOSTNAME_EXTERNAL=localstack
+    ports:
+      - "4566:4566"
+    volumes:
+      - ${TMPDIR:-/tmp/localstack}:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  localstack-bootstrap:
+    image: node:15
+    user: node
+    working_dir: /app
+    volumes:
+      - ../.aws-cdk:/app
+    environment:
+      DEPLOY_ENV: dev
+      LOCALSTACK_HOSTNAME: localstack
+      AWS_ACCOUNT_ID: '000000000000'
+      AWS_DEFAULT_REGION: eu-north-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_ACCESS_KEY_SECRET: test
+      AWS_REGION: eu-north-1
+    command: sh -lc "npm i && npm run cdklocal:bootstrap && npm run cdklocal:deploy"
+
 volumes:
   eventstore-volume-data:
   eventstore-volume-logs:

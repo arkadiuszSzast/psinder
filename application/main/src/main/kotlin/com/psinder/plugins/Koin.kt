@@ -6,6 +6,7 @@ import com.psinder.account.koin.accountEventStoreModule
 import com.psinder.account.koin.accountQueryHandlersModule
 import com.psinder.auth.authModule
 import com.psinder.auth.authorityProviderModule
+import com.psinder.aws.koin.awsKoinModule
 import com.psinder.database.kmongoModule
 import com.psinder.events.plugins.eventStoreDbKoinModule
 import com.psinder.feature.toggle.configCatModule
@@ -38,6 +39,7 @@ internal fun Application.configureKoin() {
         kediatrMonitoringMiddlewaresModule,
         configCatModule,
         featureTogglesQueryHandlersModule,
-        featureTogglesCommandHandlersModule
+        featureTogglesCommandHandlersModule,
+        awsKoinModule
     )
 }
