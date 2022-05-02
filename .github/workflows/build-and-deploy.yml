@@ -33,7 +33,7 @@ jobs:
         with:
           java-version: 16
       - name: Build with Gradle
-        run: ./gradlew test installDist
+        run: ./gradlew installDist
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
