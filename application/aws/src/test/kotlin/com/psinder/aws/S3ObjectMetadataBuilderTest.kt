@@ -14,13 +14,13 @@ class S3ObjectMetadataBuilderTest : DescribeSpec() {
         describe("S3ObjectMetadataBuilder") {
 
             it("should build metadata") {
-                //arrange && act
+                // arrange && act
                 val result = s3ObjectMetadata {
                     mediaType = MediaType("application", "json")
                     extension = "json"
                 }
 
-                //assert
+                // assert
                 expectThat(result) {
                     get { this[S3ObjectMetadata.Keys.mediaType] }.isEqualTo("application/json")
                     get { this[S3ObjectMetadata.Keys.extension] }.isEqualTo("json")

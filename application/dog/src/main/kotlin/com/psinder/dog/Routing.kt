@@ -3,9 +3,7 @@ package com.psinder.dog
 import com.psinder.shared.file.FileStorage
 import com.trendyol.kediatr.CommandBus
 import io.ktor.application.Application
-import io.ktor.application.call
 import io.ktor.http.Url
-import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import org.koin.ktor.ext.inject
