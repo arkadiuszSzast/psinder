@@ -59,7 +59,7 @@ services:
       AWS_ACCESS_KEY_ID: test
       AWS_ACCESS_KEY_SECRET: test
       AWS_REGION: eu-north-1
-    command: sh -lc "npm i && npm run cdklocal:bootstrap && npm run cdklocal:deploy"
+    command: sh -lc "npm i && npm run cdklocal:deploy"
 
 volumes:
   eventstore-volume-data:

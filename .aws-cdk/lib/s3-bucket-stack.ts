@@ -11,21 +11,21 @@ export class S3BucketsStack extends cdk.Stack {
 
         const bucketsNames: string[] = ['dog-profile-images']
 
-        // bucketsNames.map((bucketName) => {
-        //     const bucketEnvSpecificName = envSpecificName(bucketName)
-        //
-        //     const bucket = new s3.Bucket(this, `${bucketEnvSpecificName}-bucket`, {
-        //         bucketName: bucketEnvSpecificName,
-        //         removalPolicy: cdk.RemovalPolicy.DESTROY,
-        //         versioned: true,
-        //         encryption: s3.BucketEncryption.S3_MANAGED,
-        //         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL
-        //     })
-        //
-        //     const tags = cdk.Tags.of(bucket)
-        //     tags.add('application', applicationName())
-        //     tags.add('env', deployEnv())
-        // })
+        bucketsNames.map((bucketName) => {
+            const bucketEnvSpecificName = envSpecificName(bucketName)
+
+            const bucket = new s3.Bucket(this, `${bucketEnvSpecificName}-bucket`, {
+                bucketName: bucketEnvSpecificName,
+                removalPolicy: cdk.RemovalPolicy.DESTROY,
+                versioned: true,
+                encryption: s3.BucketEncryption.S3_MANAGED,
+                blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL
+            })
+
+            const tags = cdk.Tags.of(bucket)
+            tags.add('application', applicationName())
+            tags.add('env', deployEnv())
+        })
     }
 
 }
