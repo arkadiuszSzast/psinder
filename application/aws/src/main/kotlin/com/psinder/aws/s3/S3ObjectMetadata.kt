@@ -10,9 +10,10 @@ interface S3ObjectMetadata : Map<String, String> {
         fun create(data: Map<String, String>): S3ObjectMetadata = Simple(data)
     }
 
+    // Should be defined in lower case since it's stored in lower case in S3
     object Keys {
-        val savedAt = "savedAt"
-        val mediaType = "mediaType"
+        val savedAt = "saved-at"
+        val mediaType = "media-type"
         val extension = "extension"
     }
 }

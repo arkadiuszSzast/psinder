@@ -39,6 +39,7 @@ dependencies {
     implementation(project(":application:feature-toggle"))
     implementation(project(":application:dog"))
     implementation(project(":application:aws"))
+    implementation(project(":application:file-storage"))
 
     testImplementation(testFixtures(project(":application:test-utils")))
 }

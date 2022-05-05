@@ -46,7 +46,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   localstack-bootstrap:
-    image: node:15
+    image: node:17.9
     user: node
     working_dir: /app
     volumes:

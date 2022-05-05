@@ -2,6 +2,8 @@ package com.psinder.test.utils
 
 import com.psinder.shared.json.decodeFromString
 import io.ktor.server.testing.TestApplicationResponse
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import strikt.api.Assertion
@@ -34,6 +36,20 @@ fun Assertion.Builder<LocalDateTime>.isEqualToNowIgnoringSeconds() {
             pass()
         } else {
             fail("Given LocalDateTime [$it] is not between $nowMinusOneSecond and $nowPlusOneSecond")
+        }
+    }
+}
+
+fun Assertion.Builder<Instant>.isUpToOneSecondOld() {
+    assert("Instant is equal to now ignoring seconds") {
+        val epochSecondsNow = Clock.System.now().epochSeconds
+        val epochSecondsMinusOne = epochSecondsNow - 1
+        val givenEpochSeconds = it.epochSeconds
+
+        if (givenEpochSeconds >= epochSecondsMinusOne || givenEpochSeconds <= epochSecondsNow) {
+            pass()
+        } else {
+            fail("Given Instant is equal is not between $epochSecondsMinusOne and $epochSecondsNow")
         }
     }
 }
