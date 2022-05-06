@@ -31,4 +31,5 @@ internal fun Application.main() {
     configureExceptionsHandling()
     configureSecurity(JwtAuthConfig)
     configureHTTP()
+    configureApplicationStatusRouting()
 }

@@ -15,6 +15,7 @@ import {addDataDogContainer, defaultDatadogServiceEnv} from "./data-dog-containe
 import {RetentionDays} from "@aws-cdk/aws-logs";
 import {ApplicationProtocol, ApplicationProtocolVersion, SslPolicy} from "@aws-cdk/aws-elasticloadbalancingv2";
 import {addEventStoreContainer} from "./event-store-container";
+import {Duration} from "@aws-cdk/core";
 
 export class Service extends cdk.Stack {
 
@@ -43,13 +44,17 @@ export class Service extends cdk.Stack {
 
         taskDefinition.addContainer(headerCase(`${template.name}-container`), {
             image: ecs.ContainerImage.fromEcrRepository(repository, imageTag()),
-            portMappings:template.port?.map((port) => {
+            portMappings: template.port?.map((port) => {
                 return {
                     containerPort: port,
                     hostPort: port,
                     protocol: ecs.Protocol.TCP
                 }
             }),
+            healthCheck: {
+                command: ["curl", "--fail", "http://localhost:8080/v1/application-status/health"],
+                startPeriod: Duration.seconds(200)
+            },
             secrets: secrets,
             environment: template.configureDatadog ? Object.assign({}, template.environment, defaultDatadogServiceEnv(template.name)) : template.environment,
             logging: template.configureDatadog ? datadogLogging(template.name) : defaultLogging(),
@@ -77,7 +82,7 @@ export class Service extends cdk.Stack {
             openListener: true,
             sslPolicy: SslPolicy.RECOMMENDED,
             protocolVersion: ApplicationProtocolVersion.HTTP2,
-            publicLoadBalancer: true
+            publicLoadBalancer: true,
         })
 
         template.s3Buckets?.map((bucketName) => {
