@@ -57,11 +57,15 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      - name: cdk deploy
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: "14"
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
           working-directory: ./.aws-cdk/
+      - name: Deploy stack
+        run: cd .aws-cdk && cdk deploy --all --require-approval never
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID}}
@@ -72,4 +76,3 @@ jobs:
           DD_API_KEY: ${{ secrets.DD_API_KEY }}
           DD_APPLICATION_KEY: ${{ secrets.DD_APPLICATION_KEY }}
           DEPLOY_ENV: ${{ env.DEPLOY_ENV }}
-        run: npm i && cdk deploy --all --require-approval never
