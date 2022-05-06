@@ -58,11 +58,10 @@ jobs:
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
       - name: cdk deploy
-        uses: docker://kikemnzz/automate-cdk-github-action-kmzz:v1.0.0
+        uses: actions/setup-node@v2
         with:
-          cdk_version: '2.17.0'
-          cdk_action: 'deploy --verbose --require-approval never'
-          cdk_stack_directory: '.aws-cdk'
+          node-version: "14"
+          working-directory: ./.aws-cdk/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID}}
@@ -73,3 +72,4 @@ jobs:
           DD_API_KEY: ${{ secrets.DD_API_KEY }}
           DD_APPLICATION_KEY: ${{ secrets.DD_APPLICATION_KEY }}
           DEPLOY_ENV: ${{ env.DEPLOY_ENV }}
+        run: npm i && cdk deploy --all --require-approval never
