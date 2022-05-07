@@ -27,8 +27,8 @@ export class Service extends cdk.Stack {
         const repository = ecr.Repository.fromRepositoryName(stack, headerCase(`${template.name}-repository`), template.repository)
         const certificate = acm.Certificate.fromCertificateArn(stack, 'Certificate', 'arn:aws:acm:eu-north-1:993160204208:certificate/05e1a3fd-aed9-49ae-9f2e-8699d3b10449')
         const taskDefinition = new ecs.FargateTaskDefinition(stack, headerCase(`${template.name}-task-definition`), {
-            cpu: 512,
-            memoryLimitMiB: 1024
+            cpu: 1024,
+            memoryLimitMiB: 2048
         })
 
         const securityGroups = template.securityGroups
@@ -84,6 +84,14 @@ export class Service extends cdk.Stack {
             protocolVersion: ApplicationProtocolVersion.HTTP2,
             publicLoadBalancer: true,
         })
+
+        // @ts-ignore
+        service.taskDefinition.defaultContainer!.props.healthCheck = <ecs.HealthCheck>{
+            command: ["curl", "--fail", "http://localhost:8080/v1/application-status/health"],
+            interval: cdk.Duration.seconds(15),
+            retries: 3,
+            timeout: cdk.Duration.seconds(5),
+        };
 
         template.s3Buckets?.map((bucketName) => {
             const bucketEnvSpecificName = envSpecificName(bucketName)

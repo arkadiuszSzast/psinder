@@ -38,7 +38,7 @@ export function psinderTemplate(vpc: ec2.IVpc, cluster: ecs.ICluster, stackProps
         vpc: vpc,
         cluster: cluster,
         name: 'psinder',
-        port: [8443],
+        port: [8443, 8080],
         repository: RepositoryName.PSINDER,
         configureDatadog: true,
         stackProps: stackProps,
