@@ -25,16 +25,13 @@ import {addEventStoreContainer} from "./event-store-container";
 
 export class Service extends cdk.Stack {
 
-    static from(scope: cdk.Construct, template: ServiceTemplate): Service {
+    static from(scope: cdk.Construct, template: ServiceTemplate, psinderCertificate: acm.Certificate): Service {
         const stack = new cdk.Stack(scope, paramCase(envSpecificName(template.name)), template.stackProps)
         const hostedZone = route53.HostedZone.fromLookup(stack, "psinder-hosted-zone", {
             domainName: 'psinder.link'
         })
         const repository = ecr.Repository.fromRepositoryName(stack, headerCase(`${template.name}-repository`), template.repository)
-        const certificate = new acm.Certificate(stack, 'Certificate', {
-            domainName: '*.psinder.link',
-            validation: acm.CertificateValidation.fromDns(hostedZone)
-        });
+
         const taskDefinition = new ecs.FargateTaskDefinition(stack, headerCase(`${template.name}-task-definition`), {
             cpu: 1024,
             memoryLimitMiB: 2048,
@@ -102,7 +99,7 @@ export class Service extends cdk.Stack {
             port: 443,
             open: true,
             protocol: ApplicationProtocol.HTTPS,
-            certificates: [certificate]
+            certificates: [psinderCertificate]
         })
 
         httpsListener.addTargets("psinder-load-balancer-https-target", {

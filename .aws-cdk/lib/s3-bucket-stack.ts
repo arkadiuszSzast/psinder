@@ -1,6 +1,4 @@
 import * as cdk from '@aws-cdk/core';
-import * as ecs from '@aws-cdk/aws-ecs';
-import * as ec2 from "@aws-cdk/aws-ec2";
 import {applicationName, deployEnv, envSpecificName, zoneName} from "./utils";
 import * as s3 from "@aws-cdk/aws-s3";
 

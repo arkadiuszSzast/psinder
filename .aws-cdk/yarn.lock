@@ -125,6 +125,18 @@
     "@aws-cdk/cx-api" "1.155.0"
     "constructs" "^3.3.69"
 
+"@aws-cdk/aws-cloudfront-origins@^1.155.0":
+  "integrity" "sha512-Dr1dSVNVmww3bhzIOHAezMm/zcBVHefNPxH0WR96Y23e4bJ5Qwf2rlnQ9ytiYE9IcyEJw/CYvhPSO7o4Qf9Pzg=="
+  "resolved" "https://registry.npmjs.org/@aws-cdk/aws-cloudfront-origins/-/aws-cloudfront-origins-1.155.0.tgz"
+  "version" "1.155.0"
+  dependencies:
+    "@aws-cdk/aws-cloudfront" "1.155.0"
+    "@aws-cdk/aws-elasticloadbalancingv2" "1.155.0"
+    "@aws-cdk/aws-iam" "1.155.0"
+    "@aws-cdk/aws-s3" "1.155.0"
+    "@aws-cdk/core" "1.155.0"
+    "constructs" "^3.3.69"
+
 "@aws-cdk/aws-cloudfront@1.155.0":
   "integrity" "sha512-VDwOtmzb4aaPL2/w5wUsFx4G2PL6roucfpm4DGqcIkw5jGI5fLYKPb/utGvE7oCDVFRkE/b3fzwz7Huf/vhluA=="
   "resolved" "https://registry.npmjs.org/@aws-cdk/aws-cloudfront/-/aws-cloudfront-1.155.0.tgz"
