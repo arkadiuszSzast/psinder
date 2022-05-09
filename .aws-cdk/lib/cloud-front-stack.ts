@@ -9,20 +9,21 @@ import * as s3 from "@aws-cdk/aws-s3";
 
 export class CloudFrontStack extends cdk.Stack {
 
-    constructor(scope: cdk.Construct, cfCertificate: acm.Certificate, props?: cdk.StackProps) {
+    constructor(scope: cdk.Construct, props?: cdk.StackProps) {
         super(scope, envSpecificName(applicationName() + '-cloud-front'), props)
 
         const hostedZone = route53.HostedZone.fromLookup(this, "psinder-hosted-zone", {
             domainName: 'psinder.link'
         })
         const bucketEnvSpecificName = envSpecificName('dog-profile-images')
+        const certificate = acm.Certificate.fromCertificateArn(this, 'psinder-certificate', 'arn:aws:acm:us-east-1:993160204208:certificate/47443f83-e7db-4f4e-8e45-7b5751967df8')
 
         const bucket = s3.Bucket.fromBucketName(this, `${bucketEnvSpecificName}-bucket`, bucketEnvSpecificName)
 
         const cf = new cloudfront.Distribution(this, "cdnDistribution", {
             defaultBehavior: {origin: new origins.S3Origin(bucket)},
-            domainNames: [`${deployEnv()}-images.psinder.link`],
-            certificate: cfCertificate,
+            domainNames: [`${deployEnv()}-stage.psinder.link`],
+            certificate: certificate,
         });
         new route53.ARecord(this, "CDNARecord", {
             zone: hostedZone,
