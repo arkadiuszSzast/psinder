@@ -1,5 +1,4 @@
 FROM adoptopenjdk/openjdk16
-EXPOSE 8080:8080
 EXPOSE 8443:8443
 RUN mkdir /app
 RUN mkdir /keystore

@@ -1,21 +1,27 @@
 import * as cdk from '@aws-cdk/core';
+import {Duration} from '@aws-cdk/core';
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import {Secret} from "@aws-cdk/aws-ecs";
 import * as ecr from "@aws-cdk/aws-ecr";
 import * as s3 from '@aws-cdk/aws-s3';
-import {ApplicationLoadBalancedFargateService} from "@aws-cdk/aws-ecs-patterns";
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as route53 from "@aws-cdk/aws-route53";
+import * as route53_targets from "@aws-cdk/aws-route53-targets";
 import {RepositoryName} from "./repository-name";
 import {ddApiKey, deployEnv, envSpecificName, githubSha, imageTag, secureSsmParameterForEnv,} from "./utils";
 import {paramCase} from "param-case";
 import {headerCase} from "header-case";
 import {addDataDogContainer, defaultDatadogServiceEnv} from "./data-dog-container";
 import {RetentionDays} from "@aws-cdk/aws-logs";
-import {ApplicationProtocol, ApplicationProtocolVersion, SslPolicy} from "@aws-cdk/aws-elasticloadbalancingv2";
+import {
+    ApplicationLoadBalancer,
+    ApplicationProtocol,
+    ApplicationProtocolVersion,
+    IpAddressType,
+    Protocol
+} from "@aws-cdk/aws-elasticloadbalancingv2";
 import {addEventStoreContainer} from "./event-store-container";
-import {Duration} from "@aws-cdk/core";
 
 export class Service extends cdk.Stack {
 
@@ -25,10 +31,13 @@ export class Service extends cdk.Stack {
             domainName: 'psinder.link'
         })
         const repository = ecr.Repository.fromRepositoryName(stack, headerCase(`${template.name}-repository`), template.repository)
-        const certificate = acm.Certificate.fromCertificateArn(stack, 'Certificate', 'arn:aws:acm:eu-north-1:993160204208:certificate/05e1a3fd-aed9-49ae-9f2e-8699d3b10449')
+        const certificate = new acm.Certificate(stack, 'Certificate', {
+            domainName: '*.psinder.link',
+            validation: acm.CertificateValidation.fromDns(hostedZone)
+        });
         const taskDefinition = new ecs.FargateTaskDefinition(stack, headerCase(`${template.name}-task-definition`), {
             cpu: 1024,
-            memoryLimitMiB: 2048
+            memoryLimitMiB: 2048,
         })
 
         const securityGroups = template.securityGroups
@@ -36,7 +45,16 @@ export class Service extends cdk.Stack {
                 const group = new ec2.SecurityGroup(stack, securityGroup.id, securityGroup.props)
                 group.addIngressRule(securityGroup.ingressProps.peer, securityGroup.ingressProps.port)
                 return group
-            })
+            }) ?? []
+
+        const albSecurityGroupHTTPS = new ec2.SecurityGroup(stack, 'SecurityGroup-ALB-443', {
+            allowAllOutbound: true,
+            vpc: template.vpc,
+        })
+        albSecurityGroupHTTPS.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(443))
+        albSecurityGroupHTTPS.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80))
+        albSecurityGroupHTTPS.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(8080))
+        albSecurityGroupHTTPS.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(8443))
 
         const secrets = template.secrets ?
             Object.assign({}, ...Object.entries(template.secrets).map(([k, v]) => ({[k]: Secret.fromSsmParameter(secureSsmParameterForEnv(stack, v))})))
@@ -51,10 +69,6 @@ export class Service extends cdk.Stack {
                     protocol: ecs.Protocol.TCP
                 }
             }),
-            healthCheck: {
-                command: ["curl", "--fail", "http://localhost:8080/v1/application-status/health"],
-                startPeriod: Duration.seconds(200)
-            },
             secrets: secrets,
             environment: template.configureDatadog ? Object.assign({}, template.environment, defaultDatadogServiceEnv(template.name)) : template.environment,
             logging: template.configureDatadog ? datadogLogging(template.name) : defaultLogging(),
@@ -66,32 +80,51 @@ export class Service extends cdk.Stack {
 
         addEventStoreContainer(taskDefinition) //temp solution because cloud version isn't so cheap for testing purposes
 
-        const service = new ApplicationLoadBalancedFargateService(stack, headerCase(`${template.name}-service`), {
+        const service = new ecs.FargateService(stack, headerCase(`${template.name}-service`), {
             cluster: template.cluster,
             taskDefinition: taskDefinition,
             desiredCount: 1,
-            domainName: 'psinder.link',
-            domainZone: hostedZone,
             securityGroups: securityGroups,
-            assignPublicIp: true,
-            loadBalancerName: 'psinder',
-            targetProtocol: ApplicationProtocol.HTTPS,
-            certificate: certificate,
-            redirectHTTP: true,
-            protocol: ApplicationProtocol.HTTPS,
-            openListener: true,
-            sslPolicy: SslPolicy.RECOMMENDED,
-            protocolVersion: ApplicationProtocolVersion.HTTP2,
-            publicLoadBalancer: true,
+            serviceName: template.name,
+            assignPublicIp: true
         })
 
-        // @ts-ignore
-        service.taskDefinition.defaultContainer!.props.healthCheck = <ecs.HealthCheck>{
-            command: ["curl", "--fail", "http://localhost:8080/v1/application-status/health"],
-            interval: cdk.Duration.seconds(15),
-            retries: 3,
-            timeout: cdk.Duration.seconds(5),
-        };
+        const alb = new ApplicationLoadBalancer(stack, "psinder-load-balancer", {
+            vpc: template.vpc,
+            internetFacing: true,
+            loadBalancerName: 'psinder-load-balancer',
+            http2Enabled: true,
+            securityGroup: albSecurityGroupHTTPS,
+            ipAddressType: IpAddressType.IPV4,
+        })
+
+        const httpsListener = alb.addListener('psinder-load-balancer-https-listener', {
+            port: 443,
+            open: true,
+            protocol: ApplicationProtocol.HTTPS,
+            certificates: [certificate]
+        })
+
+        httpsListener.addTargets("psinder-load-balancer-https-target", {
+            port: 8443,
+            protocol: ApplicationProtocol.HTTPS,
+            healthCheck: {
+                path: '/v1/application-status/health',
+                protocol: Protocol.HTTPS,
+                port: '8443',
+                interval: Duration.seconds(60),
+                unhealthyThresholdCount: 4
+            },
+            targets: [service],
+            protocolVersion: ApplicationProtocolVersion.HTTP1,
+        })
+
+        new route53.ARecord(stack, 'psinder-api-dns-record', {
+            recordName: deployEnv(),
+            zone: hostedZone,
+            target: route53.RecordTarget.fromAlias(new route53_targets.LoadBalancerTarget(alb)),
+            ttl: Duration.minutes(1)
+        });
 
         template.s3Buckets?.map((bucketName) => {
             const bucketEnvSpecificName = envSpecificName(bucketName)
