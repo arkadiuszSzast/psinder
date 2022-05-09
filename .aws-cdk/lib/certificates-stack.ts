@@ -8,7 +8,7 @@ export class CertificatesStack extends cdk.Stack {
     readonly psinderCertificate: acm.Certificate
 
     constructor(scope: cdk.Construct, props?: cdk.StackProps) {
-        super(scope, envSpecificName(applicationName() + '-s3'), props)
+        super(scope, envSpecificName(applicationName() + '-certificates'), props)
 
         const hostedZone = route53.HostedZone.fromLookup(this, "psinder-hosted-zone", {
             domainName: 'psinder.link'
