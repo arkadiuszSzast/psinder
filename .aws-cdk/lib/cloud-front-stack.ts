@@ -9,7 +9,7 @@ import * as s3 from "@aws-cdk/aws-s3";
 
 export class CloudFrontStack extends cdk.Stack {
 
-    constructor(scope: cdk.Construct, psinderCertificate: acm.Certificate, props?: cdk.StackProps) {
+    constructor(scope: cdk.Construct, cfCertificate: acm.Certificate, props?: cdk.StackProps) {
         super(scope, envSpecificName(applicationName() + '-cloud-front'), props)
 
         const hostedZone = route53.HostedZone.fromLookup(this, "psinder-hosted-zone", {
@@ -21,8 +21,8 @@ export class CloudFrontStack extends cdk.Stack {
 
         const cf = new cloudfront.Distribution(this, "cdnDistribution", {
             defaultBehavior: {origin: new origins.S3Origin(bucket)},
-            domainNames: [`images.${deployEnv()}.psinder.link`],
-            certificate: psinderCertificate,
+            domainNames: [`${deployEnv()}-images.psinder.link`],
+            certificate: cfCertificate,
         });
         new route53.ARecord(this, "CDNARecord", {
             zone: hostedZone,

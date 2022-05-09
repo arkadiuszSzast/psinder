@@ -9,6 +9,7 @@ import {Service} from "../lib/service-factory";
 import {S3BucketsStack} from "../lib/s3-bucket-stack";
 import {CloudFrontStack} from "../lib/cloud-front-stack";
 import {CertificatesStack} from "../lib/certificates-stack";
+import {CloudFrontCertificateStack} from "../lib/cloud-front-certificate-stack";
 
 const cdkEnv: cdk.Environment = {
     account: process.env.AWS_ACCOUNT_ID,
@@ -33,7 +34,14 @@ const s3BucketsStack = new S3BucketsStack(app, {
     env: cdkEnv
 })
 
-const cloudFrontImagesStack = new CloudFrontStack(app, certificatesStack.psinderCertificate, {
+const cloudFrontCertificateStack = new CloudFrontCertificateStack(app, {
+    env: {
+        account: process.env.AWS_ACCOUNT_ID,
+        region: 'us-east-1'
+    }
+})
+
+const cloudFrontImagesStack = new CloudFrontStack(app, cloudFrontCertificateStack.cloudFrontCertificate, {
     env: cdkEnv
 })
 

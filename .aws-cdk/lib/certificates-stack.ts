@@ -1,6 +1,5 @@
 import * as cdk from '@aws-cdk/core';
 import {applicationName, deployEnv, envSpecificName, zoneName} from "./utils";
-import * as s3 from "@aws-cdk/aws-s3";
 import * as acm from "@aws-cdk/aws-certificatemanager";
 import * as route53 from "@aws-cdk/aws-route53";
 
