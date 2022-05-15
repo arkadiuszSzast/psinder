@@ -14,7 +14,7 @@ internal class UploadFileCommandHandler(private val fileStorage: FileStorage) :
         logger.debug { "Going to upload file $fileCandidate" }
 
         return Either.catch {
-            fileStorage.upload(command.fileCandidate)
+            fileStorage.uploadPublic(command.fileCandidate)
         }
             .tap { logger.debug { "Uploaded file $it" } }
             .tapLeft { logger.error { "Error while uploading file: $fileCandidate. Exception: ${it.stackTraceToString()}" } }

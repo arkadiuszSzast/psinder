@@ -1,6 +1,7 @@
 package com.psinder.aws.s3
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.model.ObjectCannedAcl
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
 import aws.smithy.kotlin.runtime.content.ByteStream
 import com.psinder.file.storage.FileCandidate
@@ -19,7 +20,7 @@ class AwsFileStorage(
     private val s3ClientProvider: Provider<S3Client>,
     private val bucketNameResolver: BucketNameResolver
 ) : FileStorage {
-    override suspend fun upload(fileCandidate: FileCandidate): StoredFile {
+    override suspend fun uploadPublic(fileCandidate: FileCandidate): StoredFile {
         val bucketName = bucketNameResolver.resolve(BucketName(fileCandidate.basePath.value))
         val contentAsByteArray = httpClient.get<ByteArray>(fileCandidate.sourceUrl)
         val tikaConfig = TikaConfig.getDefaultConfig()
@@ -33,6 +34,8 @@ class AwsFileStorage(
                     bucket = bucketName.resolvedValue
                     key = fileCandidate.key.asString()
                     body = ByteStream.fromBytes(contentAsByteArray)
+                    contentType = mediaType.toString()
+                    acl = ObjectCannedAcl.PublicRead
                     metadata = s3ObjectMetadata {
                         this.mediaType = mediaType
                         this.extension = extension

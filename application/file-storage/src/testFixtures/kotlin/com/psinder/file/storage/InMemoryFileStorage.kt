@@ -9,7 +9,7 @@ class InMemoryFileStorage(private val urlToExtensionMapper: (Url) -> FileExtensi
 
     private var storage = mutableMapOf<String, StoredFile>()
 
-    override suspend fun upload(fileCandidate: FileCandidate): StoredFile {
+    override suspend fun uploadPublic(fileCandidate: FileCandidate): StoredFile {
         val extension = urlToExtensionMapper(fileCandidate.sourceUrl)
 
         val file = object : StoredFile {

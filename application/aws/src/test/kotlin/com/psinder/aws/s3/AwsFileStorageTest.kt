@@ -41,7 +41,7 @@ class AwsFileStorageTest : LocalStackTest(emptyList(), listOf(BucketName(TextFil
                 val fileCandidate = TextFile.getCandidate(Url("https://example-text.test"))
 
                 // act
-                val result = awsFileStorage.upload(fileCandidate)
+                val result = awsFileStorage.uploadPublic(fileCandidate)
 
                 // assert
                 val savedFile = s3ClientProvider.get().use { s3Client ->
@@ -54,9 +54,11 @@ class AwsFileStorageTest : LocalStackTest(emptyList(), listOf(BucketName(TextFil
                 }
 
                 val savedFileAsByteArray = savedFile.body?.toByteArray()
+                expectThat(savedFile.contentType).isEqualTo("text/plain")
                 expectThat(savedFileAsByteArray) { isEqualTo(textFileAsByteArray) }
                 expectThat(S3ObjectMetadata.create(savedFile.metadata!!)) {
                     get { this[S3ObjectMetadata.Keys.mediaType] }.isEqualTo("text/plain")
+                    get { this[S3ObjectMetadata.Keys.extension] }.isEqualTo(".txt")
                     get { this[S3ObjectMetadata.Keys.extension] }.isEqualTo(".txt")
                     get { Instant.parse(this[S3ObjectMetadata.Keys.savedAt]!!) }.isUpToOneSecondOld()
                 }
@@ -68,7 +70,7 @@ class AwsFileStorageTest : LocalStackTest(emptyList(), listOf(BucketName(TextFil
 
                 // act && assert
                 expectThrows<ClientRequestException> {
-                    awsFileStorage.upload(fileCandidate)
+                    awsFileStorage.uploadPublic(fileCandidate)
                 }
 
                 val allObjects = s3ClientProvider.get()
