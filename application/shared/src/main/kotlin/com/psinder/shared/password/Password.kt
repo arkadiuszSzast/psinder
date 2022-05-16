@@ -30,7 +30,7 @@ value class RawPassword(val value: String) : Validatable<RawPassword> {
 @JvmInline
 @Serializable
 value class HashedPassword(val value: String) {
-    fun matches(value: String) = BCrypt.checkpw(value, this.value)
+    fun matches(rawPassword: RawPassword) = BCrypt.checkpw(rawPassword.value, this.value)
 
     override fun toString(): String {
         return "HashedPassword(value='*masked*')"

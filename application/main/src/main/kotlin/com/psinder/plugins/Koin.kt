@@ -1,9 +1,9 @@
 package com.psinder.plugins
 
-import com.psinder.account.accountRepositoriesModule
 import com.psinder.account.koin.accountCommandHandlersModule
 import com.psinder.account.koin.accountEventStoreModule
 import com.psinder.account.koin.accountQueryHandlersModule
+import com.psinder.account.koin.accountRepositoriesModule
 import com.psinder.auth.authModule
 import com.psinder.auth.authorityProviderModule
 import com.psinder.aws.koin.awsKoinModule

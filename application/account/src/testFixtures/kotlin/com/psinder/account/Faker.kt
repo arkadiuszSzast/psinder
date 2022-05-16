@@ -8,6 +8,7 @@ import com.psinder.shared.password.RawPassword
 import com.psinder.test.utils.date
 import io.github.serpro69.kfaker.Faker
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import java.util.concurrent.TimeUnit
 
 val Faker.accountModule: AccountModule
@@ -21,13 +22,15 @@ class AccountModule(private val faker: Faker) {
     fun city() = City.create(faker.address.city())
     fun streetName() = StreetName.create(faker.address.streetName())
     fun addressData() = AddressData.create(faker.address.city(), faker.address.streetName())
-    fun rawPassword() = RawPassword(faker.friends.characters())
+    fun rawPassword() =
+        RawPassword(faker.random.randomString(10) + faker.random.nextChar().uppercase() + faker.random.nextInt() + "#")
+
     fun hashedPassword() = rawPassword().hashpw()
     fun accountStatus() = faker.random.nextEnum<AccountStatus>()
     fun role() = faker.random.nextEnum<Role>()
     fun timeZone() = TimeZone.of(faker.address.timeZone())
     fun lastLoggedInDate(atMost: Long = 10, unit: TimeUnit = TimeUnit.DAYS) =
-        LastLoggedInDate(faker.date.localDateTime.past(atMost, unit))
+        LastLoggedInDate(faker.date.localDateTime.past(atMost, unit).toInstant(TimeZone.UTC))
 
     fun created(atMost: Long = 10, unit: TimeUnit = TimeUnit.DAYS) =
         CreatedDate(faker.date.localDateTime.past(atMost, unit))

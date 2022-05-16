@@ -3,6 +3,7 @@ package com.psinder.account
 import arrow.optics.optics
 import com.psinder.account.activation.events.AccountActivatedEvent
 import com.psinder.account.events.AccountCreatedEvent
+import com.psinder.account.events.AccountLoggedInSuccessEvent
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.AccountId
 import com.psinder.auth.account.BelongsToAccount
@@ -51,5 +52,8 @@ data class AccountProjection constructor(
 
         fun applyActivatedEvent(source: AccountProjection, event: AccountActivatedEvent) =
             AccountProjection.status.modify(source) { event.accountStatus }
+
+        fun applyLoggedInSuccessEvent(source: AccountProjection, event: AccountLoggedInSuccessEvent) =
+            AccountProjection.lastLoggedInDate.set(source, LastLoggedInDate(event.attemptDate))
     }
 }

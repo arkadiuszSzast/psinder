@@ -42,4 +42,10 @@ dependencies {
     implementation(project(":application:file-storage"))
 
     testImplementation(testFixtures(project(":application:test-utils")))
+
+    testFixturesImplementation(testFixtures(project(":application:aws")))
+    testFixturesImplementation(testFixtures(project(":application:event-store")))
+    testFixturesImplementation(testFixtures(project(":application:mongo-db-access")))
+    testFixturesImplementation(testFixtures(project(":application:mediator")))
+    testFixturesImplementation(testFixtures(project(":application:mail")))
 }

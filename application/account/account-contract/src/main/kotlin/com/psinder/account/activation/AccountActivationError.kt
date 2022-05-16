@@ -1,4 +1,4 @@
-package com.psinder.account.activation.commands
+package com.psinder.account.activation
 
 import kotlinx.serialization.KSerializer
 import pl.brightinventions.codified.Codified

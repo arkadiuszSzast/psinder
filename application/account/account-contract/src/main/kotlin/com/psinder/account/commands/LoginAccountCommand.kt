@@ -1,13 +1,23 @@
 package com.psinder.account.commands
 
+import com.psinder.account.LogInFailureError
 import com.psinder.account.requests.LoginAccountRequest
+import com.psinder.shared.EmailAddress
 import com.psinder.shared.jwt.JwtToken
 import com.trendyol.kediatr.CommandMetadata
 import com.trendyol.kediatr.CommandWithResult
+import pl.brightinventions.codified.enums.CodifiedEnum
 
 data class LoginAccountCommand(
     val loginAccountRequest: LoginAccountRequest,
     override val metadata: CommandMetadata? = null
 ) : CommandWithResult<LoginAccountCommandResult>
 
-data class LoginAccountCommandResult(val token: JwtToken)
+sealed class LoginAccountCommandResult
+
+data class LoginAccountCommandSucceed(val email: EmailAddress, val token: JwtToken) : LoginAccountCommandResult()
+
+data class LoginAccountCommandFailure(
+    val email: EmailAddress,
+    val errorCode: CodifiedEnum<LogInFailureError, String>
+) : LoginAccountCommandResult()

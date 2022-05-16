@@ -23,31 +23,9 @@ abstract class LocalStackTest(private val neededModules: List<Module>, private v
     override val s3ClientProvider: Provider<S3Client> by inject()
 
     override fun beforeEach(testCase: TestCase) {
-        removeAllBuckets()
-        createBuckets()
-    }
-
-    private fun removeAllBuckets() {
         runBlocking {
-            s3ClientProvider.get().use { s3Client ->
-                val buckets = s3Client.listBuckets { ListBucketsRequest {} }.buckets.orEmpty()
-                buckets.map { it.name }.forEach { bucketName ->
-                    s3Client.listObjects { ListBucketsRequest { bucket = bucketName } }.contents.orEmpty().forEach {
-                        s3Client.deleteObject(DeleteObjectRequest { bucket = bucketName; key = it.key })
-                    }
-                    s3Client.deleteBucket(DeleteBucketRequest { bucket = bucketName })
-                }
-            }
-        }
-    }
-
-    private fun createBuckets() {
-        runBlocking {
-            s3ClientProvider.get().use { s3Client ->
-                buckets.forEach { bucketName ->
-                    s3Client.createBucket(CreateBucketRequest { bucket = bucketName.value })
-                }
-            }
+            s3ClientProvider.removeAllBuckets()
+            s3ClientProvider.createBuckets(buckets)
         }
     }
 
@@ -57,5 +35,25 @@ abstract class LocalStackTest(private val neededModules: List<Module>, private v
 
     init {
         startKoin { modules(neededModules.toList().plus(localstackTestingModule)) }
+    }
+}
+
+suspend fun Provider<S3Client>.removeAllBuckets() {
+    get().use { s3Client ->
+        val buckets = s3Client.listBuckets { ListBucketsRequest {} }.buckets.orEmpty()
+        buckets.map { it.name }.forEach { bucketName ->
+            s3Client.listObjects { ListBucketsRequest { bucket = bucketName } }.contents.orEmpty().forEach {
+                s3Client.deleteObject(DeleteObjectRequest { bucket = bucketName; key = it.key })
+            }
+            s3Client.deleteBucket(DeleteBucketRequest { bucket = bucketName })
+        }
+    }
+}
+
+suspend fun Provider<S3Client>.createBuckets(buckets: List<BucketName>) {
+    get().use { s3Client ->
+        buckets.forEach { bucketName ->
+            s3Client.createBucket(CreateBucketRequest { bucket = bucketName.value })
+        }
     }
 }

@@ -16,6 +16,7 @@ dependencies {
     testImplementation(testFixtures(project(":application:test-utils")))
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
 
+    testFixturesApi("aws.sdk.kotlin:s3:$aws_s3_sdk_version")
     testFixturesImplementation("org.testcontainers:testcontainers:$test_containers_version")
     testFixturesImplementation("io.insert-koin:koin-test:$koin_version")
     testFixturesImplementation("io.kotest:kotest-runner-junit5:$kotest_version")

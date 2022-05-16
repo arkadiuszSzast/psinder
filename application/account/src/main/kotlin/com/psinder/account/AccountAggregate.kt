@@ -1,10 +1,13 @@
 package com.psinder.account
 
-import com.psinder.account.activation.commands.AccountActivationError
+import com.psinder.account.activation.AccountActivationError
 import com.psinder.account.activation.events.AccountActivatedEvent
 import com.psinder.account.activation.events.AccountActivationEvent
 import com.psinder.account.activation.events.AccountActivationFailureEvent
 import com.psinder.account.events.AccountCreatedEvent
+import com.psinder.account.events.AccountLoggedInEvent
+import com.psinder.account.events.AccountLoggedInFailureEvent
+import com.psinder.account.events.AccountLoggedInSuccessEvent
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.AccountId
 import com.psinder.auth.account.BelongsToAccount
@@ -13,6 +16,7 @@ import com.psinder.database.HasId
 import com.psinder.shared.EmailAddress
 import com.psinder.shared.date.CreatedDate
 import com.psinder.shared.password.HashedPassword
+import com.psinder.shared.password.RawPassword
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinLocalDateTime
 import kotlinx.serialization.Contextual
@@ -79,4 +83,28 @@ fun AccountAggregate.Events.activate(
             accountAggregateId.cast(), AccountActivationError.AccountStatusUnknown.codifiedEnum()
         )
     }
+}
+
+fun AccountAggregate.Events.logIn(
+    accountAggregateId: Id<AccountAggregate>,
+    accountStatus: CodifiedEnum<AccountStatus, String>,
+    accountPassword: HashedPassword,
+    logInRequestPassword: RawPassword,
+): AccountLoggedInEvent {
+    if (!accountPassword.matches(logInRequestPassword)) {
+        return AccountLoggedInFailureEvent(accountAggregateId.cast(), LogInFailureError.InvalidPassword.codifiedEnum())
+    }
+
+    if (accountStatus.knownOrNull() == AccountStatus.Suspended) {
+        return AccountLoggedInFailureEvent(accountAggregateId.cast(), LogInFailureError.AccountSuspended.codifiedEnum())
+    }
+
+    if (accountStatus.knownOrNull() == AccountStatus.Staged) {
+        return AccountLoggedInFailureEvent(
+            accountAggregateId.cast(),
+            LogInFailureError.AccountNotActivated.codifiedEnum()
+        )
+    }
+
+    return AccountLoggedInSuccessEvent(accountAggregateId.cast())
 }

@@ -16,6 +16,7 @@ class JwtConfigTest : DescribeSpec({
                 get { realm }.isEqualTo("jwt-test-realm")
                 get { issuer }.isEqualTo("jwt-test-issuer")
                 get { secret }.isEqualTo("test-secret")
+                get { expirationInMillis }.isEqualTo(10000)
             }
         }
     }

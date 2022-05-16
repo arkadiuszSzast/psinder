@@ -8,6 +8,7 @@ import com.psinder.account.activation.commands.ActivateAccountCommandSucceed
 import com.psinder.account.activation.requests.ActivateAccountRequest
 import com.psinder.account.commands.CreateAccountCommand
 import com.psinder.account.commands.LoginAccountCommand
+import com.psinder.account.commands.LoginAccountCommandSucceed
 import com.psinder.account.requests.CreateAccountRequest
 import com.psinder.account.requests.LoginAccountRequest
 import com.psinder.account.responses.LoginAccountResponse
@@ -46,10 +47,14 @@ fun Application.configureAccountRouting() {
             }
         }
 
-        post("/login") {
+        post("${AccountApi.v1}/login") {
             val request = call.receive<LoginAccountRequest>().validateEagerly()
-            val loginCommandResult = commandBus.executeCommandAsync(LoginAccountCommand(request))
-            call.respond(LoginAccountResponse(loginCommandResult.token))
+
+            when (val result = commandBus.executeCommandAsync(LoginAccountCommand(request))) {
+                is LoginAccountCommandSucceed -> LoginAccountResponse(result.token)
+                    .let { call.respond(HttpStatusCode.OK, it) }
+                else -> call.respond(HttpStatusCode.Unauthorized)
+            }
         }
 
         get("/test") {

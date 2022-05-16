@@ -2,10 +2,13 @@ package com.psinder.account.commands
 
 import arrow.core.nel
 import com.psinder.account.AccountAggregate
+import com.psinder.account.AccountProjection
 import com.psinder.account.create
 import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.queries.FindAccountByEmailQuery
+import com.psinder.auth.authority.authorities
 import com.psinder.auth.authority.createAccountFeature
+import com.psinder.auth.authority.withInjectedAuthoritiesReturning
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.auth.role.Role
 import com.psinder.events.streamName
@@ -32,7 +35,16 @@ internal class CreateAccountHandler(
 
         logger.debug { "Starting creating account" }
 
-        val alreadyRegisteredAccount = commandBus.executeQueryAsync(FindAccountByEmailQuery(email)).account
+        val alreadyRegisteredAccount = withInjectedAuthoritiesReturning(
+            authorities {
+                entityAccess(AccountProjection::class) {
+                    viewScope { account, _ -> account.email == email }
+                }
+            }
+        ) {
+            commandBus.executeQueryAsync(FindAccountByEmailQuery(email)).account
+        }
+
         alreadyRegisteredAccount.tap {
             logger.error { "Cannot create account. Email [${it.email}] is already taken" }
             throw ValidationException(

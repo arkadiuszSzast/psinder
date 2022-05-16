@@ -7,6 +7,7 @@ dependencies {
     implementation(project(":application:mediator"))
     implementation(project(":application:mail:mail-contract"))
     implementation(project(":application:feature-toggle"))
+    implementation(project(":application:aws"))
 
     testFixturesImplementation(testFixtures(project(":application:mongo-db-access")))
     testFixturesImplementation(testFixtures(project(":application:test-utils")))
@@ -18,4 +19,6 @@ dependencies {
     testImplementation(testFixtures(project(":application:mediator")))
     testImplementation(testFixtures(project(":application:security")))
     testImplementation(testFixtures(project(":application:mail")))
+    testImplementation(testFixtures(project(":application:aws")))
+    testImplementation(testFixtures(project(":application:main")))
 }

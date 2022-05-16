@@ -1506,10 +1506,10 @@
   "resolved" "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz"
   "version" "2.1.2"
 
-"aws-cdk-local@^1.65.8":
-  "integrity" "sha512-xUPxazw4HEhJYhzsQg+TJYJjCzuja5WH3folSy3ir9nrhF4l8JirsQeji49rNLGAs4tmBq3mOFOMY89pIeAaDg=="
-  "resolved" "https://registry.npmjs.org/aws-cdk-local/-/aws-cdk-local-1.65.8.tgz"
-  "version" "1.65.8"
+"aws-cdk-local@^2.15.0":
+  "integrity" "sha512-Wsexx+2yohaEuvC25DcU/MD1wbj9XjHfYfBI67PE2wNo+NZFeZ4T66rvKhYXLDBMKF6kGhTRzjXis6GPwUZvtg=="
+  "resolved" "https://registry.npmjs.org/aws-cdk-local/-/aws-cdk-local-2.15.0.tgz"
+  "version" "2.15.0"
   dependencies:
     "diff" "^5.0.0"
 

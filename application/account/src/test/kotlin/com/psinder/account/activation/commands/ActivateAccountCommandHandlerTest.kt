@@ -5,6 +5,7 @@ import com.psinder.account.AccountMongoRepository
 import com.psinder.account.AccountRepository
 import com.psinder.account.AccountStatus
 import com.psinder.account.accountAggregateType
+import com.psinder.account.activation.AccountActivationError
 import com.psinder.account.activation.events.AccountActivatedEvent
 import com.psinder.account.activation.events.AccountActivationFailureEvent
 import com.psinder.account.config.JwtConfig

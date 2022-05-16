@@ -9,6 +9,8 @@ private object ConfigMap {
 
 fun getProperty(key: ConfigKey) = ConfigMap.config.property(key.key).getString()
 
+fun getAsLong(key: ConfigKey) = ConfigMap.config.property(key.key).getString().toLong()
+
 fun getPropertyAsBoolean(key: ConfigKey) = ConfigMap.config.property(key.key).getString().toBoolean()
 
 fun getPropertyOrNull(key: ConfigKey) = ConfigMap.config.propertyOrNull(key.key)?.getString()

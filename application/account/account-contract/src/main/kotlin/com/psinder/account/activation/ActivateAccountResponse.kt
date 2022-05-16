@@ -1,7 +1,6 @@
 package com.psinder.account.activation
 
 import com.psinder.account.AccountDto
-import com.psinder.account.activation.commands.AccountActivationError
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id

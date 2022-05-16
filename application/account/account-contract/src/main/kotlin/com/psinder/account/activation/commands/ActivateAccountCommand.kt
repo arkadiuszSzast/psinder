@@ -1,6 +1,7 @@
 package com.psinder.account.activation.commands
 
 import com.psinder.account.AccountDto
+import com.psinder.account.activation.AccountActivationError
 import com.psinder.shared.jwt.JwtToken
 import com.trendyol.kediatr.CommandMetadata
 import com.trendyol.kediatr.CommandWithResult

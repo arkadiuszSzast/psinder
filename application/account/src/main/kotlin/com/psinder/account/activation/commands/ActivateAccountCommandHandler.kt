@@ -7,6 +7,7 @@ import com.psinder.account.AccountAggregate
 import com.psinder.account.AccountDto
 import com.psinder.account.AccountProjection
 import com.psinder.account.activate
+import com.psinder.account.activation.AccountActivationError
 import com.psinder.account.activation.events.AccountActivatedEvent
 import com.psinder.account.activation.events.AccountActivationEvent
 import com.psinder.account.activation.events.AccountActivationFailureEvent
