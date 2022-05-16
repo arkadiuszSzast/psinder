@@ -10,7 +10,7 @@ internal class PersonalDataTest : DescribeSpec({
 
         it("should start with uppercase") {
             // arrange && act && assert
-            expectThat(Name.create("Joe"))
+            expectThat(Name.create("joe"))
                 .get { value }
                 .isEqualTo("Joe")
 
@@ -32,7 +32,7 @@ internal class PersonalDataTest : DescribeSpec({
 
         it("should start with uppercase") {
             // arrange && act && assert
-            expectThat(Surname.create("Doe"))
+            expectThat(Surname.create("doe"))
                 .get { value }
                 .isEqualTo("Doe")
 
