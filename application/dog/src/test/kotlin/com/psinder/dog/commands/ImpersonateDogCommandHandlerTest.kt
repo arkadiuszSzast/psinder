@@ -11,16 +11,11 @@ import com.psinder.dog.DogProfileMongoRepository
 import com.psinder.dog.DogProfileRepository
 import com.psinder.dog.ImpersonatingError
 import com.psinder.dog.createDogProfile
-import com.psinder.dog.queries.FindDogProfileByIdQuery
 import com.psinder.dog.queries.FindDogProfileByIdQueryHandler
 import com.psinder.kediatr.kediatrTestModule
-import com.psinder.shared.jwt.JwtToken
 import com.psinder.test.utils.faker
-import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.traxter.eventstoredb.EventStoreDB
 import org.koin.core.component.get
-import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -47,14 +42,14 @@ class ImpersonateDogCommandHandlerTest : DatabaseTest(testingModules) {
         describe("ImpersonateDogCommandHandler") {
 
             it("should return impersonator token") {
-                //arrange
+                // arrange
                 val accountContext = faker.authModule.accountContext()
                 val dog = createDogProfile(accountId = accountContext.accountId)
 
-                //act
+                // act
                 val result = handler.handleAsync(ImpersonateDogCommand(dog.id.cast(), accountContext))
 
-                //arrange
+                // arrange
                 expectThat(result)
                     .isA<ImpersonateDogCommandSuccessResult>()
                     .get { token.verify(Algorithm.HMAC256(JwtAuthConfig.secret)) }
@@ -62,44 +57,44 @@ class ImpersonateDogCommandHandlerTest : DatabaseTest(testingModules) {
             }
 
             it("should return error when trying impersonate dog that belongs to other account") {
-                //arrange
+                // arrange
                 val accountContext = faker.authModule.userAccountContext()
                 val otherAccountContext = faker.authModule.userAccountContext()
                 val dog = createDogProfile(accountId = otherAccountContext.accountId)
 
-                //act
+                // act
                 val result = handler.handleAsync(ImpersonateDogCommand(dog.id.cast(), accountContext))
 
-                //arrange
+                // arrange
                 expectThat(result)
                     .isA<ImpersonateDogCommandFailureResult>()
                     .get { error }.isEqualTo(ImpersonatingError.NotAllowed.codifiedEnum())
             }
 
             it("should return error when trying impersonate not existing dog") {
-                //arrange
+                // arrange
                 val accountContext = faker.authModule.accountContext()
                 val dog = createDogProfile(accountId = accountContext.accountId)
 
-                //act
+                // act
                 val result = handler.handleAsync(ImpersonateDogCommand(newId(), accountContext))
 
-                //arrange
+                // arrange
                 expectThat(result)
                     .isA<ImpersonateDogCommandFailureResult>()
                     .get { error }.isEqualTo(ImpersonatingError.NotFound.codifiedEnum())
             }
 
             it("should impersonate other user dog when authenticated as admin") {
-                //arrange
+                // arrange
                 val accountContext = faker.authModule.adminAccountContext()
                 val otherAccountContext = faker.authModule.userAccountContext()
                 val dog = createDogProfile(accountId = otherAccountContext.accountId)
 
-                //act
+                // act
                 val result = handler.handleAsync(ImpersonateDogCommand(dog.id.cast(), accountContext))
 
-                //arrange
+                // arrange
                 expectThat(result)
                     .isA<ImpersonateDogCommandSuccessResult>()
                     .get { token.verify(Algorithm.HMAC256(JwtAuthConfig.secret)) }

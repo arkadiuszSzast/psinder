@@ -6,7 +6,6 @@ import com.psinder.dog.DogAggregate
 import com.psinder.dog.DogProfileMongoRepository
 import com.psinder.dog.DogProfileRepository
 import com.psinder.dog.dogModule
-import com.psinder.dog.events.DogRegisteredEvent
 import com.psinder.dog.register
 import com.psinder.dog.support.DatabaseAndEventStoreTest
 import com.psinder.events.streamName

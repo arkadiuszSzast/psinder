@@ -1,19 +1,12 @@
 package com.psinder.dog
 
 import com.psinder.auth.account.AccountId
-import com.psinder.auth.role.Role
 import com.psinder.database.HasDatabaseAndTransactionally
 import com.psinder.dog.pairs.DogPair
 import com.psinder.dog.vote.Vote
-import com.psinder.shared.EmailAddress
-import com.psinder.shared.date.CreatedDate
-import com.psinder.shared.password.HashedPassword
 import com.psinder.test.utils.faker
-import kotlinx.datetime.TimeZone
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
-import pl.brightinventions.codified.enums.CodifiedEnum
-import pl.brightinventions.codified.enums.codifiedEnum
 
 suspend fun HasDatabaseAndTransactionally.createRandomDogProfile(customize: DogProfileProjection.() -> Unit = {}): DogProfileProjection {
     val dogProfile = faker.randomProvider.randomClassInstance<DogProfileProjection> {

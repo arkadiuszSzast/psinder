@@ -7,7 +7,6 @@ import com.psinder.account.AccountRepository
 import com.psinder.account.AccountStatus
 import com.psinder.account.accountModule
 import com.psinder.account.create
-import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.support.DatabaseAndEventStoreTest
 import com.psinder.events.streamName
 import com.psinder.events.toEventData

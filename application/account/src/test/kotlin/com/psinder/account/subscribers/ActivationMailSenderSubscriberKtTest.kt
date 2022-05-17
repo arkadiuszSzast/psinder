@@ -8,7 +8,6 @@ import com.psinder.account.activation.commands.GenerateAccountActivationTokenHan
 import com.psinder.account.config.JwtConfig
 import com.psinder.account.config.MailConfig
 import com.psinder.account.create
-import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.support.DatabaseAndEventStoreTest
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.auth.principal.CanDoAnythingAbilityProvider

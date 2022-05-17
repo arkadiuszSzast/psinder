@@ -4,7 +4,6 @@ import arrow.core.nel
 import com.psinder.account.AccountAggregate
 import com.psinder.account.AccountProjection
 import com.psinder.account.create
-import com.psinder.account.events.AccountCreatedEvent
 import com.psinder.account.queries.FindAccountByEmailQuery
 import com.psinder.auth.authority.authorities
 import com.psinder.auth.authority.createAccountFeature

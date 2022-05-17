@@ -4,7 +4,6 @@ import com.psinder.auth.authority.registerDogFeature
 import com.psinder.auth.principal.AuthorizedAccountAbilityProvider
 import com.psinder.dog.DogAggregate
 import com.psinder.dog.DogProfileImage
-import com.psinder.dog.events.DogRegisteredEvent
 import com.psinder.dog.register
 import com.psinder.events.streamName
 import com.psinder.events.toEventData
