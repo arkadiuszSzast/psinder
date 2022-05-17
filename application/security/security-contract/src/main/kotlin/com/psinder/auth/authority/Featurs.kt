@@ -7,3 +7,4 @@ val generateAccountActivationLinkFeature = Feature("generate-account-activate-li
 val sendingMailsFeature = Feature("send-mail")
 val setUserFeatureToggleFeature = Feature("set-user-feature-toggle")
 val registerDogFeature = Feature("register-dog")
+val impersonateDogFeature = Feature("impersonate-dog")

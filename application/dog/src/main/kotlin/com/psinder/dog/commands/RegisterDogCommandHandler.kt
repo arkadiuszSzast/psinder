@@ -24,9 +24,8 @@ internal class RegisterDogCommandHandler(
 
     override suspend fun handleAsync(command: RegisterDogCommand): RegisterDogCommandResult {
         acl.ensure().hasAccessTo(registerDogFeature)
-        val metadata = command.metadata
-        val accountContext = command.accountContext
-        val (dogName, dogDescription, imagesUrls) = command.registerDogRequest
+        val (registerDogRequest, accountIdProvider, metadata) = command
+        val (dogName, dogDescription, imagesUrls) = registerDogRequest
 
         val images = imagesUrls
             .map { DogProfileImage.getCandidate(Url(it.value)) }
@@ -34,12 +33,12 @@ internal class RegisterDogCommandHandler(
             .mapNotNull { it.orNull() }
             .map { DogProfileImage.fromStoredFile(it) }
 
-        val dogRegisteredEvent = DogAggregate.Events.register(accountContext, dogName, dogDescription, images)
+        val dogRegisteredEvent = DogAggregate.Events.register(accountIdProvider, dogName, dogDescription, images)
         logger.debug { "Dog registered. Sending event: $dogRegisteredEvent" }
 
         eventStore.appendToStream(
             dogRegisteredEvent.streamName,
-            dogRegisteredEvent.toEventData<DogRegisteredEvent>(metadata),
+            dogRegisteredEvent.toEventData(metadata),
         )
 
         return RegisterDogCommandResult(dogRegisteredEvent.dogId)

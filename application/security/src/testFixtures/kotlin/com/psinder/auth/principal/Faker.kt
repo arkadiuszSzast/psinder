@@ -16,4 +16,14 @@ class AuthModule(private val faker: Faker) {
         override val accountId: AccountId = AccountId(newId<AccountId>().toString())
         override val role: CodifiedEnum<Role, String> = faker.random.nextEnum<Role>().codifiedEnum()
     }
+
+    fun userAccountContext() = object : AccountContext {
+        override val accountId: AccountId = AccountId(newId<AccountId>().toString())
+        override val role: CodifiedEnum<Role, String> = Role.User.codifiedEnum()
+    }
+
+    fun adminAccountContext() = object : AccountContext {
+        override val accountId: AccountId = AccountId(newId<AccountId>().toString())
+        override val role: CodifiedEnum<Role, String> = Role.Admin.codifiedEnum()
+    }
 }

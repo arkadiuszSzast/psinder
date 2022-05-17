@@ -3,8 +3,8 @@ package com.psinder.dog.subscribers
 import arrow.core.nel
 import com.psinder.auth.principal.authModule
 import com.psinder.dog.DogAggregate
-import com.psinder.dog.DogProfileMongoRepository
-import com.psinder.dog.DogProfileRepository
+import com.psinder.dog.DogOverviewMongoRepository
+import com.psinder.dog.DogOverviewRepository
 import com.psinder.dog.dogModule
 import com.psinder.dog.events.DogRegisteredEvent
 import com.psinder.dog.register
@@ -21,16 +21,15 @@ import org.koin.dsl.module
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import strikt.api.expectThat
 import strikt.arrow.isSome
-import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 
 private val testingModules = module {
-    single { DogProfileMongoRepository(get<CoroutineDatabase>().getCollection()) } bind DogProfileRepository::class
+    single { DogOverviewMongoRepository(get<CoroutineDatabase>().getCollection()) } bind DogOverviewRepository::class
     single { DogProfileProjectionUpdater(get()) }
 }
 
-class DogProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModules.nel()) {
-    private val dogRepository = get<DogProfileRepository>()
+class DogOverviewProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModules.nel()) {
+    private val dogRepository = get<DogOverviewRepository>()
 
     init {
 
@@ -42,12 +41,12 @@ class DogProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModules.n
                     launch {
                         // arrange
                         val accountContext = faker.authModule.accountContext()
-                        val dogRegisteredEvent = DogAggregate.Events.register(
+                        val dogRegisteredEvent = DogAggregate.register(
                             accountContext, faker.dogModule.dogName(), faker.dogModule.dogDescription(), emptyList()
                         )
 
                         // act
-                        application.dogProfileProjectionUpdater(eventStoreDb, get())
+                        application.dogOverviewProjectionUpdater(eventStoreDb, get())
                         eventStoreDb.appendToStream(
                             dogRegisteredEvent.streamName,
                             dogRegisteredEvent.toEventData(),
@@ -61,8 +60,6 @@ class DogProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModules.n
                                 .and { get { name }.isEqualTo(dogRegisteredEvent.dogName) }
                                 .and { get { description }.isEqualTo(dogRegisteredEvent.dogDescription) }
                                 .and { get { images }.isEqualTo(dogRegisteredEvent.images) }
-                                .and { get { votes }.isEmpty() }
-                                .and { get { pairs }.isEmpty() }
                         }
                     }
                 }

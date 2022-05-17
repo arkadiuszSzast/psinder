@@ -54,7 +54,7 @@ class AccountProjectionSubscriberKtTest : DatabaseAndEventStoreTest(testingModul
                         application.accountProjectionUpdater(eventStoreDb, get())
                         eventStoreDb.appendToStream(
                             accountAggregateCreatedEvent.streamName,
-                            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(),
+                            accountAggregateCreatedEvent.toEventData(),
                         )
                         delay(600)
 

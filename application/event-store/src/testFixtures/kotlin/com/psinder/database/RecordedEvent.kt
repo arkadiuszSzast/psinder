@@ -7,7 +7,7 @@ import com.psinder.events.DomainEvent
 import com.psinder.events.toEventData
 
 inline fun <reified T : DomainEvent> DomainEvent.recordedEvent(): RecordedEvent {
-    val eventData = this.toEventData<T>()
+    val eventData = (this as T).toEventData()
 
     return RecordedEvent(
         "$aggregateType-$aggregateId",

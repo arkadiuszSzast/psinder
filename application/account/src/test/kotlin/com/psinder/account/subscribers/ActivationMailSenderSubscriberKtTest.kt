@@ -87,7 +87,7 @@ class ActivationMailSenderSubscriberKtTest : DatabaseAndEventStoreTest(testingMo
                         application.activationMailSenderSubscriber(eventStoreDb, commandBus, MailConfig)
                         eventStoreDb.appendToStream(
                             accountAggregateCreatedEvent.streamName,
-                            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(),
+                            accountAggregateCreatedEvent.toEventData(),
                         )
                         delay(600)
 
@@ -127,7 +127,7 @@ class ActivationMailSenderSubscriberKtTest : DatabaseAndEventStoreTest(testingMo
                         application.activationMailSenderSubscriber(eventStoreDb, commandBus, MailConfig)
                         eventStoreDb.appendToStream(
                             accountAggregateCreatedEvent.streamName,
-                            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(),
+                            accountAggregateCreatedEvent.toEventData(),
                         )
                         delay(600)
 

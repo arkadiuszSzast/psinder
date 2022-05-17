@@ -2,10 +2,15 @@ package com.psinder.dog
 
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.AccountId
+import com.psinder.auth.account.AccountIdProvider
 import com.psinder.auth.account.BelongsToAccount
 import com.psinder.auth.account.DogId
 import com.psinder.auth.account.DogIdProvider
+import com.psinder.auth.role.Role
 import com.psinder.database.HasId
+import com.psinder.dog.events.DogImpersonatedEvent
+import com.psinder.dog.events.DogImpersonatedSuccessfullyEvent
+import com.psinder.dog.events.DogImpersonatingFailedEvent
 import com.psinder.dog.events.DogRegisteredEvent
 import com.psinder.dog.pairs.DogPair
 import com.psinder.dog.vote.Vote
@@ -14,6 +19,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
+import pl.brightinventions.codified.enums.codifiedEnum
 
 @Serializable
 data class DogAggregate(
@@ -33,11 +39,21 @@ data class DogAggregate(
 }
 
 fun DogAggregate.Events.register(
-    accountContext: AccountContext,
+    accountIdProvider: AccountIdProvider,
     name: DogName,
     description: DogDescription,
     images: List<DogProfileImage>
 ): DogRegisteredEvent {
-    val accountId = accountContext.accountId
+    val accountId = accountIdProvider.accountId
     return DogRegisteredEvent(newId(), accountId, name, description, images)
+}
+
+fun DogAggregate.Events.impersonate(
+    accountContext: AccountContext,
+    target: DogProfileDto
+): DogImpersonatedEvent {
+    if (accountContext.accountId == target.accountId || accountContext.role.code() == Role.Admin.code) {
+        return DogImpersonatedSuccessfullyEvent(target.id, accountContext.accountId)
+    }
+    return DogImpersonatingFailedEvent(target.id, ImpersonatingError.NotAllowed.codifiedEnum())
 }

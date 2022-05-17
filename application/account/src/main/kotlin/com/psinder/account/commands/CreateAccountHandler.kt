@@ -66,7 +66,7 @@ internal class CreateAccountHandler(
         logger.debug { "Account created. Sending event: $accountAggregateCreatedEvent" }
         eventStore.appendToStream(
             accountAggregateCreatedEvent.streamName,
-            accountAggregateCreatedEvent.toEventData<AccountCreatedEvent>(metadata),
+            accountAggregateCreatedEvent.toEventData(metadata),
         )
 
         return CreateAccountCommandResult(accountAggregateCreatedEvent.accountId.cast())

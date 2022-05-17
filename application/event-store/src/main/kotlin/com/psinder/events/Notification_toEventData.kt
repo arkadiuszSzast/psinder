@@ -8,7 +8,7 @@ import io.ktor.http.ContentType
 import kotlinx.serialization.encodeToString
 import mu.KotlinLogging
 
-inline fun <reified T : DomainEvent> DomainEvent.toEventData(
+inline fun <reified T : DomainEvent> T.toEventData(
     correlationId: CorrelationId? = null,
     causationId: CausationId? = null
 ): EventData {
@@ -29,7 +29,7 @@ inline fun <reified T : DomainEvent> DomainEvent.toEventData(
     )
 }
 
-inline fun <reified T : DomainEvent> DomainEvent.toEventData(
+inline fun <reified T : DomainEvent> T.toEventData(
     parentEvent: RecordedEvent?
 ): EventData {
     val log = KotlinLogging.logger {}
@@ -43,7 +43,7 @@ inline fun <reified T : DomainEvent> DomainEvent.toEventData(
     return toEventData<T>(correlationId, causationId)
 }
 
-inline fun <reified T : DomainEvent> DomainEvent.toEventData(
+inline fun <reified T : DomainEvent> T.toEventData(
     commandMetadata: CommandMetadata?
 ): EventData {
     val correlationId = commandMetadata?.correlationId?.let { CorrelationId(it) } ?: CorrelationId(eventId)

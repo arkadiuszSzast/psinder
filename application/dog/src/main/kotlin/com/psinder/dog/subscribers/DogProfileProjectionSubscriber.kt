@@ -8,13 +8,13 @@ import io.traxter.eventstoredb.StreamGroup
 import io.traxter.eventstoredb.StreamName
 import kotlinx.coroutines.launch
 
-internal fun Application.dogProjectionUpdater(
+internal fun Application.dogProfileProjectionUpdater(
     eventStoreDb: EventStoreDB,
-    dogProjectionUpdater: DogProjectionUpdater
+    dogProjectionUpdater: DogProfileProjectionUpdater
 ) = launch {
     eventStoreDb.subscribeToPersistedStream(
         StreamName(dogAggregateType.streamName),
-        StreamGroup("dog-projection-updater")
+        StreamGroup("dog-profile-projection-updater")
     ) { _, event ->
         dogProjectionUpdater.update(event.event)
     }

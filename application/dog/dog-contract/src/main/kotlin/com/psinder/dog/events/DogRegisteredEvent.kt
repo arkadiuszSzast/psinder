@@ -2,8 +2,8 @@ package com.psinder.dog.events
 
 import com.psinder.auth.account.AccountId
 import com.psinder.dog.DogDescription
-import com.psinder.dog.DogDto
 import com.psinder.dog.DogName
+import com.psinder.dog.DogProfileDto
 import com.psinder.dog.DogProfileImage
 import com.psinder.dog.dogAggregateType
 import com.psinder.events.AggregateType
@@ -18,7 +18,7 @@ import java.util.UUID
 
 @Serializable
 data class DogRegisteredEvent(
-    @Contextual val dogId: Id<DogDto>,
+    @Contextual val dogId: Id<DogProfileDto>,
     val accountId: AccountId,
     val dogName: DogName,
     val dogDescription: DogDescription,

@@ -14,22 +14,22 @@ import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 
 @Serializable
-data class DogProjection(
-    @SerialName("_id") @Contextual override val id: Id<DogProjection>,
+data class DogProfileProjection(
+    @SerialName("_id") @Contextual override val id: Id<DogProfileProjection>,
     override val accountId: AccountId,
     val name: DogName,
     val description: DogDescription,
     val images: List<DogProfileImage>,
     val votes: List<Vote>,
     val pairs: List<DogPair>
-) : HasId<DogProjection>, BelongsToAccount, DogIdProvider {
+) : HasId<DogProfileProjection>, BelongsToAccount, DogIdProvider {
 
     override val dogId: DogId
         get() = DogId(id.toString())
 
     companion object {
 
-        fun applyRegisteredEvent(event: DogRegisteredEvent) = DogProjection(
+        fun applyRegisteredEvent(event: DogRegisteredEvent) = DogProfileProjection(
             event.dogId.cast(),
             event.accountId,
             event.dogName,
