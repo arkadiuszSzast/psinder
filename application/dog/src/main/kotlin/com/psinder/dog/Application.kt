@@ -5,4 +5,5 @@ import io.ktor.application.Application
 @Suppress("unused")
 fun Application.dogModule() {
     configureDogRouting()
+    configureEventStoreSubscribers()
 }

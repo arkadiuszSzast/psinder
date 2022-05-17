@@ -7,7 +7,6 @@ import io.ktor.application.ApplicationCall
 import io.ktor.auth.Principal
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.principal
-import io.ktor.features.callId
 
 fun ApplicationCall.getAccountContext(): AccountContext =
     when (val principal = principal<Principal>()) {

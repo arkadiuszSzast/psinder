@@ -6,6 +6,7 @@ import com.psinder.auth.authority.AuthoritiesProvider
 import com.psinder.auth.authority.activatingAccountFeature
 import com.psinder.auth.authority.authoritiesFor
 import com.psinder.auth.authority.createAccountFeature
+import com.psinder.auth.authority.registerDogFeature
 import com.psinder.auth.authority.setUserFeatureToggleFeature
 import com.psinder.auth.role.Role
 import org.koin.dsl.bind
@@ -19,6 +20,9 @@ object StaticAuthorityProvider : AuthoritiesProvider {
                 allScopes()
             }
             featureAccess(setUserFeatureToggleFeature)
+        },
+        authoritiesFor(Role.User) {
+            featureAccess(registerDogFeature)
         },
         authoritiesFor("unknown".codifiedEnum()) {
             featureAccess(createAccountFeature)

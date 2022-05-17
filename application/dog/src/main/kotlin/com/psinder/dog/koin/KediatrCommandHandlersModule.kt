@@ -4,5 +4,5 @@ import com.psinder.dog.commands.RegisterDogCommandHandler
 import org.koin.dsl.module
 
 val dogCommandHandlersModule = module {
-    single { RegisterDogCommandHandler() }
+    single { RegisterDogCommandHandler(get(), get(), get()) }
 }

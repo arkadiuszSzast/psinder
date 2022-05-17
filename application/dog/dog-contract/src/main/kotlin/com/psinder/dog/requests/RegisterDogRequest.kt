@@ -16,10 +16,10 @@ data class RegisterDogRequest(
 
     companion object {
         val validator = Validation<RegisterDogRequest> {
-            RegisterDogRequest::dogName{
+            RegisterDogRequest::dogName {
                 run(DogName.validator)
             }
-            RegisterDogRequest::dogDescription{
+            RegisterDogRequest::dogDescription {
                 run(DogDescription.validator)
             }
         }

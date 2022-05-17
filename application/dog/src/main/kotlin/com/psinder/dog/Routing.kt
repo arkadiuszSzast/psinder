@@ -8,10 +8,7 @@ import com.psinder.shared.validation.validateEagerly
 import com.trendyol.kediatr.CommandBus
 import io.ktor.application.Application
 import io.ktor.application.call
-import io.ktor.auth.Principal
 import io.ktor.auth.authenticate
-import io.ktor.auth.jwt.JWTPrincipal
-import io.ktor.auth.principal
 import io.ktor.http.Url
 import io.ktor.request.receive
 import io.ktor.response.respond

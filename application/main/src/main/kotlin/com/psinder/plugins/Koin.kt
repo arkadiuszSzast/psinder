@@ -9,6 +9,8 @@ import com.psinder.auth.authorityProviderModule
 import com.psinder.aws.koin.awsKoinModule
 import com.psinder.database.kmongoModule
 import com.psinder.dog.koin.dogCommandHandlersModule
+import com.psinder.dog.koin.dogEventStoreModule
+import com.psinder.dog.koin.dogRepositoriesModule
 import com.psinder.events.plugins.eventStoreDbKoinModule
 import com.psinder.feature.toggle.configCatModule
 import com.psinder.feature.toggle.koin.featureTogglesCommandHandlersModule
@@ -33,6 +35,8 @@ internal fun Application.configureKoin() {
         accountRepositoriesModule,
         accountEventStoreModule,
         dogCommandHandlersModule,
+        dogRepositoriesModule,
+        dogEventStoreModule,
         kmongoModule,
         sendGridModule,
         mailCommandHandlersModule,

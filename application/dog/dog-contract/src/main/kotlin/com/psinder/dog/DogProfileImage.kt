@@ -24,5 +24,14 @@ data class DogProfileImage(
         fun getCandidate(sourceUrl: Url): FileCandidate {
             return FileCandidate(sourceUrl, FileBasePath(basePath), FileKey(newId<DogProfileImage>()))
         }
+
+        fun fromStoredFile(storedFile: StoredFile): DogProfileImage {
+            return DogProfileImage(
+                storedFile.fileExtension,
+                storedFile.savedAt,
+                storedFile.key,
+                storedFile.basePath
+            )
+        }
     }
 }

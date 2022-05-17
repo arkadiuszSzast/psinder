@@ -2,7 +2,6 @@ package com.psinder.dog
 
 import com.psinder.shared.validation.validate
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import strikt.api.expectThat
 import strikt.arrow.isInvalid
 import strikt.arrow.isValid
@@ -15,54 +14,53 @@ class DogNameTest : DescribeSpec() {
         describe("DogName") {
 
             it("should start with a capital letter") {
-                //arrange && act
+                // arrange && act
                 val dogName = DogName("puppy")
 
-                //assert
+                // assert
                 expectThat(dogName.value).isEqualTo("Puppy")
             }
 
             it("should trim") {
-                //arrange && act
+                // arrange && act
                 val dogName = DogName(" puppy ")
 
-                //assert
+                // assert
                 expectThat(dogName.value).isEqualTo("Puppy")
             }
 
             it("should fail validation if less than 3 characters") {
-                //arrange
+                // arrange
                 val dogName = DogName("pu")
 
-                //act
+                // act
                 val result = dogName.validate()
 
-                //assert
+                // assert
                 expectThat(result).isInvalid()
             }
 
             it("should pass validation when exactly 3 characters") {
-                //arrange
+                // arrange
                 val dogName = DogName("pup")
 
-                //act
+                // act
                 val result = dogName.validate()
 
-                //assert
+                // assert
                 expectThat(result).isValid()
             }
 
             it("should pass validation when more than 3 characters") {
-                //arrange
+                // arrange
                 val dogName = DogName("pupp")
 
-                //act
+                // act
                 val result = dogName.validate()
 
-                //assert
+                // assert
                 expectThat(result).isValid()
             }
-
         }
     }
 }

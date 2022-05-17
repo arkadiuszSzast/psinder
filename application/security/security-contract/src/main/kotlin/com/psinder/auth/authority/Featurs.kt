@@ -6,3 +6,4 @@ val generateAccountActivationTokenFeature = Feature("generate-account-activate-t
 val generateAccountActivationLinkFeature = Feature("generate-account-activate-link")
 val sendingMailsFeature = Feature("send-mail")
 val setUserFeatureToggleFeature = Feature("set-user-feature-toggle")
+val registerDogFeature = Feature("register-dog")

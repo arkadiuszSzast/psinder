@@ -1,7 +1,5 @@
 package com.psinder.dog
 
-import com.psinder.dog.requests.RegisterDogRequest
-import com.psinder.shared.EmailAddress
 import com.psinder.shared.validation.Validatable
 import io.konform.validation.Validation
 import io.konform.validation.jsonschema.minLength
@@ -17,7 +15,7 @@ value class DogName private constructor(val value: String) : Validatable<DogName
         }
 
         val validator = Validation<DogName> {
-            DogName::value{
+            DogName::value {
                 minLength(3) hint "validation.dog_name_to_short"
             }
         }

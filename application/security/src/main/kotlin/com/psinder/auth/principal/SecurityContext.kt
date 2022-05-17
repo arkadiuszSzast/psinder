@@ -7,8 +7,6 @@ import com.psinder.auth.authority.AccountAuthorities
 import com.psinder.auth.authority.AuthoritiesProvider
 import com.psinder.auth.getAccountContext
 import com.szastarek.ktor.globalrequestdata.requestData
-import io.ktor.auth.Principal
-import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.principal
 import mu.KotlinLogging
 

@@ -1,6 +1,5 @@
 package com.psinder.dog.vote
 
-import com.psinder.auth.role.Role
 import kotlinx.serialization.KSerializer
 import pl.brightinventions.codified.Codified
 import pl.brightinventions.codified.enums.CodifiedEnum

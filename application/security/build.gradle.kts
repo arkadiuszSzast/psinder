@@ -8,4 +8,5 @@ dependencies {
     implementation(project(":application:shared"))
 
     testFixturesImplementation("com.github.bright.codified:enums:$codified_version")
+    testFixturesImplementation(testFixtures(project(":application:test-utils")))
 }

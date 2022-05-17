@@ -1,6 +1,5 @@
 package com.psinder.dog.vote
 
-import com.psinder.auth.role.Role
 import com.psinder.dog.DogAggregate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
