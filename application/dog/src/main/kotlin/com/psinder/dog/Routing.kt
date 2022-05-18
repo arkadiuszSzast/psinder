@@ -4,7 +4,9 @@ import com.psinder.auth.getAccountContext
 import com.psinder.dog.commands.ImpersonateDogCommand
 import com.psinder.dog.commands.ImpersonateDogCommandFailureResult
 import com.psinder.dog.commands.ImpersonateDogCommandSuccessResult
+import com.psinder.dog.commands.LikeDogCommand
 import com.psinder.dog.commands.RegisterDogCommand
+import com.psinder.dog.requests.LikeDogRequest
 import com.psinder.dog.requests.RegisterDogRequest
 import com.psinder.file.storage.commands.UploadFileCommand
 import com.psinder.shared.validation.validateEagerly
@@ -12,6 +14,7 @@ import com.trendyol.kediatr.CommandBus
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.auth.authenticate
+import io.ktor.auth.authentication
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.request.receive
@@ -48,6 +51,16 @@ fun Application.configureDogRouting() {
                     is ImpersonateDogCommandSuccessResult -> call.respond(result)
                     is ImpersonateDogCommandFailureResult -> call.respond(HttpStatusCode.BadRequest, result)
                 }
+            }
+        }
+
+        authenticate {
+            post(DogApi.v1 + "/votes/like") {
+                val dogContext = call.getDogContext()
+                val request = call.receive<LikeDogRequest>()
+
+                commandBus.executeCommandAsync(LikeDogCommand(dogContext, request.targetDogId))
+                call.respond(HttpStatusCode.OK)
             }
         }
 

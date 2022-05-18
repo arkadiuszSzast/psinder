@@ -1,5 +1,6 @@
 package com.psinder.dog
 
+import arrow.core.Either
 import com.psinder.auth.account.AccountContext
 import com.psinder.auth.account.AccountId
 import com.psinder.auth.account.AccountIdProvider
@@ -11,14 +12,17 @@ import com.psinder.database.HasId
 import com.psinder.dog.events.DogImpersonatedEvent
 import com.psinder.dog.events.DogImpersonatedSuccessfullyEvent
 import com.psinder.dog.events.DogImpersonatingFailedEvent
+import com.psinder.dog.events.DogLikedEvent
 import com.psinder.dog.events.DogRegisteredEvent
 import com.psinder.dog.pairs.DogPair
 import com.psinder.dog.vote.Vote
+import com.psinder.dog.vote.VoteOption
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
+import org.litote.kmongo.toId
 import pl.brightinventions.codified.enums.codifiedEnum
 
 @Serializable
@@ -56,4 +60,19 @@ fun DogAggregate.Events.impersonate(
         return DogImpersonatedSuccessfullyEvent(target.id, accountContext.accountId)
     }
     return DogImpersonatingFailedEvent(target.id, ImpersonatingError.NotAllowed.codifiedEnum())
+}
+
+fun DogAggregate.Events.likeDog(
+    dogContext: DogContext,
+    votes: List<Vote>,
+    targetDogId: Id<DogProfileDto>
+): Either<Throwable, DogLikedEvent> {
+    val alreadyLiked = votes.filter { it.selectedOption.code() == VoteOption.Like.code }
+        .any { it.targetDogId == targetDogId }
+
+    if (alreadyLiked) {
+        return Either.Left(IllegalStateException("Dog with id $targetDogId already liked"))
+    }
+
+    return Either.Right(DogLikedEvent(dogContext.dogId.value.toId(), targetDogId))
 }

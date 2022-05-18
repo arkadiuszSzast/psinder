@@ -1,6 +1,6 @@
 package com.psinder.dog.vote
 
-import com.psinder.dog.DogAggregate
+import com.psinder.dog.DogProfileDto
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.litote.kmongo.Id
@@ -8,6 +8,6 @@ import pl.brightinventions.codified.enums.CodifiedEnum
 
 @Serializable
 data class Vote(
-    @Contextual val targetDogId: Id<DogAggregate>,
+    @Contextual val targetDogId: Id<DogProfileDto>,
     @Serializable(with = VoteOption.CodifiedSerializer::class) val selectedOption: CodifiedEnum<VoteOption, String>
 )
