@@ -9,10 +9,11 @@ import com.psinder.auth.account.DogId
 import com.psinder.auth.account.DogIdProvider
 import com.psinder.auth.role.Role
 import com.psinder.database.HasId
+import com.psinder.dog.events.DogDislikeSentEvent
 import com.psinder.dog.events.DogImpersonatedEvent
 import com.psinder.dog.events.DogImpersonatedSuccessfullyEvent
 import com.psinder.dog.events.DogImpersonatingFailedEvent
-import com.psinder.dog.events.DogLikedEvent
+import com.psinder.dog.events.DogLikeSentEvent
 import com.psinder.dog.events.DogRegisteredEvent
 import com.psinder.dog.pairs.DogPair
 import com.psinder.dog.vote.Vote
@@ -20,7 +21,9 @@ import com.psinder.dog.vote.VoteOption
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.bson.types.ObjectId
 import org.litote.kmongo.Id
+import org.litote.kmongo.id.toId
 import org.litote.kmongo.newId
 import org.litote.kmongo.toId
 import pl.brightinventions.codified.enums.codifiedEnum
@@ -66,7 +69,10 @@ fun DogAggregate.Events.likeDog(
     dogContext: DogContext,
     votes: List<Vote>,
     targetDogId: Id<DogProfileDto>
-): Either<Throwable, DogLikedEvent> {
+): Either<Throwable, DogLikeSentEvent> {
+    if (ObjectId(dogContext.dogId.value).toId<DogProfileDto>() == targetDogId) {
+        return Either.Left(IllegalStateException("Cannot like yourself. DogId: ${dogContext.dogId}"))
+    }
     val alreadyLiked = votes.filter { it.selectedOption.code() == VoteOption.Like.code }
         .any { it.targetDogId == targetDogId }
 
@@ -74,5 +80,23 @@ fun DogAggregate.Events.likeDog(
         return Either.Left(IllegalStateException("Dog with id $targetDogId already liked"))
     }
 
-    return Either.Right(DogLikedEvent(dogContext.dogId.value.toId(), targetDogId))
+    return Either.Right(DogLikeSentEvent(dogContext.dogId.value.toId(), targetDogId))
+}
+
+fun DogAggregate.Events.dislikeDog(
+    dogContext: DogContext,
+    votes: List<Vote>,
+    targetDogId: Id<DogProfileDto>
+): Either<Throwable, DogDislikeSentEvent> {
+    if (ObjectId(dogContext.dogId.value).toId<DogProfileDto>() == targetDogId) {
+        return Either.Left(IllegalStateException("Cannot dislike yourself. DogId: ${dogContext.dogId}"))
+    }
+    val alreadyDisliked = votes.filter { it.selectedOption.code() == VoteOption.Dislike.code }
+        .any { it.targetDogId == targetDogId }
+
+    if (alreadyDisliked) {
+        return Either.Left(IllegalStateException("Dog with id $targetDogId already disliked"))
+    }
+
+    return Either.Right(DogDislikeSentEvent(dogContext.dogId.value.toId(), targetDogId))
 }

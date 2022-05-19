@@ -1,6 +1,7 @@
 package com.psinder.dog.commands
 
 import com.psinder.dog.DogAggregate
+import com.psinder.dog.dislikeDog
 import com.psinder.dog.likeDog
 import com.psinder.dog.queries.FindDogProfileByIdQuery
 import com.psinder.events.streamName
@@ -11,8 +12,9 @@ import io.traxter.eventstoredb.EventStoreDB
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.litote.kmongo.id.toId
+import org.litote.kmongo.toId
 
-class LikeDogCommandHandler(
+class DislikeDogCommandHandler(
     private val commandBus: CommandBus,
     private val eventStoreDB: EventStoreDB
 ) : AsyncCommandHandler<LikeDogCommand> {
@@ -24,12 +26,12 @@ class LikeDogCommandHandler(
         val dog = commandBus.executeQueryAsync(FindDogProfileByIdQuery(ObjectId(dogContext.dogId.value).toId())).dog
 
         dog
-            .tapNone { logger.warn { "Dog with id ${dogContext.dogId} not found. Like wont be saved." } }
+            .tapNone { logger.warn { "Dog with id ${dogContext.dogId} not found. Dislike wont be saved." } }
             .tap {
-                DogAggregate.Events.likeDog(dogContext, it.votes, targetDogId)
+                DogAggregate.Events.dislikeDog(dogContext, it.votes, targetDogId)
                     .fold(
                         {
-                            logger.warn { "Error when trying to like dog with id $targetDogId. Error: ${it.stackTraceToString()}" }
+                            logger.warn { "Error when trying to dislike dog with id $targetDogId. Error: ${it.stackTraceToString()}" }
                         },
                         {
                             eventStoreDB.appendToStream(

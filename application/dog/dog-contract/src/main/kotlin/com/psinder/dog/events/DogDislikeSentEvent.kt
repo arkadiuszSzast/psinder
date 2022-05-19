@@ -13,20 +13,22 @@ import org.litote.kmongo.Id
 import java.util.UUID
 
 @Serializable
-data class DogLikedEvent(@Contextual val dogId: Id<DogProfileDto>, @Contextual val targetDogId: Id<DogProfileDto>) :
-    DomainEvent {
+data class DogDislikeSentEvent(
+    @Contextual val dogId: Id<DogProfileDto>,
+    @Contextual val targetDogId: Id<DogProfileDto>
+) : DomainEvent {
     @Serializable(with = UUIDSerializer::class)
     override val eventId: UUID = UUID.randomUUID()
 
     @Contextual
     override val aggregateId = dogId
 
-    override val eventName = DogLikedEvent.eventName
+    override val eventName = DogLikeSentEvent.eventName
 
     override val aggregateType: AggregateType = dogAggregateType
 
     companion object {
-        val eventName: EventName = EventName("liked")
+        val eventName: EventName = EventName("dislike-sent")
         val fullEventType = FullEventType(dogAggregateType, eventName)
     }
 }

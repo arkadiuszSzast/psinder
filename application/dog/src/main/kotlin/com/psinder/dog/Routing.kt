@@ -6,6 +6,7 @@ import com.psinder.dog.commands.ImpersonateDogCommandFailureResult
 import com.psinder.dog.commands.ImpersonateDogCommandSuccessResult
 import com.psinder.dog.commands.LikeDogCommand
 import com.psinder.dog.commands.RegisterDogCommand
+import com.psinder.dog.requests.DislikeDogRequest
 import com.psinder.dog.requests.LikeDogRequest
 import com.psinder.dog.requests.RegisterDogRequest
 import com.psinder.file.storage.commands.UploadFileCommand
@@ -58,6 +59,16 @@ fun Application.configureDogRouting() {
             post(DogApi.v1 + "/votes/like") {
                 val dogContext = call.getDogContext()
                 val request = call.receive<LikeDogRequest>()
+
+                commandBus.executeCommandAsync(LikeDogCommand(dogContext, request.targetDogId))
+                call.respond(HttpStatusCode.OK)
+            }
+        }
+
+        authenticate {
+            post(DogApi.v1 + "/votes/dislike") {
+                val dogContext = call.getDogContext()
+                val request = call.receive<DislikeDogRequest>()
 
                 commandBus.executeCommandAsync(LikeDogCommand(dogContext, request.targetDogId))
                 call.respond(HttpStatusCode.OK)
