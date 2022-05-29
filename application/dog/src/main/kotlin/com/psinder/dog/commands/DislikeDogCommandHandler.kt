@@ -2,7 +2,6 @@ package com.psinder.dog.commands
 
 import com.psinder.dog.DogAggregate
 import com.psinder.dog.dislikeDog
-import com.psinder.dog.likeDog
 import com.psinder.dog.queries.FindDogProfileByIdQuery
 import com.psinder.events.streamName
 import com.psinder.events.toEventData

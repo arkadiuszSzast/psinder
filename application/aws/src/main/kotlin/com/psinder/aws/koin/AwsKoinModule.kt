@@ -7,7 +7,9 @@ import com.psinder.aws.config.AWSConfig
 import com.psinder.aws.s3.AwsFileStorage
 import com.psinder.aws.s3.BucketNameResolver
 import com.psinder.aws.s3.EnvBucketNameResolver
+import com.psinder.aws.s3.LocalstackPublicFileUrlResolver
 import com.psinder.file.storage.FileStorage
+import com.psinder.file.storage.PublicFileUrlResolver
 import com.psinder.shared.config.ApplicationConfig
 import com.psinder.shared.provider.Provider
 import io.ktor.client.HttpClient
@@ -27,6 +29,14 @@ val awsKoinModule = module {
             else -> Provider { S3Client.fromEnvironment() }
         }
     }
+    single {
+        when (AWSConfig.useLocalstack) {
+            true -> {
+                LocalstackPublicFileUrlResolver(get())
+            }
+            else -> throw NotImplementedError()
+        }
+    } bind PublicFileUrlResolver::class
     single { EnvBucketNameResolver(ApplicationConfig) } bind BucketNameResolver::class
     single { AwsFileStorage(HttpClient(), get(), get()) } bind FileStorage::class
 }

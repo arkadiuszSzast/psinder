@@ -11,7 +11,9 @@ import org.litote.kmongo.Id
 import pl.brightinventions.codified.enums.CodifiedEnum
 
 data class ImpersonateDogCommand(
-    val dogId: Id<DogProfileDto>, val accountContext: AccountContext, override val metadata: CommandMetadata? = null
+    val dogId: Id<DogProfileDto>,
+    val accountContext: AccountContext,
+    override val metadata: CommandMetadata? = null
 ) : CommandWithResult<ImpersonateDogCommandResult>
 
 @Serializable

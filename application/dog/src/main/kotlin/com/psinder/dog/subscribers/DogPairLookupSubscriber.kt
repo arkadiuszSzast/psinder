@@ -3,7 +3,6 @@ package com.psinder.dog.subscribers
 import com.psinder.dog.DogProfileRepository
 import com.psinder.dog.events.DogLikeSentEvent
 import com.psinder.dog.events.DogPairFoundEvent
-import com.psinder.dog.pairs.DogPair
 import com.psinder.dog.vote.likes
 import com.psinder.events.getAs
 import com.psinder.events.getMetadata
@@ -48,6 +47,5 @@ internal fun Application.dogPairLookupSubscriber(
                         }
                     }
             }
-
     }
 }
